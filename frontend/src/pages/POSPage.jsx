@@ -1,5 +1,5 @@
 import React from 'react'
-import router from '../POS/routes';
+
 
 function POSPage() {
     return (

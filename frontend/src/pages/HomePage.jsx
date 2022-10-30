@@ -13,11 +13,6 @@ const HomePage = () => {
           </div>
         </nav>
       </header>
-      <main>
-        <Link to="/pos" className="btn bt-primary">
-          Click Here !
-        </Link>
-      </main>
     </div>
   );
 }

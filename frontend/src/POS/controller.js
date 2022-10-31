@@ -3,13 +3,22 @@ const queries = require("./queries");
 const { response } = require("express");
 
 
-/*const decrementInventoryById = (req, res) => {
+const decrementInventoryById = (req, res) => {
     const id  = parseInt(req.params.id);
-    pool.query(queries.decrementInventoryById, [id], (error, results) => {
-        if (error) throw error;
-        res.status(200).json(results.rows)
+
+    //make sure ingredient actually exists
+    pool.query(queries.getIngredientById, [id], (error, results) => {
+        const noIngredientFound = !results.rows.length;
+        if (noIngredientFound) {
+            res.send("Ingredient does not exist in database.");
+        } else {
+            pool.query(queries.decrementInventoryById, [id], (error, results) => {
+                if (error) throw error;
+                res.status(200).send("Ingredient inventory reduced by one.");
+            });
+        }
     });
-};*/
+};
 
 const getMenuItems = (req, res) => {
     pool.query(queries.getMenuItems, (error, results) => {
@@ -57,17 +66,17 @@ const removeMenuItem = (req, res) => {
             });
         } 
     });
-};
+}; 
 
 
-/*const getIngredients = (req, res) => {
+const getIngredients = (req, res) => {
     pool.query(queries.getIngredients, (error, results) => {
         if (error) throw error;
         res.status(200).json(results.rows)
     });
-}; */
+};
 
-/*
+
 const getIngredientById = (req, res) => {
     const id = parseInt(req.params.id);
     pool.query(queries.getIngredientById, [id], (error, results) => {
@@ -112,15 +121,16 @@ const removeIngredient = (req, res) => {
         
         
     });
-};*/
+};
 
 
 
 module.exports = {
-    /*getIngredients,
+    getIngredients,
     getIngredientById,
     addIngredient,
-    removeIngredient,*/
+    removeIngredient,
+    decrementInventoryById,
     getMenuItems,
     getMenuItemById,
     addMenuItem,

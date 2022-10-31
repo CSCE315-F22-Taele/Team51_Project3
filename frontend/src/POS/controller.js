@@ -3,6 +3,14 @@ const queries = require("./queries");
 const { response } = require("express");
 
 
+/*const decrementInventoryById = (req, res) => {
+    const id  = parseInt(req.params.id);
+    pool.query(queries.decrementInventoryById, [id], (error, results) => {
+        if (error) throw error;
+        res.status(200).json(results.rows)
+    });
+};*/
+
 const getMenuItems = (req, res) => {
     pool.query(queries.getMenuItems, (error, results) => {
         if (error) throw error;

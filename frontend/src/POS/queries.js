@@ -11,6 +11,7 @@ const getMenuItemById = "SELECT * FROM menu WHERE id = $1";
 const checkMenuItemExists = "SELECT i FROM menu i where i.id = $1";
 const addMenuItem = "INSERT INTO menu (category, name, price, ingredients, png, options, id) VALUES ($1, $2, $3, $4, $5, $6, $7)";
 const removeMenuItem = "DELETE FROM menu WHERE id = $1";
+//const decrementInventoryById = "UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1"
 
 module.exports = {
     getMenuItems,
@@ -18,4 +19,5 @@ module.exports = {
     checkMenuItemExists,
     addMenuItem,
     removeMenuItem,
+    decrementInventoryById,
 }

@@ -1,5 +1,6 @@
 const express = require("express");
 const posRoutes = require("../../frontend/src/POS/routes");
+const inventoryRoutes = require("../../frontend/src/POS/inventoryRoutes");
 const app = express();
 const port = 3001;
 
@@ -11,6 +12,7 @@ app.get("/", (req, res) => {
 
 //FOR FIXING CORS ERROR IN REACT
 const cors=require("cors");
+const { application } = require("express");
 const corsOptions ={
    origin:'*', 
    credentials:true,            //access-control-allow-credentials:true
@@ -20,6 +22,7 @@ app.use(cors(corsOptions))
 //end
 
 app.use("/api/v1/pos", posRoutes);
+app.use("/api/v1/inventory", inventoryRoutes);
 
 
 app.listen(port, () => console.log(`app listening on port ${port}`));

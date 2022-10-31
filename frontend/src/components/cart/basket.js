@@ -20,29 +20,46 @@ export default function Basket(props) {
                     <div className='col-2 text-right'>
                         {item.qty} x ${item.price.toFixed(2)}
                     </div>
+                    {item.options !== null && (
+                        <>
+                            <div className='row'>
+                                <div className='col-2'>Customize Item</div>
+                            </div>
+                        </>
+                    )}
+
                 </div>
             ))}
             {cartItems.length !== 0 && (
                 <>
-                <hr></hr>
-                <div className='row'>
-                    <div className='col-2'>Price of Items</div>
-                    <div className='col-1 text-right'>${itemsPrice.toFixed(2)}</div>
-                </div>
-                <div className='row'>
-                    <div className='col-2'>Sales Tax</div>
-                    <div className='col-1 text-right'>${taxPrice.toFixed(2)}</div>
-                </div>
-                <div className='row'>
-                    <div className='col-2'>Total Price</div>
-                    <div className='col-1 text-right'>${totalPrice.toFixed(2)}</div>
-                </div>
-                <hr/>
-                <div className='row'>
-                    <button onClick={() => alert('Thank you for your order!')}>Checkout</button>
-                </div>
+                    <hr></hr>
+                    <div className='row'>
+                        <div className='col-2'>Price of Items</div>
+                        <div className='col-1 text-right'>${itemsPrice.toFixed(2)}</div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-2'>Sales Tax</div>
+                        <div className='col-1 text-right'>${taxPrice.toFixed(2)}</div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-2'>Total Price</div>
+                        <div className='col-1 text-right'>${totalPrice.toFixed(2)}</div>
+                    </div>
+                    <hr />
+                    <div className='row'>
+                        <button onClick={() => alert('Thank you for your order!')}>Checkout</button>
+                    </div>
                 </>
             )}
         </aside>
     );
 }
+
+/*
+{item.options.map((option) => (
+    <div className="row">
+        <button className="removeSmall">-</button>
+        <button className="addSmall">+</button>
+    </div> 
+))}
+*/

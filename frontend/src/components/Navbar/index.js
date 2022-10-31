@@ -8,7 +8,7 @@ return (
 	<>
 	<Nav>
 		<NavMenu>
-            <NavLink to="/HomePage" activeStyle>
+            <NavLink to="/" activeStyle>
                 Home
             </NavLink>
 
@@ -18,6 +18,21 @@ return (
             
             <NavLink to="/ManagerPage" activeStyle>
                 Manager
+            </NavLink>
+
+            <NavLink to="Inventory" activeStyle>
+            </NavLink>
+
+            <NavLink to="OrderHistory" activeStyle>
+            </NavLink>
+
+            <NavLink to="Excess" activeStyle>
+            </NavLink>
+
+            <NavLink to="Pair" activeStyle>
+            </NavLink>
+
+            <NavLink to="Restock" activeStyle>
             </NavLink>
 		</NavMenu>
 	</Nav>

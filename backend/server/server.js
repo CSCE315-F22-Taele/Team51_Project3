@@ -25,5 +25,5 @@ app.use("/api/v1/pos", posRoutes);
 app.use("/api/v1/inventory", inventoryRoutes);
 
 
-app.listen(port, () => console.log(`app listening on port ${port}`));
+app.listen(port, () => console.log(`Server Started on Port ${port}`));
 

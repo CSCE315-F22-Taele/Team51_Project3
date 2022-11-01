@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 
-const Inventory = () => {
+export default function Inventory() {
    const [items, setInventory] = useState([]);
 
    useEffect(() => {
@@ -46,5 +46,3 @@ const Inventory = () => {
       </div>
    )
 }
-
-export default Inventory;

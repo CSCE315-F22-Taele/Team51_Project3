@@ -1,16 +1,12 @@
 const express = require("express");
-const posRoutes = require("../../frontend/src/POS/routes");
-const inventoryRoutes = require("../../frontend/src/POS/inventoryRoutes");
+const posRoutes = require("../routes/menu");
+const inventoryRoutes = require("../routes/inventory");
 const app = express();
 const port = 3001;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("test");
-});
-
-//FOR FIXING CORS ERROR IN REACT
+// FOR FIXING CORS ERROR IN REACT
 const cors=require("cors");
 const { application } = require("express");
 const corsOptions ={
@@ -19,7 +15,10 @@ const corsOptions ={
    optionSuccessStatus:200,
 }
 app.use(cors(corsOptions))
-//end
+
+app.get("/", (req, res) => {
+    res.send("RevPOS Application: Pinging Test to Server");
+});
 
 app.use("/api/v1/pos", posRoutes);
 app.use("/api/v1/inventory", inventoryRoutes);

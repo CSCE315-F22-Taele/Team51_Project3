@@ -34,7 +34,7 @@ const POSPage = () => {
 
    async function getMenu() {
       try {
-         const res = await fetch("http://localhost:3001/api/v1/pos");
+         const res = await fetch("api/v1/pos");
          const data = await res.json();
          setMenu(data);
       }

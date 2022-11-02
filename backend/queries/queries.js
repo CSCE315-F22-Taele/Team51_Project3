@@ -14,6 +14,10 @@ const addMenuItem = "INSERT INTO menu (category, name, price, ingredients, png, 
 const removeMenuItem = "DELETE FROM menu WHERE id = $1"; 
 
 
+//REVENUE (SALES REPORT)
+const getAllRevenueDates = "SELECT * FROM revenue";
+const getRevenueByDate = "SELECT * FROM revenue where date = $1";
+
 module.exports = {
     getMenuItems,
     getMenuItemById,
@@ -26,4 +30,6 @@ module.exports = {
     addIngredient,
     removeIngredient,
     decrementInventoryById,
+    getAllRevenueDates,
+    getRevenueByDate,
 }

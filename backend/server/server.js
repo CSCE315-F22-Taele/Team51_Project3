@@ -1,6 +1,7 @@
 const express = require("express");
 const posRoutes = require("../routes/menu");
 const inventoryRoutes = require("../routes/inventory");
+const revenueRoutes = require("../routes/revenue");
 const app = express();
 const port = 3001;
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/pos", posRoutes);
 app.use("/api/v1/inventory", inventoryRoutes);
+app.use("/api/v1/revenue", revenueRoutes);
 
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

@@ -10,7 +10,7 @@ export default function Inventory() {
 
    async function getInventory() {
       try {
-         const res = await fetch("http://localhost:3001/api/v1/inventory");
+         const res = await fetch("api/v1/inventory");
          const data = await res.json();
          setInventory(data);
       }

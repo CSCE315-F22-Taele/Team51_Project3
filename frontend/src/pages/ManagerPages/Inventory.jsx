@@ -19,6 +19,17 @@ export default function Inventory() {
       }
    }
 
+   // async function editInventory() {
+   //    try {
+   //       const res = await fetch("api/v1/inventory");
+   //       const data = await res.json();
+   //       setInventory(data);
+   //    }
+   //    catch (err) {
+   //       console.log(err);
+   //    }
+   // }
+
    const displayData = items.map((item) => {
       return (
          <tr>

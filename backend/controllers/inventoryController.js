@@ -74,10 +74,28 @@ const removeIngredient = (req, res) => {
     });
 };
 
+const editInventoryById = (req, res) => {
+    const {amount, id} = req.body;
+
+    //make sure ingredient actually exists
+    pool.query(queries.getIngredientById, [id], (error, results) => {
+        const noIngredientFound = !results.rows.length;
+        if (noIngredientFound) {
+            res.send("Ingredient does not exist in database.");
+        } else {
+            pool.query(queries.editInventoryById, [amount,id], (error, results) => {
+                if (error) throw error;
+                res.status(200).send("Ingredient inventory reduced by one.");
+            });
+        }
+    });
+};
+
 module.exports = {
     getIngredients,
     getIngredientById,
     addIngredient,
     removeIngredient,
+    editInventoryById,
     decrementInventoryById,
 }

@@ -33,7 +33,8 @@ export default function Inventory() {
    const handleChange = (event) =>
    {
       // here should be the database call and thhen we can rerender the input
-      
+      const value = event.target.value;
+      setAmounts( values =>( {...values, [items.inventory] :values}))
    }
    const displayData = items.map((item) => {
       return (

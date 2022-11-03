@@ -4,7 +4,7 @@ const controller = require("../controllers/inventoryController")
 const router = Router();
 
 router.get("/", controller.getIngredients);
-router.post("/:amount,id", controller.editInventoryById);
+router.patch("/:id", controller.updateIngredientInventory);
 router.post("/", controller.addIngredient);
 router.get("/:id", controller.getIngredientById);
 router.delete("/:id", controller.removeIngredient);

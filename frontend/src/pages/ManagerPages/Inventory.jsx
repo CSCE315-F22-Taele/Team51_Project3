@@ -1,79 +1,90 @@
-
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect } from "react";
 
 export default function Inventory() {
-   const [items, setInventory] = useState([]);
-   const [amount, editInventoryById] = useState([]);
-   
-   
-   useEffect(() => {
-      getInventory();
-   }, []);
+    const [inventory, setInventory] = useState([]);
+    const [quantity, setQuantity] = useState();
 
+    /**
+     * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
+     */
+    async function getInventory() {
+        try {
+            const res = await fetch("api/v1/inventory");
+            const data = await res.json();
+            setInventory(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-   async function getInventory() {
-      try {
-         const res = await fetch("api/v1/inventory");
-         const data = await res.json();
-         setInventory(data);
-      }
-      catch (err) {
-         console.log(err);
-      }
-   }
+    useEffect(() => {
+        getInventory();
+    }, []);
 
-   async function changeInventory(amount, id ) {
-      try {
-         const res = await fetch("api/v1/inventory/?amount=${amount}&id=${id}");
-         const data = await res.json();
-         editInventoryById(data);
+    /**
+     * Sends a HTTP PATCH request with the quantity of the ID to be modified
+     * @author  Joshua, Johnny
+     * @param   {int} int the identification value of the ingredient being modified
+     * @param   {any} quantity the new inventory value to be assigned to the ingredient
+     */
+    async function updateIngredientInventory(id, quantity) {
+        try {
+            console.log(JSON.stringify(parseInt(quantity)));
+            const res = await fetch(`/api/v1/inventory/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PATCH",
+                },
+                body: JSON.stringify({ quantity: parseInt(quantity) }),
+            });
 
-      }
-      catch (err) {
-         console.log(err);
-      }
-   }
-   const displayData = items.map((item) => {
-      // const handleChange = (amount,id) =>
-      // {
-      //    // here should be the database call and thhen we can rerender the input
-      //    const { data, status } = useQuery([amount, id], editInventory)
-      //    // setAmounts( values =>( {...values, [items.inventory] :values}))
-      // }
-      return (
-         <tr>
-            <td>{item.id}</td>
-            <td>{item.name}</td>
-            <td>
-               <form>
-                  <input type='number' name={item.name} defaultValue={item.inventory} onChange={changeInventory(amount,item.id)}
-                  >
+            window.location = "/Inventory";
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-                  </input>
-               </form>
-            </td>
-            <td>{item.inventory}</td>
-         </tr>
-      )
-   })
+    const displayData = inventory.map((ingredient) => {
+        return (
+            <tr>
+                <td>{ingredient.id}</td>
+                <td>{ingredient.name}</td>
+                <td>{ingredient.inventory}</td>
+                <td>
+                    <form
+                        onSubmit={(event) => {
+                            updateIngredientInventory(ingredient.id, quantity);
+                        }}
+                    >
+                        <input
+                            type="number"
+                            name={ingredient.name}
+                            defaultValue={ingredient.inventory}
+                            onChange={(event) => {
+                                setQuantity(event.target.value);
+                            }}
+                        ></input>
+                    </form>
+                </td>
+            </tr>
+        );
+    });
 
-   return (
-      <div className="App">
-         <table className='table table-striped'>
-            <thead>
-               <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Change Amount</th>
-                  <th>Inventory</th>
-               </tr>
-            </thead>
-            <tbody>
-               {displayData}
-            </tbody>
-         </table>
-      </div>
-   )
+    return (
+        <div className="App">
+            <table className="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Inventory</th>
+                        <th>Change Amount</th>
+                    </tr>
+                </thead>
+                <tbody>{displayData}</tbody>
+            </table>
+        </div>
+    );
 }
-

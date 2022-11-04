@@ -1,7 +1,14 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages";
+import {
+    BrowserRouter as Router,
+    Navigate,
+    Routes,
+    Route,
+    Outlet,
+} from "react-router-dom";
+import Navbar from "./components/navbar/navbar"
+// import Home from "./pages/Home/home";
+import Login from "./pages/Login/login";
 import POSPage from "./pages/POSPage";
 import ManagerMenu from "./pages/ManagerMenu/ManagerMenu";
 import Inventory from "./pages/ManagerPages/Inventory";
@@ -10,22 +17,36 @@ import Excess from "./pages/ManagerPages/Excess";
 import Pair from "./pages/ManagerPages/Pair";
 import Restock from "./pages/ManagerPages/Restock";
 
-function App() {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/POSPage" element={<POSPage />} />
-        <Route path="/ManagerPage" element={<ManagerMenu />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/OrderHistory" element={<OrderHistory />} />
-        <Route path="/Excess" element={<Excess />} />
-        <Route path="/Pair" element={<Pair />} />
-        <Route path="/Restock" element={<Restock />} />
-      </Routes>
-    </Router>
-  );
-}
+const isAuth = true;
 
-export default App;
+const PrivateRoutes = () => {
+    return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
+};
+
+const RestrictedRoutes = () => {
+    return <>{!isAuth ? <Outlet /> : <Navigate to="/POSPage" />}</>;
+};
+
+export default function App() {
+    return (
+        <Router>
+            { (isAuth) ? <Navbar /> : null }
+            <Routes>
+                <Route exact path="/" element={<Login />} />
+
+                <Route element={<PrivateRoutes />}>
+                    <Route path="/POSPage" element={<POSPage />} />
+                    <Route path="/ManagerPage" element={<ManagerMenu />} />
+                    <Route path="/inventory" element={<Inventory />} />
+                    <Route path="/OrderHistory" element={<OrderHistory />} />
+                    <Route path="/Excess" element={<Excess />} />
+                    <Route path="/Pair" element={<Pair />} />
+                    <Route path="/Restock" element={<Restock />} />
+                </Route>
+                <Route element={<RestrictedRoutes />}>
+                    <Route path="/login" element={<Login />} />
+                </Route>
+            </Routes>
+        </Router>
+    );
+}

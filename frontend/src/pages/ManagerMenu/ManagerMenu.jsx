@@ -5,6 +5,7 @@ import boxImg from "../../images/orderHistory.png";
 import excessReportImg from "../../images/excess.png";
 import statButton from "../../images/statsbutton.png";
 import restockButton from "../../images/restock.png";
+import revenueButton from "../../images/revenue.jpg";
 import "./managerStyle.css";
 
 export default function ManagerPage() {
@@ -30,7 +31,7 @@ export default function ManagerPage() {
         <img className="statButton" src={boxImg} alt="Order History"></img>Order
         History
       </button>
-      <button onClick={()=>navigate("/Excess")}>
+      <button onClick={() => navigate("/Excess")}>
         <img
           className="statButton"
           src={excessReportImg}
@@ -57,6 +58,18 @@ export default function ManagerPage() {
           alt="Restock Report"
         ></img>
         Restock Report
+      </button>
+      <button
+        onClick={() => {
+          navigate("/Revenue");
+        }}
+      >
+        <img
+          className="statButton"
+          src={revenueButton}
+          alt="Sales Report"
+        ></img>
+        Sales Report
       </button>
     </div>
   );

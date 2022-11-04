@@ -6,7 +6,7 @@ import {
     Route,
     Outlet,
 } from "react-router-dom";
-import Navbar from "./components/navbar/navbar"
+import Navbar from "./components/nav/navbar"
 // import Home from "./pages/Home/home";
 import Login from "./pages/Login/login";
 import POSPage from "./pages/POSPage";

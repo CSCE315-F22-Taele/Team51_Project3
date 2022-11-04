@@ -75,6 +75,7 @@ export default function Inventory() {
     return (
         <div className="App">
             <table className="table table-striped">
+
                 <thead>
                     <tr>
                         <th>ID</th>

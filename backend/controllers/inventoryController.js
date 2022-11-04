@@ -100,6 +100,24 @@ const updateIngredientInventory = (req, res) => {
     );
 };
 
+/**
+ * Queries the items in certain dates from orders and orderinfo
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
+
+const getExcessDates = (req,res) => {
+    const firstDate = req.params.firstDate;
+    const secondDate = req.params.secondDate;
+    console.log(firstDate, secondDate);
+
+    //const { date } = req.body;
+    pool.query(queries.excessReport, [firstDate,secondDate], (error, results) => {
+        if (error) throw error;
+        res.status(200).json(results.rows)
+    });
+}
+
 module.exports = {
     getIngredients,
     getIngredientById,
@@ -107,4 +125,5 @@ module.exports = {
     removeIngredient,
     updateIngredientInventory,
     decrementInventoryById,
+    getExcessDates,
 };

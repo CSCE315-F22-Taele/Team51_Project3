@@ -30,7 +30,7 @@ export default function ManagerPage() {
         <img className="statButton" src={boxImg} alt="Order History"></img>Order
         History
       </button>
-      <button onClick={navigate()}>
+      <button onClick={()=>navigate("/Excess")}>
         <img
           className="statButton"
           src={excessReportImg}

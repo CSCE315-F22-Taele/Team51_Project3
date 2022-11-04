@@ -9,6 +9,7 @@ import OrderHistory from "./pages/ManagerPages/OrderHistory";
 import Excess from "./pages/ManagerPages/Excess";
 import Pair from "./pages/ManagerPages/Pair";
 import Restock from "./pages/ManagerPages/Restock";
+import Revenue from "./pages/ManagerPages/Revenue";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/Excess" element={<Excess />} />
         <Route path="/Pair" element={<Pair />} />
         <Route path="/Restock" element={<Restock />} />
+        <Route path="/Revenue" element={<Revenue />} />
       </Routes>
     </Router>
   );

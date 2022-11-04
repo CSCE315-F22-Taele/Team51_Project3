@@ -4,7 +4,7 @@ const controller = require('../controllers/revenueController');
 const router = Router();
 
 router.get("/", controller.getAllRevenueDates);
-router.get("/:date,date", controller.getRevenueBetweenDates); //check params
+router.get("/:firstDate/:secondDate", controller.getRevenueBetweenDates); //check params
 router.get("/:date", controller.getRevenueByDate);
 router.get("/", controller.getOrderIDsFromOrderHistory);
 router.get("/:orderid", controller.getRevenueByOrderID);

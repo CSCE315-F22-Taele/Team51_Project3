@@ -10,9 +10,12 @@ const getAllRevenueDates = (req, res) => {
 }
 
 const getRevenueBetweenDates = (req, res) => { //check params
-    const date = req.params.date;
+    const firstDate = req.params.firstDate;
+    const secondDate = req.params.secondDate;
+    console.log(firstDate, secondDate);
+
     //const { date } = req.body;
-    pool.query(queries.getRevenueBetweenDates, [date,date], (error, results) => {
+    pool.query(queries.getRevenueBetweenDates, [firstDate,secondDate], (error, results) => {
         if (error) throw error;
         res.status(200).json(results.rows)
     });

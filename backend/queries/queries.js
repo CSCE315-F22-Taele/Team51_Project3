@@ -17,7 +17,10 @@ const removeMenuItem = "DELETE FROM menu WHERE id = $1";
 
 //REVENUE (SALES REPORT)
 const getAllRevenueDates = "SELECT * FROM revenue";
-const getRevenueByDate = "SELECT * FROM revenue where date = $1";
+const getRevenueBetweenDates = "SELECT * FROM revenue WHERE date BETWEEN $1 and $2";
+const getRevenueByDate = "SELECT * FROM revenue WHERE date = $1";
+const getOrderIDsFromOrderHistory = "SELECT distinct orderid FROM orders;" //on the x axis
+const getRevenueByOrderID = "SELECT amount FROM orderinfo where orderid = $1" //get corresponding price
 
 module.exports = {
     getMenuItems,
@@ -33,5 +36,8 @@ module.exports = {
     decrementInventoryById,
     editInventoryById,
     getAllRevenueDates,
+    getRevenueBetweenDates,
     getRevenueByDate,
+    getOrderIDsFromOrderHistory,
+    getRevenueByOrderID,
 }

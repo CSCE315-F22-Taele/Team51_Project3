@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@apollo/client": "^3.7.1",
-    "echarts-for-react": "^3.0.2",
-    "graphql": "^16.6.0",
-    "react-query": "^3.39.2"
-  }
-}

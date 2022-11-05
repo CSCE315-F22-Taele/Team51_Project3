@@ -1,20 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import Layout from '../../layouts/layout'
 
 const Home = () => {
   return (
-    <div>
-      <header>
-        <nav className="navbar bg-light">
-          <div className="container-fluid">
-            <Link to="/" className="navbar-brand mb-0 h1">
-              RevPOS
-            </Link>
-          </div>
-        </nav>
-      </header>
-    </div>
-  );
+    <Layout>
+      <h1>Home</h1>
+    </Layout>
+  )
 }
 
-export default Home;
+export default Home

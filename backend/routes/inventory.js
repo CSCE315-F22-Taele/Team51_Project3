@@ -2,7 +2,7 @@ const { Router } = require('express');
 const controller = require("../controllers/inventoryController")
 
 const router = Router();
-z
+
 router.get("/", controller.getIngredients);
 router.patch("/:id", controller.updateIngredientInventory);
 router.post("/", controller.addIngredient);

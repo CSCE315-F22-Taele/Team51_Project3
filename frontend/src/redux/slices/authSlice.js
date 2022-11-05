@@ -12,7 +12,7 @@ export const authSlice = createSlice({
             state.isAuth = true;
         },
         unauthenticateUser: (state) => {
-            state.isAuth = true;
+            state.isAuth = false;
         },
     },
 });

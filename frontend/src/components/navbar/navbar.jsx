@@ -18,6 +18,9 @@ const Navbar = () => {
                         <NavLink to="/POSPage" className="mx-3">
                             <span>POS</span>
                         </NavLink>
+                        <NavLink to="/ManagerMenu" className="mx-3">
+                            <span>Manager</span>
+                        </NavLink>
                     </div>
                 ) : (
                     <div>

@@ -39,7 +39,7 @@ const App = () => {
 
                 <Route element={<PrivateRoutes />}>
                     <Route path="/POSPage" element={<POSPage />} />
-                    <Route path="/ManagerPage" element={<ManagerMenu />} />
+                    <Route path="/ManagerMenu" element={<ManagerMenu />} />
                     <Route path="/inventory" element={<Inventory />} />
                     <Route path="/OrderHistory" element={<OrderHistory />} />
                     <Route path="/Excess" element={<Excess />} />

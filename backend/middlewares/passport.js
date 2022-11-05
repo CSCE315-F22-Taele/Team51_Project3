@@ -1,6 +1,6 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
 const passport = require("passport");
-const { Strategy } = require("passport-jwt");
+const JWTstrategy = require("passport-jwt").Strategy;
 const pool = require("../server/db");
 
 const cookieExtractor = function (req) {
@@ -10,7 +10,7 @@ const cookieExtractor = function (req) {
 };
 
 passport.use(
-    new Strategy(
+    new JWTstrategy(
         {
             jwtFromRequest: cookieExtractor,
             secretOrKey: process.env.SECRET,

@@ -22,6 +22,27 @@ const usernameExists = check("username").custom(async (value) => {
     }
 });
 
+const loginCredentialsCheck = check("username").custom(
+    async (value, { req }) => {
+        const user = await pool.query(
+            "SELECT * FROM accounts WHERE username = $1",
+            [value]
+        );
+        if (!user.rows.length) {
+            throw new Error("[1] Invalid credentials, try again.");
+        }
+
+        const validPassword =
+            req.body.password === user.rows[0].password; 
+        if (!validPassword) {
+            throw new Error("[2] Invalid credentials, try again.");
+        }
+
+        req.user = user.rows[0];
+    }
+);
+
 module.exports = {
     registerValidation: [username, password, usernameExists],
+    loginValidation: [loginCredentialsCheck],
 };

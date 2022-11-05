@@ -6,9 +6,10 @@ import {
     Route,
     Outlet,
 } from "react-router-dom";
-import Navbar from "./components/nav/navbar"
-// import Home from "./pages/Home/home";
+import Navbar from "./components/navbar/navbar"
+import Home from "./pages/Home/home";
 import Login from "./pages/Login/login";
+import Register from "./pages/Register/register"
 import POSPage from "./pages/POSPage";
 import ManagerMenu from "./pages/ManagerMenu/ManagerMenu";
 import Inventory from "./pages/ManagerPages/Inventory";
@@ -18,22 +19,23 @@ import Pair from "./pages/ManagerPages/Pair";
 import Restock from "./pages/ManagerPages/Restock";
 import Revenue from "./pages/ManagerPages/Revenue";
 
-const isAuth = true;
+import { useSelector } from "react-redux";
 
 const PrivateRoutes = () => {
-    return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
-};
+    const { isAuth } = useSelector((state) => state.auth)
+    return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
+  }
+  
+  const RestrictedRoutes = () => {
+    const { isAuth } = useSelector((state) => state.auth)
+    return <>{!isAuth ? <Outlet /> : <Navigate to='/POSPage' />}</>
+  }
 
-const RestrictedRoutes = () => {
-    return <>{!isAuth ? <Outlet /> : <Navigate to="/POSPage" />}</>;
-};
-
-export default function App() {
+const App = () => {
     return (
         <Router>
-            { (isAuth) ? <Navbar /> : null }
             <Routes>
-                <Route exact path="/" element={<Login />} />
+                <Route exact path="/" element={<Home />} />
 
                 <Route element={<PrivateRoutes />}>
                     <Route path="/POSPage" element={<POSPage />} />
@@ -46,9 +48,12 @@ export default function App() {
                     <Route path="/Revenue" element={<Revenue />} />
                 </Route>
                 <Route element={<RestrictedRoutes />}>
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/login" element={<Login />} /> 
+                    <Route path="/register" element={<Register />} />
                 </Route>
             </Routes>
         </Router>
     );
 }
+
+export default App

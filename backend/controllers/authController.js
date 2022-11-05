@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
     } catch (err) {
         console.log(err.message);
         return res.status(500).json({
-            error: err.emssage,
+            error: err.message,
         });
     }
 };
@@ -69,13 +69,10 @@ exports.protected = async (req, res) => {
 
 exports.logout = async (req, res) => {
     try {
-        return res
-            .status(200)
-            .clearCookie("token", { httpOnly: true })
-            .json({
-                success: true,
-                message: "Logged out successfully",
-            });
+        return res.status(200).clearCookie("token", { httpOnly: true }).json({
+            success: true,
+            message: "Logged out successfully",
+        });
     } catch (err) {
         console.log(err.message);
         return res.status(500).json({

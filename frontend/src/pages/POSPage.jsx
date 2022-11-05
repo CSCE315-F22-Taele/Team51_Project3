@@ -60,8 +60,7 @@ const POSPage = () => {
                     <Basket
                         onAdd={onAdd}
                         onRemove={onRemove}
-                        cartItems={cartItems}
-                    ></Basket>
+                        cartItems={cartItems}></Basket>
                 </div>
             </Layout>
         </div>

@@ -6,10 +6,10 @@ const { userAuth } = require("../middlewares/auth");
 
 const router = Router();
 
-router.get("/get-users", getUsers) 
-router.get("/protected", userAuth, protected)
-router.post("/register", registerValidation, validateAuthErrors, register)
-router.post("/login", loginValidation, validateAuthErrors, login)
-router.get("/logout", userAuth, logout)
+router.get("/get-users", getUsers);
+router.get("/protected", userAuth, protected);
+router.post("/register", registerValidation, validateAuthErrors, register);
+router.post("/login", loginValidation, validateAuthErrors, login);
+router.get("/logout", userAuth, logout);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 export async function onLogin(loginData) {
     return await fetch("/api/login", {
         method: "POST",
-        credentials: 'include',
+        credentials: "include",
         headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -9,7 +9,11 @@ export async function onLogin(loginData) {
         },
         body: JSON.stringify({
             username: loginData.username,
-            password: loginData.password
-        })
+            password: loginData.password,
+        }),
     });
+}
+
+export async function onLogout() {
+    return await fetch("/api/logout");
 }

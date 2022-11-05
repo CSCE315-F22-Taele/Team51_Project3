@@ -9,15 +9,32 @@ export default function Excess() {
   async function callExcess(date1,date2)
   {
     try {
-      const res = await fetch(`api/v1/inventory/${date1},${date2}`);
-      const data = await res.json();
-      setTable(data);
-  } catch (err) {
-      console.error(err);
+      const res = await fetch(`api/v1/inventory/${JSON.stringify(date1)}`,{
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "PATCH",
+        },
+        body: JSON.stringify(date2),
+    });
+    setTable(res)
+    window.location = "/Excess";
+} catch (err) {
+    console.error(err);
+}
   }
-  }
-  const userInput = () => {
-  }
+  const userInput = items.map((displayItem) => {
+    return(
+    <tr>
+    <td>{displayItem.orderId}</td>
+    <td>{displayItem.date}</td>
+    <td>{displayItem.amount}</td>
+     <td>{displayItem.items}</td>
+      <td>{displayItem.inventory_ordered}</td>
+    </tr>
+    );
+    });
 
   return (
     <div className="App">
@@ -49,7 +66,7 @@ export default function Excess() {
                 <th>date</th>
                 <th>amount</th>
                 <th>items</th>
-                <th>inventory ordered</th>
+                <th>inventory_ordered</th>
             </tr>
         </thead>
         <tbody>{userInput}</tbody>

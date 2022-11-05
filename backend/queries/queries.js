@@ -6,7 +6,7 @@ const addIngredient = "INSERT INTO ingredients (id, name, inventory) VALUES ($1,
 const removeIngredient = "DELETE FROM ingredients WHERE id = $1";
 const decrementInventoryById = "UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1";
 const editInventoryById = "UPDATE ingredients set inventory = $1 where id = $1";
-const excessReport = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2;"
+const excessReport = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
 
 
 //MENU ITEMS (For POS)

@@ -106,17 +106,21 @@ const updateIngredientInventory = (req, res) => {
  * @param   {any} res packet to send back the desired HTTP response
  */
 
-const getExcessDates = (req,res) => {
-    const firstDate = req.params.firstDate;
-    const secondDate = req.params.secondDate;
-    console.log(firstDate, secondDate);
+ const getExcessDates = (req, res) => {
+    // Grabs the :id value (params) from the request
+    const { date1 } = req.params;
+    // Grabs the JSON body data from the request
+    const { date2 } = req.body;
 
-    //const { date } = req.body;
-    pool.query(queries.excessReport, [firstDate,secondDate], (error, results) => {
-        if (error) throw error;
-        res.status(200).json(results.rows)
-    });
-}
+    pool.query(
+        "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2",
+        [date1, date2],
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).send("excess dates grapped");
+        }
+    );
+};
 
 module.exports = {
     getIngredients,

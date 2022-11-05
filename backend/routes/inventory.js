@@ -9,6 +9,6 @@ router.post("/", controller.addIngredient);
 router.get("/:id", controller.getIngredientById);
 router.delete("/:id", controller.removeIngredient);
 router.patch("/:id", controller.decrementInventoryById)
-router.patch("/:firstDate/:secondDate", controller.getExcessDates)
+router.patch("/:firstDate", controller.getExcessDates)
 
 module.exports = router;

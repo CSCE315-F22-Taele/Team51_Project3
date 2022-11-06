@@ -21,13 +21,14 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            await onLogin(values);
+            const res = await onLogin(values);
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
             dispatch(authenticateUser());
             localStorage.setItem("isAuth", "true");
         } catch (err) {
-            console.log("ERROR")
-            console.log(err.response.data.errors[0].msg);
-            setError(err.response.data.errors[0].msg);
+            setError("Invalid credentials, try again!");
         }
     };
 

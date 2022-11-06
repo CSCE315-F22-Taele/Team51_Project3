@@ -100,26 +100,6 @@ const updateIngredientInventory = (req, res) => {
     );
 };
 
-/**
- * Queries the items in certain dates from orders and orderinfo
- * this will be parsed to find the lowest items
- * @param   {any} req object containing information about the HTTP request
- * @param   {any} res packet to send back the desired HTTP response
- */
-
- const getExcessDates = (req, res) => {
-    // Grabs the JSON body data from the request
-    const { date1, date2 } = req.body;
-
-    pool.query(
-        queries.excessReport,
-        [date1, date2],
-        (error, results) => {
-            if (error) throw error;
-            res.status(200).send("excess dates grapped");
-        }
-    );
-};
 
 module.exports = {
     getIngredients,
@@ -128,5 +108,4 @@ module.exports = {
     removeIngredient,
     updateIngredientInventory,
     decrementInventoryById,
-    getExcessDates,
 };

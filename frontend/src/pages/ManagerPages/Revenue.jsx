@@ -48,7 +48,8 @@ useEffect(() => {
     catch (err) {
         console.log(err);
     }
-   }*/
+   }
+   */
 
    const displayInfo = sales.map((item) => {
     return (

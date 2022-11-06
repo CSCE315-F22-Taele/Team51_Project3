@@ -7,7 +7,7 @@ export default function Excess() {
 
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  cosnt [excessReportCalled, setExcess] = useState(false);
+  const [excessReportCalled, setExcess] = useState(false);
 
 
   // async function getExcess() {

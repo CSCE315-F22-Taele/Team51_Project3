@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 
 export default function Revenue() {
   const [sales, setTable] = useState([]);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   async function getExcess() {
     try {
@@ -45,7 +45,9 @@ export default function Revenue() {
        }}*/
       >
         <input
-          type="date"
+
+          type="string"
+
           placeholder="yyyy-mm-dd"
           onChange={(event) => {
             setStartDate(event.target.value);
@@ -53,7 +55,7 @@ export default function Revenue() {
         >
         </input>
         <input
-          type="date"
+          type="string"
           placeholder="yyyy-mm-dd"
           onChange={(event) => {
             setEndDate(event.target.value);
@@ -145,5 +147,3 @@ export default function Revenue() {
 //     </div>
 //   )
 
-
-// }

@@ -1,5 +1,5 @@
 const { Router } = require('express');
 const controller = require('../controllers/restockController');
-const rounter = Router();
+const router = Router();
 
 module.exports = router;

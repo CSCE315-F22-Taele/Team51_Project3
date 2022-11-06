@@ -25,7 +25,7 @@ const getPairDates = (req, res) => {
     const secondDate = req.params.secondDate;
     console.log(firstDate,secondDate);
     pool.query(
-        queries.excessReportDates,
+        queries.pairReportDates,
         [firstDate, secondDate],
         (error, results) => {
             if (error) throw error;

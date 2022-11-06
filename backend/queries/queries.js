@@ -30,6 +30,7 @@ const excessReport = "select * from orders join orderinfo on orders.orderid = or
 const showRestock = "SELECT * FROM ingredients where inventory < $1"
 
 //PAIR REPORT
+const pairReportDates = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
 const pairReport = "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN $1 AND $2) GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;";
 
 module.exports = {
@@ -53,5 +54,6 @@ module.exports = {
     excessReport,
     excessReportDates,
     showRestock,
+    pairReportDates,
     pairReport,
 }

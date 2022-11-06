@@ -6,8 +6,6 @@ const addIngredient = "INSERT INTO ingredients (id, name, inventory) VALUES ($1,
 const removeIngredient = "DELETE FROM ingredients WHERE id = $1";
 const decrementInventoryById = "UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1";
 const editInventoryById = "UPDATE ingredients set inventory = $1 where id = $1";
-const excessReport = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
-
 
 //MENU ITEMS (For POS)
 const getMenuItems = "SELECT * FROM menu";
@@ -23,6 +21,10 @@ const getRevenueBetweenDates = "SELECT * FROM revenue WHERE date BETWEEN $1 and 
 const getRevenueByDate = "SELECT * FROM revenue WHERE date = $1";
 const getOrderIDsFromOrderHistory = "SELECT distinct orderid FROM orders;" //on the x axis
 const getRevenueByOrderID = "SELECT amount FROM orderinfo where orderid = $1" //get corresponding price
+
+//EXCESS REPORT
+const excessReportDates = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
+const excessReport = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid";
 
 
 module.exports = {
@@ -44,4 +46,5 @@ module.exports = {
     getOrderIDsFromOrderHistory,
     getRevenueByOrderID,
     excessReport,
+    excessReportDates,
 }

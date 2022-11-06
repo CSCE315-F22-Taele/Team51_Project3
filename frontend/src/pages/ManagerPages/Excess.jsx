@@ -4,13 +4,15 @@ import { useState, useEffect } from 'react';
 
 export default function Revenue() {
   const [sales, setTable] = useState([]);
+
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
+
   async function getExcess() {
     try {
-      //const res = await fetch(`api/v1/inventory/${startDate}/${endDate}`);
-      const res = await fetch("api/v1/inventory");
+      const res = await fetch("api/v1/excess");
+      console.log(res)
       const data = await res.json();
       setTable(data);
     } catch (err) {
@@ -22,6 +24,25 @@ export default function Revenue() {
     getExcess();
   }, []);
 
+  async function editExcessDates() {
+    try {
+      const res = await fetch(`api/v1/excess/${firstDate}/${secondDate}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Acces-Control-Allow-Methods": "PATCH",
+        },
+        body: JSON.stringify(sales),
+      });
+      setTable(res);
+      window.location = "/Excess";
+
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
 
   const displayInfo = sales.map((item) => {
     return (
@@ -40,9 +61,9 @@ export default function Revenue() {
     <div className="App">
       <h1>Excess Report </h1>
       <form
-      /*onSubmit={(event) => {
-         getRevenue(startDate,endDate);
-       }}*/
+        onSubmit={(event) => {
+          editExcessDates();
+        }}
       >
         <input
 
@@ -79,7 +100,7 @@ export default function Revenue() {
 
   );
 
-}
+};
 
 // import React from 'react'
 // import { useState, useEffect } from "react";

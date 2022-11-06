@@ -102,18 +102,17 @@ const updateIngredientInventory = (req, res) => {
 
 /**
  * Queries the items in certain dates from orders and orderinfo
+ * this will be parsed to find the lowest items
  * @param   {any} req object containing information about the HTTP request
  * @param   {any} res packet to send back the desired HTTP response
  */
 
  const getExcessDates = (req, res) => {
-    // Grabs the :id value (params) from the request
-    const { date1 } = req.params;
     // Grabs the JSON body data from the request
-    const { date2 } = req.body;
+    const { date1, date2 } = req.body;
 
     pool.query(
-        "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2",
+        queries.excessReport,
         [date1, date2],
         (error, results) => {
             if (error) throw error;

@@ -2,49 +2,73 @@ import React, { Component } from "react";
 import { useState, useEffect } from 'react';
 
 
-export default function Revenue() {
+export default function Excess() {
   const [sales, setTable] = useState([]);
 
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  cosnt [excessReportCalled, setExcess] = useState(false);
 
 
-  async function getExcess() {
-    try {
-      const res = await fetch("api/v1/excess");
-      console.log(res)
-      const data = await res.json();
-      setTable(data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  // async function getExcess() {
+  //   try {
+  //     const res = await fetch("api/v1/excess");
+  //     console.log(res)
+  //     const data = await res.json();
+  //     setTable(data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
 
-  useEffect(() => {
-    getExcess();
-  }, []);
+  // useEffect(() => {
+  //   editExcessDates();
+  // }, []);
 
+  /**
+ * Sends a HTTP PATCH request with the quantity of the ID to be modified
+ * @author  Joshua
+ * @param   {date} startDate first date for btwn
+ * @param   {date} endDate second date in btwn
+ */
+  // async function editExcessDates() {
+  //   try {
+  //     const res = await fetch(`api/v1/excess/${firstDate}/${secondDate}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "Acces-Control-Allow-Methods": "PATCH",
+  //       },
+  //       body: JSON.stringify(sales),
+  //     });
+  //     setTable(res);
+  //     window.location = "/Excess";
+
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //   }
+  // }  
   async function editExcessDates() {
     try {
-      const res = await fetch(`api/v1/excess/${firstDate}/${secondDate}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Acces-Control-Allow-Methods": "PATCH",
-        },
-        body: JSON.stringify(sales),
-      });
-      setTable(res);
-      window.location = "/Excess";
-
-    }
-    catch (err) {
-      console.log(err);
-    }
+      const res = await fetch(`api/v1/excess/${startDate}/${endDate}`);
+      const data = await res.json();
+      setTable(data);
+      setExcess = true;
+      // var saveFirstDate = startDate;
+      // var saveSecondDate = endDate;
+      // localStorage.setItem(startDate, saveFirstDate);
+      // localStorage.setItem(endDate, saveSecondDate);
+      console.log(startDate, endDate);
+    } catch (err) { console.error(err); }
   }
 
   const displayInfo = sales.map((item) => {
+    if (excessReportCalled)
+    {
+      // return functionality and parser here
+    }
     return (
       <tr>
         <td>{item.orderId}</td>
@@ -60,8 +84,10 @@ export default function Revenue() {
   return (
     <div className="App">
       <h1>Excess Report </h1>
-      <form
+      <form 
         onSubmit={(event) => {
+          editExcessDates();
+          event.preventDefault();
           editExcessDates();
         }}
       >
@@ -73,6 +99,7 @@ export default function Revenue() {
           onChange={(event) => {
             setStartDate(event.target.value);
           }}
+          onKeyPress="setStorage(this)"
         >
         </input>
         <input
@@ -81,7 +108,8 @@ export default function Revenue() {
           onChange={(event) => {
             setEndDate(event.target.value);
           }}
-        ></input>
+          onKeyPress="setStorage(this)"
+          ></input>
         <button>Submit</button>
       </form>
       <table className="table table-striped">

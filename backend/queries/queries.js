@@ -26,6 +26,8 @@ const getRevenueByOrderID = "SELECT amount FROM orderinfo where orderid = $1" //
 const excessReportDates = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
 const excessReport = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid";
 
+//RESTOCK REPORT
+const showRestock = "SELECT * FROM ingredients where inventory < $1"
 
 module.exports = {
     getMenuItems,
@@ -47,4 +49,5 @@ module.exports = {
     getRevenueByOrderID,
     excessReport,
     excessReportDates,
+    showRestock,
 }

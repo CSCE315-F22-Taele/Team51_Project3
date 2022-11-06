@@ -11,6 +11,8 @@ export async function onLogin(loginData) {
             username: loginData.username,
             password: loginData.password,
         }),
+    }).then(response => {
+        console.log(response.status, response.ok)
     });
 }
 

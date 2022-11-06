@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
     };
     try {
         const token = sign(payload, process.env.SECRET);
-
+        console.log("Logged in");
         return res.status(200).cookie("token", token, { httpOnly: true }).json({
             success: true,
             message: "Logged in successfully",

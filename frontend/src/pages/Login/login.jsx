@@ -25,6 +25,7 @@ const Login = () => {
             dispatch(authenticateUser());
             localStorage.setItem("isAuth", "true");
         } catch (err) {
+            console.log("ERROR")
             console.log(err.response.data.errors[0].msg);
             setError(err.response.data.errors[0].msg);
         }
@@ -32,6 +33,7 @@ const Login = () => {
 
     return (
         <div>
+            <Layout></Layout>
             <form onSubmit={(e) => onSubmit(e)} className="container mt-3">
                 <h1>Login</h1>
 

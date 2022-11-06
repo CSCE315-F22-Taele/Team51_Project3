@@ -6,10 +6,9 @@ import {
     Route,
     Outlet,
 } from "react-router-dom";
-import Navbar from "./components/navbar/navbar"
 import Home from "./pages/Home/home";
 import Login from "./pages/Login/login";
-import Register from "./pages/Register/register"
+import Register from "./pages/Register/register";
 import POSPage from "./pages/POSPage";
 import ManagerMenu from "./pages/ManagerMenu/ManagerMenu";
 import Inventory from "./pages/ManagerPages/Inventory";
@@ -22,14 +21,14 @@ import Revenue from "./pages/ManagerPages/Revenue";
 import { useSelector } from "react-redux";
 
 const PrivateRoutes = () => {
-    const { isAuth } = useSelector((state) => state.auth)
-    return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
-  }
-  
-  const RestrictedRoutes = () => {
-    const { isAuth } = useSelector((state) => state.auth)
-    return <>{!isAuth ? <Outlet /> : <Navigate to='/POSPage' />}</>
-  }
+    const { isAuth } = useSelector((state) => state.auth);
+    return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
+};
+
+const RestrictedRoutes = () => {
+    const { isAuth } = useSelector((state) => state.auth);
+    return <>{!isAuth ? <Outlet /> : <Navigate to="/POSPage" />}</>;
+};
 
 const App = () => {
     return (
@@ -48,12 +47,12 @@ const App = () => {
                     <Route path="/Revenue" element={<Revenue />} />
                 </Route>
                 <Route element={<RestrictedRoutes />}>
-                    <Route path="/login" element={<Login />} /> 
+                    <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                 </Route>
             </Routes>
         </Router>
     );
-}
+};
 
-export default App
+export default App;

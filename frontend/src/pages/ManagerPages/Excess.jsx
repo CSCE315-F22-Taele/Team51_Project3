@@ -45,7 +45,9 @@ export default function Revenue() {
        }}*/
       >
         <input
+
           type="string"
+
           placeholder="yyyy-mm-dd"
           onChange={(event) => {
             setStartDate(event.target.value);
@@ -145,5 +147,3 @@ export default function Revenue() {
 //     </div>
 //   )
 
-
-// }

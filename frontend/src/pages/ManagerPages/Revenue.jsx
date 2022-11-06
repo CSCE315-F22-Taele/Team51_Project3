@@ -3,55 +3,129 @@ import ReactEcharts from "echarts-for-react";
 import { useState, useEffect } from 'react';
 
 
-function Revenue() {
+export default function Revenue() {
   const[sales, setRevenue] = useState([]);
+  const[startDate, setStartDate]= useState();
+  const[endDate, setEndDate]= useState();
 
-  //getRevenue();
-  useEffect(()=> {
-      getRevenue();
-  }, []);
-
-  async function getRevenue() {
-      try {
-         const res = await fetch("api/v1/revenue");
-         const data = await res.json();
-         setRevenue(data);
-         //console.log(data);
-      }
-      catch (err) {
-         console.log(err);
-      }
-   }
-  }
-
-
-  class App extends Component {
-    render() {
-      return (
-        <ReactEcharts
-          option={{
-            xAxis: {
-              type: "category",
-              //needs to be orderids from orderinfo
-              data: ["ID#", "ID#", "ID#", "ID#", "ID#", "ID#", "ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#"]
-            },
-            yAxis: {
-
-              name: "Revenue of Menu Items",
-
-              type: "value"
-            },
-            series: [{ 
-              //hardcoded right now, but needs to be revenue
-              data: [820, 932, 901, 934, 820, 932, 901, 934,820, 932, 901, 934, 1290, 1330, 1320, 1290, 1330, 1320, 1290, 1330, 1320],
-              type: "bar"
-            }]
-          }}
-        />
-      );
+  async function getSales() {
+    try {
+        //const res = await fetch(`api/v1/revenue/${startDate}/${endDate}`);
+        const res = await fetch("api/v1/revenue");
+        const data = await res.json();
+        setRevenue(data);
+    } catch (err) {
+        console.error(err);
     }
-  }
-  export default App;
+}
+
+useEffect(() => {
+    getSales();
+}, []);
+
+  // //getRevenue();
+  // useEffect(()=> {
+  //     getRevenue();
+  // }, []);
+
+/*
+  async function getRevenue(startDate,endDate) {
+    try {
+        const res = await fetch(`api/v1/revenue/${startDate}/${endDate}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Acces-Control-Allow-Methods": "PATCH",
+          },
+          body: JSON.stringify(sales),
+        });
+        setRevenue(res);
+        window.location = "/Revenue";
+        // const data = await res.json();
+        //console.log(data);
+    }
+    catch (err) {
+        console.log(err);
+    }
+   }*/
+
+   const displayInfo = sales.map((item) => {
+    return (
+      <tr>
+        <td> {item.name} </td>
+        <td> {item.revenue} </td>
+
+      </tr>
+    );
+   });
+
+   return (
+      <div className="App">
+        <h1>Sales Report </h1>
+      <form
+       /*onSubmit={(event) => {
+          getRevenue(startDate,endDate);
+        }}*/
+      >
+        <input
+        type="string"
+        placeholder="yyyy-mm-dd"
+        onChange={(event) => {
+          setStartDate(event.target.value);
+        }}
+      >
+      </input>
+      <input
+        type="string"
+        placeholder="yyyy-mm-dd"
+        onChange={(event) => {
+          setEndDate(event.target.value);
+        }}
+      ></input>
+      <button>Submit</button>
+    </form>
+        <table className="table table-striped">
+            <thead>
+                <tr>
+                    <th>item</th>
+                    <th>revenue</th>
+                </tr>
+            </thead>
+            <tbody>{displayInfo}</tbody>
+        </table>
+    </div>
+    
+   );
+
+}
+  // class App extends Component {
+  //   render() {
+  //     return (
+  //       <ReactEcharts
+  //         option={{
+  //           xAxis: {
+  //             type: "category",
+  //             //needs to be orderids from orderinfo
+  //             data: ["ID#", "ID#", "ID#", "ID#", "ID#", "ID#", "ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#","ID#"]
+  //           },
+  //           yAxis: {
+
+  //             name: "Revenue of Menu Items",
+
+  //             type: "value"
+  //           },
+  //           series: [{ 
+  //             //hardcoded right now, but needs to be revenue
+  //             data: [820, 932, 901, 934, 820, 932, 901, 934,820, 932, 901, 934, 1290, 1330, 1320, 1290, 1330, 1320, 1290, 1330, 1320],
+  //             type: "bar"
+  //           }]
+  //         }}
+  //       />
+  //     );
+  //   }
+  // }
+  // export default App;
 
 /*import React from 'react'
 import { useEffect, useState } from 'react';

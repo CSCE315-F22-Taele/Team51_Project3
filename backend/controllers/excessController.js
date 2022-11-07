@@ -1,5 +1,4 @@
 const pool = require("../server/db");
-const queries = require("../queries/queries");
 const { response } = require("express");
 
 /**
@@ -9,14 +8,14 @@ const { response } = require("express");
  * @param   {any} res packet to send back the desired HTTP response
  */
 const getExcess = (req, res) => {
-    pool.query(queries.excessReport,(error, results) => {
+    pool.query(
+        "SELECT * FROM orders JOIN orderinfo ON orders.orderid = orderinfo.orderid",
+        (error, results) => {
             if (error) throw error;
             res.status(200).json(results.rows);
         }
     );
 };
-
-
 
 const getExcessDates = (req, res) => {
     // Grabs the JSON body data from the request
@@ -35,13 +34,12 @@ const getExcessDates = (req, res) => {
     // }
     const firstDate = req.params.firstDate;
     const secondDate = req.params.secondDate;
-    console.log(firstDate,secondDate);
     pool.query(
-        queries.excessReportDates,
+        "SELECT * FROM orders JOIN orderinfo ON orders.orderid = orderinfo.orderid WHERE orders.date between $1 AND $2",
         [firstDate, secondDate],
         (error, results) => {
             if (error) throw error;
-            res.status(200).send("excess dates grapped");
+            res.status(200).send(results.rows);
         }
     );
     // const { firstDate } = req.params;
@@ -59,7 +57,6 @@ const getExcessDates = (req, res) => {
 };
 
 module.exports = {
-
     getExcessDates,
     getExcess,
 };

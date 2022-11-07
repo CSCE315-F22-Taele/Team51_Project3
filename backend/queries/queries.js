@@ -22,10 +22,6 @@ const getRevenueByDate = "SELECT * FROM revenue WHERE date = $1";
 const getOrderIDsFromOrderHistory = "SELECT distinct orderid FROM orders;" //on the x axis
 const getRevenueByOrderID = "SELECT amount FROM orderinfo where orderid = $1" //get corresponding price
 
-//EXCESS REPORT
-const excessReportDates = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
-const excessReport = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid";
-
 //RESTOCK REPORT
 const showRestock = "SELECT * FROM ingredients where inventory < $1"
 
@@ -50,8 +46,6 @@ module.exports = {
     getRevenueByDate,
     getOrderIDsFromOrderHistory,
     getRevenueByOrderID,
-    excessReport,
-    excessReportDates,
     showRestock,
     pairReport,
 }

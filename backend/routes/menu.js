@@ -10,3 +10,4 @@ router.delete("/:id", controller.removeMenuItem);
 
 
 module.exports = router;
+///:category/:name/:price/:ingredients/:png/:options/:id

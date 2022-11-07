@@ -6,6 +6,7 @@ import excessReportImg from "../../images/excess.png";
 import statButton from "../../images/statsbutton.png";
 import restockButton from "../../images/restock.png";
 import revenueButton from "../../images/revenue.jpg";
+import menuButton from "../../images/editMenu.png";
 import "./managerStyle.css";
 
 export default function ManagerPage() {
@@ -70,6 +71,18 @@ export default function ManagerPage() {
           alt="Sales Report"
         ></img>
         Sales Report
+      </button>
+      <button
+        onClick={() => {
+          navigate("/EditMenu");
+        }}
+      >
+        <img
+          className="statButton"
+          src={menuButton}
+          alt="Menu Functions"
+        ></img>
+        Menu Functions
       </button>
     </div>
   );

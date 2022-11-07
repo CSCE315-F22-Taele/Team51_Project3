@@ -3,7 +3,6 @@ const queries = require("../queries/queries");
 const { response } = require("express");
 
 const decrementInventoryById = (req, res) => {
-    console.log("DECREMENTING INVENTORY")
     const id = parseInt(req.params.id);
 
     //make sure ingredient actually exists

@@ -24,7 +24,7 @@ export default function Inventory() {
     /**
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
      * @author  Joshua, Johnny
-     * @param   {int} int the identification value of the ingredient being modified
+     * @param   {int} id the identification value of the ingredient being modified
      * @param   {any} quantity the new inventory value to be assigned to the ingredient
      */
     async function updateIngredientInventory(id, quantity) {

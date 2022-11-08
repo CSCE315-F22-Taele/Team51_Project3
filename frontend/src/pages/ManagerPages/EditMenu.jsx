@@ -9,26 +9,36 @@ export default function EditMenu() {
     const [png, setPNG] = useState('');
     const [options, setOptions] = useState('');
     const [id, setID] = useState(0);
-    const [idChecker, setIDChecker] = useState([]);
+    const [idChecker, setIDChecker] = useState(null);
 
     async function getMenu() {
         try {
             const res = await fetch("api/v1/menuManager");
             const data = await res.json();
             setMenu(data);
+            var idList = [];
+
+            for (let i = 0 ; i < data.length ; i++)
+            {
+                console.log(data[i]['id'])
+                idList.append(parseInt(data[i]['id']));
+            }
+
+            
         } catch (err) {
             console.error(err);
-        }
-    }
 
+        }
+        console.log(idList);
+        return idList
+    }
+    // this returns a list of ids from the menu to error check with the user
     useEffect(() => {
-        getMenu();
+        setIDChecker(getMenu());
+
     }, []);
 
     const displayInfo = menu.map((item) => {
-        const makeIDlist = (idList) => {
-            setIDChecker(idList);
-        }
         return (
             <tr>
                 <td>{item.category}</td>
@@ -38,6 +48,9 @@ export default function EditMenu() {
                 <td>{item.ingredients}</td>
                 <td>{item.png}</td>
                 <td>{item.options}</td>
+            
+                
+                
 
             </tr>
         );
@@ -58,35 +71,48 @@ export default function EditMenu() {
                     type="number"
                     placeholder="id"
                     onChange={(event) => {
-                        setID(event.target.value);
+
+                        if(! idChecker.find(event.target.value))
+                        {
+                            setID(event.target.value);
+                        }
+                        else{
+                            alert( "pick a unique id ")
+                        }
+
                     }}
                 ></input>
                 <input
                     type="string"
+                    placeholder="name"
                     onChange={(event) => {
                         setName(event.target.value);
                     }}
                 ></input>
                 <input
                     type="number"
+                    placeholder="price"
                     onChange={(event) => {
                         setPrice(event.target.value);
                     }}
                 ></input>
                 <input
                     type="string"
+                    placeholder="ingredients"
                     onChange={(event) => {
                         setIngredients(event.target.value);
                     }}
                 ></input>
                 <input
                     type="string"
+                    placeholder="options"
                     onChange={(event) => {
                         setOptions(event.target.value);
                     }}
                 ></input>
                 <input
                     type="string"
+                    placeholder="png"
                     onChange={(event) => {
                         setPNG(event.target.value);
                     }}
@@ -104,10 +130,7 @@ export default function EditMenu() {
                         <th>Name</th>
                         <th>Price</th>
                         <th>Ingredients</th>
-                        <th>Modifiable</th>
                         <th>PNG</th>
-                        <th>options</th>
-                        <th>id</th>
                     </tr>
                 </thead>
                 <tbody>{displayInfo}</tbody>

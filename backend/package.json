@@ -9,7 +9,7 @@
     "server": "npm run server-dependencies && cd server && nodemon server.js",
     "server-dependencies": "npm install",
     "client-dependencies": "npm install --prefix ../frontend",
-    "client": "npm run client-dependencies && npm run build --prefix ../frontend",
+    "client": "npm run client-dependencies && npm run start --prefix ../frontend",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "author": "",

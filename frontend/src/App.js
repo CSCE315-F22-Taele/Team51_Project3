@@ -20,6 +20,7 @@ import Revenue from "./pages/ManagerPages/Revenue";
 import EditMenu from "./pages/ManagerPages/EditMenu";
 
 import { useSelector } from "react-redux";
+import Loading from "./components/loading/loading";
 
 const PrivateRoutes = () => {
     const { isAuth } = useSelector((state) => state.auth);
@@ -28,7 +29,7 @@ const PrivateRoutes = () => {
 
 const RestrictedRoutes = () => {
     const { isAuth } = useSelector((state) => state.auth);
-    return <>{!isAuth ? <Outlet /> : <Navigate to="/POSPage" />}</>;
+    return <>{!isAuth ? <Outlet /> : <Loading />}</>;
 };
 
 const App = () => {

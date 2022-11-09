@@ -13,7 +13,7 @@ export default function EditMenu() {
 
     async function getMenu() {
         try {
-            const res = await fetch("api/v1/menuManager");
+            const res = await fetch("api/menuManager");
             const data = await res.json();
             setMenu(data);
             var idList = [];
@@ -40,7 +40,7 @@ export default function EditMenu() {
      */
     async function addMenuItem() {
         try {
-            const res = await fetch(`api/v1/menuManager/${category}/${name}/${price}/${ingredients}/${png}/${options}/${id}`);
+            const res = await fetch(`api/menuManager/${category}/${name}/${price}/${ingredients}/${png}/${options}/${id}`);
             const data = await res.json();
             setMenu(data);
         } catch (err) {

@@ -9,7 +9,7 @@ export default function Inventory() {
      */
     async function getInventory() {
         try {
-            const res = await fetch("api/v1/inventory");
+            const res = await fetch("api/inventory");
             const data = await res.json();
             setInventory(data);
         } catch (err) {
@@ -30,7 +30,7 @@ export default function Inventory() {
     async function updateIngredientInventory(id, quantity) {
         try {
             console.log(JSON.stringify(parseInt(quantity)));
-            const res = await fetch(`/api/v1/inventory/${id}`, {
+            const res = await fetch(`/api/inventory/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

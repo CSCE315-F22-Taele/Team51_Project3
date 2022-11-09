@@ -9,8 +9,8 @@ export default function Revenue() {
 
   async function getSales() {
     try {
-        //const res = await fetch(`api/v1/revenue/${startDate}/${endDate}`);
-        const res = await fetch("api/v1/revenue");
+        //const res = await fetch(`api/revenue/${startDate}/${endDate}`);
+        const res = await fetch("api/revenue");
         const data = await res.json();
         setRevenue(data);
     } catch (err) {
@@ -30,7 +30,7 @@ useEffect(() => {
 /*
   async function getRevenue(startDate,endDate) {
     try {
-        const res = await fetch(`api/v1/revenue/${startDate}/${endDate}`, {
+        const res = await fetch(`api/revenue/${startDate}/${endDate}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -131,7 +131,7 @@ useEffect(() => {
 import { useEffect, useState } from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 // const client = new ApolloClient({
-//     uri: "api/v1/graphql",
+//     uri: "api/graphql",
 //     cache: new InMemoryCache(),
 //   });
 function Revenue() {
@@ -142,7 +142,7 @@ function Revenue() {
     }, []);
     async function getRevenue() {
         try {
-           const res = await fetch("api/v1/revenue");
+           const res = await fetch("api/revenue");
            const data = await res.json();
            setRevenue(data);
            //console.log(data);
@@ -170,7 +170,7 @@ function EnterNumberDays() {
     const[days, setDays] = useState('');
     function handleSubmit(e) {
         e.preventDefault(); //browser doesn't refresh page upon submit
-        fetch("api/v1/revenue", {
+        fetch("api/revenue", {
             method: 'POST',
             body: JSON.stringify({days}),
         });

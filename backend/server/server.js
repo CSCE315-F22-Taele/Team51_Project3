@@ -37,13 +37,13 @@ app.get("/", (req, res) => {
 
 // Initialize Routes
 app.use("/api/", authRoutes);
-app.use("/api/v1/pos", posRoutes);
-// app.use("/api/v1/menu", posRoutes);
-app.use("/api/v1/inventory", inventoryRoutes);
-app.use("/api/v1/revenue", revenueRoutes);
-app.use("/api/v1/excess", excessRoutes);
-app.use("/api/v1/restock", restockRoutes);
-app.use("/api/v1/pair", pairRoutes);
-app.use("/api/v1/menuManager", menuRoutes);
+app.use("/api/pos", posRoutes);
+// app.use("/api/menu", posRoutes);
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/revenue", revenueRoutes);
+app.use("/api/excess", excessRoutes);
+app.use("/api/restock", restockRoutes);
+app.use("/api/pair", pairRoutes);
+app.use("/api/menuManager", menuRoutes);
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

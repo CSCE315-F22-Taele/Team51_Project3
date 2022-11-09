@@ -11,7 +11,7 @@ export default function Restock() {
 
   async function getTable() {
     try {
-      const res = await fetch("api/v1/inventory");
+      const res = await fetch("api/inventory");
       const data = await res.json();
       setTable(data);
     } catch (err) {

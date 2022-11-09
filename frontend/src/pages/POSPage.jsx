@@ -43,7 +43,7 @@ const POSPage = () => {
 
     async function getMenu() {
         try {
-            const res = await fetch("api/v1/pos");
+            const res = await fetch("api/pos");
             const data = await res.json();
             setMenu(data);
         } catch (err) {

@@ -20,8 +20,8 @@ export default function Excess() {
 
     async function editExcessDates() {
         try {
-            console.log(`api/v1/excess/${startDate}/${endDate}`);
-            const res = await fetch(`api/v1/excess/${startDate}/${endDate}`);
+            console.log(`api/excess/${startDate}/${endDate}`);
+            const res = await fetch(`api/excess/${startDate}/${endDate}`);
             const data = await res.json();
             setTable(data);
             setExcess(true);

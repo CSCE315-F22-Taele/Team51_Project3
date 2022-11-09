@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "proxy": "https://revpos-server.onrender.com",
   "description": "",
   "main": "server.js",
   "scripts": {

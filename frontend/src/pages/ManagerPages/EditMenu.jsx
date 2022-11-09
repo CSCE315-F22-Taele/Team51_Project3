@@ -42,7 +42,7 @@ export default function EditMenu() {
         try {
             const res = await fetch(`api/menuManager/${category}/${name}/${price}/${ingredients}/${png}/${options}/${id}`);
             const data = await res.json();
-            setMenu(data);
+            getMenu(data);
         } catch (err) {
             console.error(err);
         }
@@ -55,6 +55,7 @@ export default function EditMenu() {
         setIDChecker(getMenu());
 
     }, []);
+
 
     const displayInfo = menu.map((item) => {
         return (

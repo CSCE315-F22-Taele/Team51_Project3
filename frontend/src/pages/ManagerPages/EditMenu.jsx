@@ -11,6 +11,7 @@ export default function EditMenu() {
     const [id, setID] = useState(0);
     const [idChecker, setIDChecker] = useState(null);
 
+
     async function getMenu() {
         try {
             const res = await fetch("api/menuManager");
@@ -33,16 +34,22 @@ export default function EditMenu() {
         return idList
     }
     /**
-     * Sends a HTTP PATCH request with the quantity of the ID to be modified
-     * @author  Joshua, Johnny
-     * @param   {int} int the identification value of the ingredient being modified
-     * @param   {any} quantity the new inventory value to be assigned to the ingredient
+     * Sends a HTTP put request with new order into the menu
+     * @author  Joshua
+     * @param   {string} category is the inputed label of the items, entree, dessert, or drink
+     * @param   {string} name is the item name
+     * @param   {float} price is the manager set price
+     * @param   {string} ingredients is the string of item ids that represent the order
+     * @param   {string} options are the functioning number of editable items 
+     * @param   {int} id is the items unique id
      */
     async function addMenuItem() {
         try {
-            const res = await fetch(`api/menuManager/${category}/${name}/${price}/${ingredients}/${png}/${options}/${id}`);
+            var stringIngredients = toString(ingredients)
+            var stringOptions = toString(options)
+            const res = await fetch(`api/menuManager/${category}/${name}/${price}/${stringIngredients}/${png}/${stringOptions}/${id}`);
             const data = await res.json();
-            getMenu(data);
+            setMenu(data);
         } catch (err) {
             console.error(err);
         }
@@ -65,8 +72,8 @@ export default function EditMenu() {
                 <td>{item.name}</td>
                 <td>{item.price}</td>
                 <td>{item.ingredients}</td>
-                <td>{item.png}</td>
                 <td>{item.options}</td>
+                <td>{item.png}</td>
 
 
 
@@ -229,6 +236,7 @@ export default function EditMenu() {
                         <th>Name</th>
                         <th>Price</th>
                         <th>Ingredients</th>
+                        <th>Options</th>
                         <th>PNG</th>
                     </tr>
                 </thead>

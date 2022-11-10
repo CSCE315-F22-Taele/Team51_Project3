@@ -63,6 +63,22 @@ export default function EditMenu() {
 
     }, []);
 
+    
+    const displayUserInput= () =>
+    {
+        var returnTranslate ="Ingredients: ";
+
+        for (let i = 0; i < menu.length; i++) {
+            for( let jIndex = 0 ; jIndex < ingredients.length ; jIndex++)
+                 console.log(ingredients[jIndex])
+                // if(parseInt(ingredients[jIndex]) === menu[i]['id'])
+                // {
+                //     console.log(ingredients[jIndex])
+                //     returnTranslate+= menu[i]['name'];
+                // }
+        }
+        return (returnTranslate);
+    }
 
     const displayInfo = menu.map((item) => {
         return (
@@ -88,15 +104,17 @@ export default function EditMenu() {
         <div className="App">
             <h1>Edit Menu </h1>
             <form
-                onSubmit={(event) => {addMenuItem();
+                onSubmit={(event) => {
+                    addMenuItem();
                 }}
             >
                 {/* now we plan to dive into what is the hell that is checking user inputs and preventing stupid ones */}
 
-                <select placeholder="category">
-                    <option value="entree" onChange={(event) => { setCategory(event.target.value); }}> entree </option>
-                    <option value="dessert" onChange={(event) => { setCategory(event.target.value); }}> dessert </option>
-                    <option value="drink" onChange={(event) => { setCategory(event.target.value); }}> drink </option>
+                <select placeholder="category" onChange={(event) => { setCategory(event.target.value); console.log(event.target.value); }}>
+                    <option value=""> null </option>
+                    <option value="entree"> entree </option>
+                    <option value="dessert" > dessert </option>
+                    <option value="drink" > drink </option>
                 </select>
                 <input
                     type="number"
@@ -104,7 +122,7 @@ export default function EditMenu() {
                     onChange={(event) => {
                         // see if the id exists already
 
-                        if (!idChecker.include(event.target.value)) {
+                        if (!idChecker.includes(event.target.value)) {
                             setID(event.target.value);
                         }
                         else {
@@ -128,93 +146,117 @@ export default function EditMenu() {
                         setPrice(event.target.value);
                     }}
                 ></input>
-                <select multiple>
-
-                    <option value="1000" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	pepsi </option>
-                    <option value="1001" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	diet pepsi </option>
-                    <option value="1002" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	gatorade </option>
-                    <option value="1003" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	mug rootbeer </option>
-                    <option value="1004" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	sierra mist </option>
-                    <option value="1005" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	brisk </option>
-                    <option value="1006" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	drink cup </option>
-                    <option value="1007" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	Lids </option>
-                    <option value="1008" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	straws </option>
-                    <option value="2007" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	chicken fillet </option>
-                    <option value="2008" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	burger fillet </option>
-                    <option value="2009" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	chicken tender </option>
-                    <option value="2010" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	black bean tender </option>
-                    <option value="2011" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	bun </option>
-                    <option value="2012" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	lettuce </option>
-                    <option value="2013" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	tomato </option>
-                    <option value="2014" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	pickles </option>
-                    <option value="2015" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	onions </option>
-                    <option value="2016" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	american cheese </option>
-                    <option value="2017" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	swiss-american cheese </option>
-                    <option value="2018" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	fries </option>
-                    <option value="2019" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	bacon </option>
-                    <option value="2020" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	meal tray </option>
-                    <option value="2021" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	salt </option>
-                    <option value="2022" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	pepper </option>
-                    <option value="2023" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	utensils </option>
-                    <option value="2024" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	napkins </option>
-                    <option value="3025" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	gigem sauce </option>
-                    <option value="3026" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	ketchup </option>
-                    <option value="3027" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	mustard </option>
-                    <option value="3028" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	mayo </option>
-                    <option value="3029" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	ranch </option>
-                    <option value="3030" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	honey bbq </option>
-                    <option value="3031" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	caesar dressing </option>
-                    <option value="4032" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	chocolate ice cream </option>
-                    <option value="4033" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	vanilla ice cream </option>
-                    <option value="4034" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	strawberry ice cream </option>
-                    <option value="4035" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	cookie sandwich </option>
-                    <option value="4036" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	dessert cup </option>
-                    <option value="4037" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	dessert bowl </option>
-                    <option value="4038" onChange={(event) => { setIngredients(newArray => [...newArray, event.target.value]); }}>	cookie </option>
+                <select onChange={(event) => {
+                    var initalizeIngredients = true;
+                    if (initalizeIngredients) {
+                        setIngredients(newArray => [...newArray, event.target.value]);
+                        initalizeIngredients = false;
+                    }
+                    else if (!ingredients.includes(event.target.value)) {
+                        setIngredients(newArray => [...newArray, event.target.value]);
+                    }
+                    console.log(ingredients)
+                }}
+                >
+                    <option> null </option>
+                    <option value="1000" >	pepsi </option>
+                    <option value="1001">	diet pepsi </option>
+                    <option value="1002">	gatorade </option>
+                    <option value="1003">	mug rootbeer </option>
+                    <option value="1004">	sierra mist </option>
+                    <option value="1005">	brisk </option>
+                    <option value="1006">	drink cup </option>
+                    <option value="1007">	Lids </option>
+                    <option value="1008">	straws </option>
+                    <option value="2007">	chicken fillet </option>
+                    <option value="2008">	burger fillet </option>
+                    <option value="2009">	chicken tender </option>
+                    <option value="2010">	black bean tender </option>
+                    <option value="2011">	bun </option>
+                    <option value="2012">	lettuce </option>
+                    <option value="2013">	tomato </option>
+                    <option value="2014">	pickles </option>
+                    <option value="2015">	onions </option>
+                    <option value="2016">	american cheese </option>
+                    <option value="2017">	swiss-american cheese </option>
+                    <option value="2018">	fries </option>
+                    <option value="2019">	bacon </option>
+                    <option value="2020">	meal tray </option>
+                    <option value="2021">	salt </option>
+                    <option value="2022">	pepper </option>
+                    <option value="2023">	utensils </option>
+                    <option value="2024">	napkins </option>
+                    <option value="3025">	gigem sauce </option>
+                    <option value="3026">	ketchup </option>
+                    <option value="3027">	mustard </option>
+                    <option value="3028">	mayo </option>
+                    <option value="3029">	ranch </option>
+                    <option value="3030">	honey bbq </option>
+                    <option value="3031">	caesar dressing </option>
+                    <option value="4032">	chocolate ice cream </option>
+                    <option value="4033">	vanilla ice cream </option>
+                    <option value="4034">	strawberry ice cream </option>
+                    <option value="4035">	cookie sandwich </option>
+                    <option value="4036">	dessert cup </option>
+                    <option value="4037">	dessert bowl </option>
+                    <option value="4038">	cookie </option>
                 </select>
-                <select multiple>
 
-                    <option value="1000" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	pepsi </option>
-                    <option value="1001" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	diet pepsi </option>
-                    <option value="1002" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	gatorade </option>
-                    <option value="1003" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	mug rootbeer </option>
-                    <option value="1004" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	sierra mist </option>
-                    <option value="1005" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	brisk </option>
-                    <option value="1006" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	drink cup </option>
-                    <option value="1007" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	Lids </option>
-                    <option value="1008" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	straws </option>
-                    <option value="2007" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	chicken fillet </option>
-                    <option value="2008" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	burger fillet </option>
-                    <option value="2009" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	chicken tender </option>
-                    <option value="2010" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	black bean tender </option>
-                    <option value="2011" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	bun </option>
-                    <option value="2012" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	lettuce </option>
-                    <option value="2013" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	tomato </option>
-                    <option value="2014" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	pickles </option>
-                    <option value="2015" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	onions </option>
-                    <option value="2016" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	american cheese </option>
-                    <option value="2017" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	swiss-american cheese </option>
-                    <option value="2018" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	fries </option>
-                    <option value="2019" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	bacon </option>
-                    <option value="2020" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	meal tray </option>
-                    <option value="2021" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	salt </option>
-                    <option value="2022" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	pepper </option>
-                    <option value="2023" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	utensils </option>
-                    <option value="2024" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	napkins </option>
-                    <option value="3025" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	gigem sauce </option>
-                    <option value="3026" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	ketchup </option>
-                    <option value="3027" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	mustard </option>
-                    <option value="3028" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	mayo </option>
-                    <option value="3029" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	ranch </option>
-                    <option value="3030" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	honey bbq </option>
-                    <option value="3031" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	caesar dressing </option>
-                    <option value="4032" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	chocolate ice cream </option>
-                    <option value="4033" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	vanilla ice cream </option>
-                    <option value="4034" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	strawberry ice cream </option>
-                    <option value="4035" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	cookie sandwich </option>
-                    <option value="4036" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	dessert cup </option>
-                    <option value="4037" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	dessert bowl </option>
-                    <option value="4038" onChange={(event) => { setOptions(newArray => [...newArray, event.target.value]); }}>	cookie </option>
+
+                <select
+                onChange={(event) => {
+                    var initalizeOptions = true;
+                    if (initalizeOptions) {
+                        setOptions(newArray => [...newArray, event.target.value]);
+                        initalizeOptions = false;
+                    }
+                    else if (!options.includes(event.target.value)) {
+                        setOptions(newArray => [...newArray, event.target.value]);
+                    }
+                    console.log(options)
+                }}>
+
+                    <option value="1000">	pepsi </option>
+                    <option value="1001">	diet pepsi </option>
+                    <option value="1002">	gatorade </option>
+                    <option value="1003">	mug rootbeer </option>
+                    <option value="1004">	sierra mist </option>
+                    <option value="1005">	brisk </option>
+                    <option value="1006">	drink cup </option>
+                    <option value="1007">	Lids </option>
+                    <option value="1008">	straws </option>
+                    <option value="2007">	chicken fillet </option>
+                    <option value="2008">	burger fillet </option>
+                    <option value="2009">	chicken tender </option>
+                    <option value="2010">	black bean tender </option>
+                    <option value="2011">	bun </option>
+                    <option value="2012">	lettuce </option>
+                    <option value="2013">	tomato </option>
+                    <option value="2014">	pickles </option>
+                    <option value="2015">	onions </option>
+                    <option value="2016">	american cheese </option>
+                    <option value="2017">	swiss-american cheese </option>
+                    <option value="2018">	fries </option>
+                    <option value="2019">	bacon </option>
+                    <option value="2020">	meal tray </option>
+                    <option value="2021">	salt </option>
+                    <option value="2022">	pepper </option>
+                    <option value="2023">	utensils </option>
+                    <option value="2024">	napkins </option>
+                    <option value="3025">	gigem sauce </option>
+                    <option value="3026">	ketchup </option>
+                    <option value="3027">	mustard </option>
+                    <option value="3028">	mayo </option>
+                    <option value="3029">	ranch </option>
+                    <option value="3030">	honey bbq </option>
+                    <option value="3031">	caesar dressing </option>
+                    <option value="4032">	chocolate ice cream </option>
+                    <option value="4033">	vanilla ice cream </option>
+                    <option value="4034">	strawberry ice cream </option>
+                    <option value="4035">	cookie sandwich </option>
+                    <option value="4036">	dessert cup </option>
+                    <option value="4037">	dessert bowl </option>
+                    <option value="4038">	cookie </option>
                 </select>
                 <input
                     type="string"
@@ -228,6 +270,9 @@ export default function EditMenu() {
 
                 <button onClick >Add New Menu Item</button>
             </form>
+                <p>{displayUserInput}</p>
+
+
             <table className="table table-striped">
                 <thead>
                     <tr>

@@ -9,7 +9,8 @@ export default function EditMenu() {
     const [png, setPNG] = useState('');
     const [options, setOptions] = useState('');
     const [id, setID] = useState(0);
-    const [idChecker, setIDChecker] = useState(null);
+    const [idChecker, setIDChecker] = useState([]);
+    const [ingredientList, setInventory] = useState([]);
 
 
     async function getMenu() {
@@ -31,6 +32,7 @@ export default function EditMenu() {
         }
         idList.sort();
         //console.log(idList);
+        setIDChecker(idList);
         return idList
     }
     /**
@@ -51,33 +53,73 @@ export default function EditMenu() {
             const data = await res.json();
             setMenu(data);
         } catch (err) {
+            console.log(err);
+        }
+    }
+    async function getInventory() {
+        try {
+            const res = await fetch("api/inventory");
+            const data = await res.json();
+            setInventory(data);
+        } catch (err) {
             console.error(err);
         }
     }
 
 
-
-    // this returns a list of ids from the menu to error check with the user
+    // event returns a list of ids from the menu to error check with the user
     useEffect(() => {
-        setIDChecker(getMenu());
+        getInventory();
+        getMenu();
+        checkOptionsInIDs();
 
     }, []);
 
-    
-    const displayUserInput= () =>
+    const checkOptionsInIDs = () =>
     {
-        var returnTranslate ="Ingredients: ";
-
-        for (let i = 0; i < menu.length; i++) {
-            for( let jIndex = 0 ; jIndex < ingredients.length ; jIndex++)
-                 console.log(ingredients[jIndex])
-                // if(parseInt(ingredients[jIndex]) === menu[i]['id'])
-                // {
-                //     console.log(ingredients[jIndex])
-                //     returnTranslate+= menu[i]['name'];
-                // }
+        for (let ingredientIndex = 0; ingredientIndex < ingredients.length; ingredientIndex++) {
+            for (let index = 0; index < options.length; index++) {
+                if (!ingredients.includes(options[index]))
+                 {
+                    ingredients.push(options[index])
+                }
+            }
         }
-        return (returnTranslate);
+    }
+    // makes the options human readable
+    const displayChoice = () => {
+        var ingredientReturn = "Return ingredients: "
+        checkOptionsInIDs();
+        for (let index = 0; index < ingredientList.length; index++) {
+            for (let ingredientIndex = 0; ingredientIndex < ingredients.length; ingredientIndex++) {
+                //console.log(ingredientList[index]['id'])
+                //console.log(menu[index]['id'])
+                // console.log(parseInt(ingredients[ingredientIndex]) == parseInt(ingredientList[index]['id']))
+                if (parseInt(ingredients[ingredientIndex]) === parseInt(ingredientList[index]['id'])) {
+                    ingredientReturn += ingredientList[index]['name'] + " ";
+                }
+
+            }
+
+        }
+        return ingredientReturn;
+    }
+    // makes the options human readable
+    const displayOptions = () => {
+        var optionsReturn = "Options are: "
+        for (let index = 0; index < ingredientList.length; index++) {
+            for (let ingredientIndex = 0; ingredientIndex < options.length; ingredientIndex++) {
+                ///console.log(ingredientList[index]['id'])
+                //console.log(menu[index]['id'])
+                // console.log(parseInt(options[ingredientIndex]) == parseInt(ingredientList[index]['id']))
+                if (parseInt(options[ingredientIndex]) === parseInt(ingredientList[index]['id'])) {
+                    optionsReturn += ingredientList[index]['name'] + " ";
+                }
+
+            }
+
+        }
+        return optionsReturn;
     }
 
     const displayInfo = menu.map((item) => {
@@ -97,7 +139,11 @@ export default function EditMenu() {
             </tr>
         );
     });
-
+    const displayDropDown = ingredientList.map((inventory) => {
+        return (
+            <option value={inventory.id}> {inventory.name}</option>
+        );
+    });
     return (
 
 
@@ -106,6 +152,9 @@ export default function EditMenu() {
             <form
                 onSubmit={(event) => {
                     addMenuItem();
+                    setIngredients(newArray => [...newArray, event.target.value]);
+                    setOptions(newArray => [...newArray, event.target.value]);
+                    displayChoice();
                 }}
             >
                 {/* now we plan to dive into what is the hell that is checking user inputs and preventing stupid ones */}
@@ -156,107 +205,23 @@ export default function EditMenu() {
                         setIngredients(newArray => [...newArray, event.target.value]);
                     }
                     console.log(ingredients)
-                }}
-                >
-                    <option> null </option>
-                    <option value="1000" >	pepsi </option>
-                    <option value="1001">	diet pepsi </option>
-                    <option value="1002">	gatorade </option>
-                    <option value="1003">	mug rootbeer </option>
-                    <option value="1004">	sierra mist </option>
-                    <option value="1005">	brisk </option>
-                    <option value="1006">	drink cup </option>
-                    <option value="1007">	Lids </option>
-                    <option value="1008">	straws </option>
-                    <option value="2007">	chicken fillet </option>
-                    <option value="2008">	burger fillet </option>
-                    <option value="2009">	chicken tender </option>
-                    <option value="2010">	black bean tender </option>
-                    <option value="2011">	bun </option>
-                    <option value="2012">	lettuce </option>
-                    <option value="2013">	tomato </option>
-                    <option value="2014">	pickles </option>
-                    <option value="2015">	onions </option>
-                    <option value="2016">	american cheese </option>
-                    <option value="2017">	swiss-american cheese </option>
-                    <option value="2018">	fries </option>
-                    <option value="2019">	bacon </option>
-                    <option value="2020">	meal tray </option>
-                    <option value="2021">	salt </option>
-                    <option value="2022">	pepper </option>
-                    <option value="2023">	utensils </option>
-                    <option value="2024">	napkins </option>
-                    <option value="3025">	gigem sauce </option>
-                    <option value="3026">	ketchup </option>
-                    <option value="3027">	mustard </option>
-                    <option value="3028">	mayo </option>
-                    <option value="3029">	ranch </option>
-                    <option value="3030">	honey bbq </option>
-                    <option value="3031">	caesar dressing </option>
-                    <option value="4032">	chocolate ice cream </option>
-                    <option value="4033">	vanilla ice cream </option>
-                    <option value="4034">	strawberry ice cream </option>
-                    <option value="4035">	cookie sandwich </option>
-                    <option value="4036">	dessert cup </option>
-                    <option value="4037">	dessert bowl </option>
-                    <option value="4038">	cookie </option>
-                </select>
-
-
-                <select
-                onChange={(event) => {
-                    var initalizeOptions = true;
-                    if (initalizeOptions) {
-                        setOptions(newArray => [...newArray, event.target.value]);
-                        initalizeOptions = false;
-                    }
-                    else if (!options.includes(event.target.value)) {
-                        setOptions(newArray => [...newArray, event.target.value]);
-                    }
-                    console.log(options)
                 }}>
 
-                    <option value="1000">	pepsi </option>
-                    <option value="1001">	diet pepsi </option>
-                    <option value="1002">	gatorade </option>
-                    <option value="1003">	mug rootbeer </option>
-                    <option value="1004">	sierra mist </option>
-                    <option value="1005">	brisk </option>
-                    <option value="1006">	drink cup </option>
-                    <option value="1007">	Lids </option>
-                    <option value="1008">	straws </option>
-                    <option value="2007">	chicken fillet </option>
-                    <option value="2008">	burger fillet </option>
-                    <option value="2009">	chicken tender </option>
-                    <option value="2010">	black bean tender </option>
-                    <option value="2011">	bun </option>
-                    <option value="2012">	lettuce </option>
-                    <option value="2013">	tomato </option>
-                    <option value="2014">	pickles </option>
-                    <option value="2015">	onions </option>
-                    <option value="2016">	american cheese </option>
-                    <option value="2017">	swiss-american cheese </option>
-                    <option value="2018">	fries </option>
-                    <option value="2019">	bacon </option>
-                    <option value="2020">	meal tray </option>
-                    <option value="2021">	salt </option>
-                    <option value="2022">	pepper </option>
-                    <option value="2023">	utensils </option>
-                    <option value="2024">	napkins </option>
-                    <option value="3025">	gigem sauce </option>
-                    <option value="3026">	ketchup </option>
-                    <option value="3027">	mustard </option>
-                    <option value="3028">	mayo </option>
-                    <option value="3029">	ranch </option>
-                    <option value="3030">	honey bbq </option>
-                    <option value="3031">	caesar dressing </option>
-                    <option value="4032">	chocolate ice cream </option>
-                    <option value="4033">	vanilla ice cream </option>
-                    <option value="4034">	strawberry ice cream </option>
-                    <option value="4035">	cookie sandwich </option>
-                    <option value="4036">	dessert cup </option>
-                    <option value="4037">	dessert bowl </option>
-                    <option value="4038">	cookie </option>
+                    {displayDropDown}
+                </select>
+                <select
+                    onChange={(event) => {
+                        var initalizeOptions = true;
+                        if (initalizeOptions) {
+                            setOptions(newArray => [...newArray, event.target.value]);
+                            initalizeOptions = false;
+                        }
+                        else if (!options.includes(event.target.value)) {
+                            setOptions(newArray => [...newArray, event.target.value]);
+                        }
+                        // console.log(options)
+                    }}>
+                    {displayDropDown}
                 </select>
                 <input
                     type="string"
@@ -265,12 +230,15 @@ export default function EditMenu() {
                         setPNG(event.target.value);
                     }}
                 ></input>
-
+                <p>{displayChoice()}</p>
+                <p>{displayOptions()}</p>
 
 
                 <button onClick >Add New Menu Item</button>
             </form>
-                <p>{displayUserInput}</p>
+{/*             
+              <form id ="123123" onSubmit={setOptions(newArray=>[])}>  <button onClick >Click to clear options</button> </form>
+              <form id="12312" onSubmit={setIngredients(newArray=>[])}> <button onClick >Click to clear ingredients</button> </form> */}
 
 
             <table className="table table-striped">

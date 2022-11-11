@@ -26,6 +26,33 @@ export async function onLogin(loginData) {
 }
 
 /**
+ * Sends a HTTP POST request with the user's information to be added in the database.
+ * @author  Johnny
+ * @param   {object} loginData contains strings (username, password) holding the register info
+ * @return  {Promise} response from the HTTP request indicating status of login attempt
+ */
+ export async function onRegister(registerData) {
+    try {
+        let res = await fetch("/api/register", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST",
+            },
+            body: JSON.stringify({
+                username: registerData.username,
+                password: registerData.password,
+            }),
+        });
+        return res;
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+/**
  * Sends a HTTP GET request to logout of the system
  * @author  Johnny
  * @return  {Promise} response from the HTTP request indicating status of the logout attempt

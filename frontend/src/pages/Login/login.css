@@ -99,6 +99,11 @@
     text-align: center;
     color: var(--black-coffee);
 }
+.status-message {
+    position: absolute;
+    bottom: 80px;
+    color: black;
+}
 
 .box__container--a {
     z-index: 10;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { onLogin } from "../../components/auth/auth";
+import { onLogin, onRegister } from "../../components/auth/auth";
 import { authenticateUser } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import "./login.css";
@@ -10,7 +10,7 @@ const Login = () => {
         username: "",
         password: "",
     });
-    const [error, setError] = useState(false);
+    const [message, setMessage] = useState(false);
     const [callSwitch, setCallSwitch] = useState(false);
 
     const onChange = (e) => {
@@ -18,7 +18,7 @@ const Login = () => {
     };
 
     const dispatch = useDispatch();
-    const onSubmit = async (e) => {
+    const onLoginSubmit = async (e) => {
         e.preventDefault();
 
         try {
@@ -29,7 +29,22 @@ const Login = () => {
             dispatch(authenticateUser());
             localStorage.setItem("isAuth", "true");
         } catch (err) {
-            setError("Invalid credentials, try again!");
+            setMessage("Invalid credentials, try again!");
+        }
+    };
+
+    const onRegisterSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await onRegister(values);
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            setMessage(res.message);
+            setValues({ username: "", password: "" });
+        } catch (err) {
+            setMessage("Sign up was unsuccessful.");
         }
     };
 
@@ -39,6 +54,13 @@ const Login = () => {
         } else {
             setCallSwitch(true);
         }
+        setTimeout(function () {
+            setValues({
+                username: "",
+                password: "",
+            });
+            setMessage(false);
+        }, 250)
     };
 
     return (
@@ -48,7 +70,7 @@ const Login = () => {
                     className={`box__container box__container--a ${
                         callSwitch ? "left--active" : ""
                     }`}>
-                    <form onSubmit={(e) => onSubmit(e)} className="form__container">
+                    <form onSubmit={(e) => onLoginSubmit(e)} className="form__container">
                         <h1 className="form__header">Login</h1>
                         <input
                             className="form--input"
@@ -73,15 +95,16 @@ const Login = () => {
                         <button type="submit" className="button submit">
                             LOGIN
                         </button>
-
-                        {/* <div style={{ color: "red", margin: "10px 0" }}>{error}</div> */}
+                        <div className="description status-message">{message}</div>
                     </form>
                 </div>
                 <div
                     className={`box__container box__container--b ${
                         callSwitch ? "left--active overlap--active" : ""
                     }`}>
-                    <form onSubmit={(e) => onSubmit(e)} className="form__container">
+                    <form
+                        onSubmit={(e) => onRegisterSubmit(e)}
+                        className="form__container">
                         <h1 className="form__header">Register</h1>
                         <input
                             className="form--input"
@@ -106,8 +129,7 @@ const Login = () => {
                         <button type="submit" className="button submit">
                             SIGN UP
                         </button>
-
-                        {/* <div style={{ color: "red", margin: "10px 0" }}>{error}</div> */}
+                        <div className="description status-message">{message}</div>
                     </form>
                 </div>
                 <div

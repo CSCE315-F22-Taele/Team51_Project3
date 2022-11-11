@@ -3,7 +3,7 @@ const pool = require("../server/db");
 
 // Password
 const password = check("password")
-    .isLength({ min: 6, max: 15 })
+    .isLength({ min: 1, max: 15 })
     .withMessage("Password has to be between 6 and 15 characters.");
 
 // Username

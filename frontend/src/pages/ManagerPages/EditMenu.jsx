@@ -119,6 +119,7 @@ export default function EditMenu() {
             }
 
         }
+        checkOptionsInIDs();
         return optionsReturn;
     }
 
@@ -189,7 +190,7 @@ export default function EditMenu() {
                     }}
                 ></input>
                 <input
-                    type="number"
+                    type="float"
                     placeholder="price"
                     onChange={(event) => {
                         setPrice(event.target.value);
@@ -230,8 +231,6 @@ export default function EditMenu() {
                         setPNG(event.target.value);
                     }}
                 ></input>
-                <p>{displayChoice()}</p>
-                <p>{displayOptions()}</p>
 
 
                 <button onClick >Add New Menu Item</button>
@@ -255,6 +254,12 @@ export default function EditMenu() {
                 </thead>
                 <tbody>{displayInfo}</tbody>
             </table>
+            <form onSubmit>
+                <button onClick={() => {  ingredients.length = 0; options.length = 0;}}>Clear presets</button>
+                <p>{displayChoice()}</p>
+                <p>{displayOptions()}</p>
+            </form>
+
         </div>
 
     );

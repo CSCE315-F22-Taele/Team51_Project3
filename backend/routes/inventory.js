@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/", controller.getIngredients);
 router.patch("/:id", controller.updateIngredientInventory);
-router.post("/", controller.addIngredient);
+router.post("/:id/:name/:inventory", controller.addIngredient);
 router.get("/:id", controller.getIngredientById);
 router.delete("/:id", controller.removeIngredient);
 router.patch("/:id", controller.decrementInventoryById)

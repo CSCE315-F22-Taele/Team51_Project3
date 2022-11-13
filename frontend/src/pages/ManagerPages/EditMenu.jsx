@@ -172,7 +172,7 @@ export default function EditMenu() {
                     onChange={(event) => {
                         // see if the id exists already
 
-                        if (!idChecker.includes(event.target.value)) {
+                        if (!idChecker.includes(event.target.value) && event.target.value < 10000 && event.target.value > 8999) {
                             setID(event.target.value);
                         }
                         else {
@@ -193,7 +193,13 @@ export default function EditMenu() {
                     type="float"
                     placeholder="price"
                     onChange={(event) => {
-                        setPrice(event.target.value);
+                        if(event.target.value > 0)
+                        {
+                            setPrice(event.target.value);
+                        }
+                        else{
+                            setPrice(4.20);
+                        }
                     }}
                 ></input>
                 <select onChange={(event) => {

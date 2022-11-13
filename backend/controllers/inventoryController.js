@@ -42,12 +42,6 @@ const getIngredientById = (req, res) => {
 
 const addIngredient = (req, res) => {
     const { id, name, inventory } = req.body;
-
-    //make sure ingredient does not already exist
-    pool.query(queries.checkIngredientExists, [id], (error, results) => {
-        if (results.rows.length) {
-            res.send("ID in use. (ingredient exists already)");
-        } else {
             //add ingredient to db
             pool.query(
                 queries.addIngredient,
@@ -55,10 +49,7 @@ const addIngredient = (req, res) => {
                 (error, results) => {
                     if (error) throw error;
                     res.status(201).send("Ingredient Created Successfully!");
-                }
-            );
-        }
-    });
+                });
 };
 
 const removeIngredient = (req, res) => {

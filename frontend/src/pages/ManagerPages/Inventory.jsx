@@ -4,8 +4,8 @@ export default function Inventory() {
     const [inventory, setInventory] = useState([]);
     const [quantity, setQuantity] = useState();
     const [idCheckList, setIDChecker] = useState();
-    const [id, setID] = useState();
-    const [name, setName] = useState();
+    const [newId, setNewID] = useState();
+    const [newName, setNewName] = useState();
     const [inventoryEnter, inventoryEnterSet] = useState();
 
 
@@ -14,7 +14,7 @@ export default function Inventory() {
      */
     async function getInventory() {
         try {
-            const res = await fetch("api/inventory");
+            const res = await fetch(`api/inventory`);
             const data = await res.json();
             setInventory(data);
             var idList = [];
@@ -25,22 +25,37 @@ export default function Inventory() {
             // const idList = data['id']
 
 
-        idList.sort();
-        //console.log(idList);
-        setIDChecker(idList);
+            idList.sort();
+            //console.log(idList);
+            setIDChecker(idList);
         } catch (err) {
             console.error(err);
         }
 
     }
-    async function ingredientUpdate()
-    {
-        try{
-            const res = await fetch(`api/inventory/${id}/${name}/${inventoryEnter}`);
-            const data = await res.json();
+    async function ingredientCreate() {
+        if (!newId) {
+            setNewID(idCheckList[idCheckList.length - 1] + 1);
         }
-        catch (err) {
-            console.error(err);
+        try {
+            let res = await fetch(`api/inventory/${newId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({
+                    id: parseInt(newId),
+                    name: newName,
+                    inventory: parseInt(inventoryEnter),
+                }),
+            });
+            const data = await res.json();
+            console.log(data)
+
+        } catch (err) {
+            console.log(err.message);
         }
     }
 
@@ -90,11 +105,10 @@ export default function Inventory() {
                             name={ingredient.name}
                             defaultValue={ingredient.inventory}
                             onChange={(event) => {
-                                if(event.target.value > 0)
-                                {
+                                if (event.target.value > 0) {
                                     setQuantity(event.target.value);
                                 }
-                                else{
+                                else {
                                     setQuantity(1000);
 
                                 }
@@ -108,19 +122,21 @@ export default function Inventory() {
 
     return (
         <div className="App">
-            <form onSubmit={ingredientUpdate()}>
-            <input
+            <form onSubmit={(event) => {
+                ingredientCreate()
+            }}>
+                <input
                     type="number"
                     placeholder="id"
                     onChange={(event) => {
                         // see if the id exists already
 
                         if (!idCheckList.includes(event.target.value) && event.target.value > 0) {
-                            setID(event.target.value);
+                            setNewID(event.target.value);
                         }
                         else {
                             // if it exists find the last id and add 1
-                            setID(idCheckList[idCheckList.length - 1] + 1);
+                            setNewID(idCheckList[idCheckList.length - 1] + 1);
                         }
 
                     }}
@@ -129,24 +145,23 @@ export default function Inventory() {
                     type="string"
                     placeholder="name"
                     onChange={(event) => {
-                        setName(event.target.value);
+                        setNewName(event.target.value);
                     }}
                 ></input>
-                    <input
+                <input
                     type="number"
                     placeholder="inventory"
                     onChange={(event) => {
-                        if( event.target.value > 0)
-                        {
+                        if (event.target.value > 0) {
                             inventoryEnterSet(event.target.value);
                         }
-                        else{
-                            
+                        else {
+
                             inventoryEnterSet(1000);
                         }
                     }}
                 ></input>
-                <button>Update Ingrdients</button>
+                <button>Create New Ingredient</button>
             </form>
             <table className="table table-striped">
                 <thead>

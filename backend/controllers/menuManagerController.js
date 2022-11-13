@@ -13,19 +13,11 @@ const getMenuItems = (req, res) => {
 
 const addMenuItem = (req, res) => {
     const { category, name, price, ingredients, png, options, id } = req.body;
-
-    //make sure menu item does not already exist
-    pool.query(queries.checkMenuItemExists, [id], (error, results) => {
-        if (results.rows.length) {
-            res.send("ID in use. (menu item exists already)")
-        } else {
             //add ingredient to db
             pool.query(queries.addMenuItem, [category, name, price, ingredients, png, options, id], (error, results) => {
                 if (error) throw error;
                 res.status(201).send("Menu Item Created Successfully!");
             });
-        }
-    });
 };
 
 

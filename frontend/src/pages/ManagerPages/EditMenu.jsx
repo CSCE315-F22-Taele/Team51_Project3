@@ -12,6 +12,10 @@ export default function EditMenu() {
     const [idChecker, setIDChecker] = useState([]);
     const [ingredientList, setInventory] = useState([]);
 
+    /**
+     * Sends a HTTP get for all menu items, then gets all ids for data validation
+     * @author  Joshua
+     */
 
     async function getMenu() {
         try {
@@ -46,16 +50,34 @@ export default function EditMenu() {
      * @param   {int} id is the items unique id
      */
     async function addMenuItem() {
-        try {
-            var stringIngredients = toString(ingredients)
-            var stringOptions = toString(options)
-            const res = await fetch(`api/menuManager/${category}/${name}/${price}/${stringIngredients}/${png}/${stringOptions}/${id}`);
-            const data = await res.json();
-            setMenu(data);
-        } catch (err) {
-            console.log(err);
-        }
-    }
+
+            try {
+                    let res = await fetch("api/menuManager/",{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "POST",
+                    },
+                    body: JSON.stringify({
+                        category: JSON.stringify(category),
+                        name: JSON.stringify(name),
+                        price: parseFloat(price),
+                        ingredients: JSON.stringify(ingredients),
+                        png: JSON.stringify(png),
+                        options : JSON.stringify(options),
+                        id:parseInt(id),
+                    }),
+                });
+                const data = await res.json();
+                console.log(data)
+                
+            } catch (err) {
+                console.log(err.message);
+            }
+
+        } 
+    
     async function getInventory() {
         try {
             const res = await fetch("api/inventory");

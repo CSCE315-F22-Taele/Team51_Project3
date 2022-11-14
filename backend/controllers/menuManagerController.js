@@ -25,10 +25,9 @@ const addMenuItem = (req, res) => {
 
 const removeMenuItem = (req, res) => {
     //  const id  = parseInt(req.params.id);
-     const { id } = req.body;
-    //make sure ingredient actually exists
+    const { idRemove }  = req.body;
 
-    pool.query(queries.removeMenuItem, [id], (error, results) => {
+    pool.query("DELETE FROM menu WHERE id = $1", [idRemove], (error, results) => {
         if (error) throw error;
         res.status(200).send("Menu Item removed successfully.");
     });

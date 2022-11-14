@@ -5,13 +5,19 @@ export default function EditMenu() {
     const [category, setCategory] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0.0);
-    const [ingredients, setIngredients] = useState([]);
+    const [ingredients, setIngredients] = useState('');
     const [png, setPNG] = useState('');
     const [options, setOptions] = useState('');
     const [id, setID] = useState(0);
     const [idChecker, setIDChecker] = useState([]);
     const [ingredientList, setInventory] = useState([]);
+    const [idRemove, setIdRemove] = useState();
+    const [saveError, setError] = useState()
 
+    /**
+     * Sends a HTTP get for all menu items, then gets all ids for data validation
+     * @author  Joshua
+     */
 
     async function getMenu() {
         try {
@@ -33,6 +39,7 @@ export default function EditMenu() {
         idList.sort();
         //console.log(idList);
         setIDChecker(idList);
+        setID(idList[idList.length - 1] + 1)
         return idList
     }
     /**
@@ -45,17 +52,64 @@ export default function EditMenu() {
      * @param   {string} options are the functioning number of editable items 
      * @param   {int} id is the items unique id
      */
-    async function addMenuItem() {
-        try {
-            var stringIngredients = toString(ingredients)
-            var stringOptions = toString(options)
-            const res = await fetch(`api/menuManager/${category}/${name}/${price}/${stringIngredients}/${png}/${stringOptions}/${id}`);
-            const data = await res.json();
-            setMenu(data);
-        } catch (err) {
-            console.log(err);
+    async function addMenuItem(id) {
+        if (!id) {
+            setID(idChecker[idChecker.length - 1] + 1);
         }
+        try {
+            let res = await fetch("api/menuManager/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({
+                    category: category,
+                    name: name,
+                    price: parseFloat(price),
+                    ingredients: JSON.stringify(ingredients),
+                    png: png,
+                    options: JSON.stringify(options),
+                    id: parseInt(id),
+                }),
+            });
+            const data = await res.json();
+            console.log(data)
+
+        } catch (err) {
+            console.log(err.message);
+        }
+
     }
+    async function removeMenuById() {
+
+        try {
+            // let res = await fetch(`api/menuManger/${id}`)
+            let res = await fetch("api/menuManager/", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "DELETE",
+                },
+                body: JSON.stringify({
+                    idRemove: parseInt(idRemove),
+                }),
+            });
+            const data = await res.json();
+            console.log(data)
+
+        } catch (err) {
+            console.log(err.message);
+
+        }
+
+    }
+    /**
+* Sends a HTTP get request for all ingredients to then display in the dropdown menu
+* @author  Joshua
+*/
     async function getInventory() {
         try {
             const res = await fetch("api/inventory");
@@ -72,15 +126,12 @@ export default function EditMenu() {
         getInventory();
         getMenu();
         checkOptionsInIDs();
-
     }, []);
 
-    const checkOptionsInIDs = () =>
-    {
+    const checkOptionsInIDs = () => {
         for (let ingredientIndex = 0; ingredientIndex < ingredients.length; ingredientIndex++) {
             for (let index = 0; index < options.length; index++) {
-                if (!ingredients.includes(options[index]))
-                 {
+                if (!ingredients.includes(options[index])) {
                     ingredients.push(options[index])
                 }
             }
@@ -119,6 +170,7 @@ export default function EditMenu() {
             }
 
         }
+        checkOptionsInIDs();
         return optionsReturn;
     }
 
@@ -151,7 +203,7 @@ export default function EditMenu() {
             <h1>Edit Menu </h1>
             <form
                 onSubmit={(event) => {
-                    addMenuItem();
+                    addMenuItem(id);
                     setIngredients(newArray => [...newArray, event.target.value]);
                     setOptions(newArray => [...newArray, event.target.value]);
                     displayChoice();
@@ -171,14 +223,14 @@ export default function EditMenu() {
                     onChange={(event) => {
                         // see if the id exists already
 
-                        if (!idChecker.includes(event.target.value)) {
+                        if (!idChecker.includes(event.target.value) && event.target.value < 10000 && event.target.value > 8999) {
                             setID(event.target.value);
                         }
                         else {
                             // if it exists find the last id and add 1
                             setID(idChecker[idChecker.length - 1] + 1);
                         }
-
+                        console.log(id)
                     }}
                 ></input>
                 <input
@@ -189,10 +241,15 @@ export default function EditMenu() {
                     }}
                 ></input>
                 <input
-                    type="number"
+                    type="float"
                     placeholder="price"
                     onChange={(event) => {
-                        setPrice(event.target.value);
+                        if (event.target.value > 0) {
+                            setPrice(event.target.value);
+                        }
+                        else {
+                            setPrice(4.20);
+                        }
                     }}
                 ></input>
                 <select onChange={(event) => {
@@ -230,16 +287,29 @@ export default function EditMenu() {
                         setPNG(event.target.value);
                     }}
                 ></input>
-                <p>{displayChoice()}</p>
-                <p>{displayOptions()}</p>
 
 
                 <button onClick >Add New Menu Item</button>
             </form>
-{/*             
-              <form id ="123123" onSubmit={setOptions(newArray=>[])}>  <button onClick >Click to clear options</button> </form>
-              <form id="12312" onSubmit={setIngredients(newArray=>[])}> <button onClick >Click to clear ingredients</button> </form> */}
 
+            <form onSubmit={(event)=>{
+                setIdRemove(event.target.value);
+                removeMenuById()}
+                }>
+                <input type="number"
+                    placeholder="id to REMOVE"
+                    onChange={(event) => {
+                        if(idChecker.includes(parseInt(event.target.value)))
+                        {
+                            setIdRemove(event.target.value)
+                        }
+                        console.log(idRemove)
+                    }
+
+                    }>
+                </input>
+                <button>Remove menu item by id</button>
+            </form>
 
             <table className="table table-striped">
                 <thead>
@@ -255,6 +325,12 @@ export default function EditMenu() {
                 </thead>
                 <tbody>{displayInfo}</tbody>
             </table>
+            <form onSubmit>
+                <button onClick={() => { ingredients.length = 0; options.length = 0; }}>Clear presets</button>
+                <p>{displayChoice()}</p>
+                <p>{displayOptions()}</p>
+            </form>
+
         </div>
 
     );

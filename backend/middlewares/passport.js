@@ -1,6 +1,7 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
 const passport = require("passport");
 const JWTstrategy = require("passport-jwt").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const pool = require("../server/db");
 
 const cookieExtractor = function (req) {
@@ -23,17 +24,44 @@ passport.use(
                 );
 
                 if (!rows.length) {
-                    throw new Error("401 not authorized");
+                    throw new Error("401: Not Authorized");
                 }
                 let user = {
                     userid: rows[0].userid,
                     username: rows[0].username,
                 };
-                return await done(null, user)
+                return await done(null, user);
             } catch (err) {
-                console.log(err.message)
-                done(null, false)
+                return done(err);
             }
         }
     )
 );
+
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SCRET,
+            callbackURL: "/api/auth/google/callback",
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            const user = {
+                email: profile.emails[0].value,
+                googleId: profile.id,
+                displayName: profile.displayName,
+            };
+        }
+    )
+);
+
+passport.serializeUser((user, done) => {
+    console.log("Serializing User: ", user);
+    done(null, user.id);
+});
+
+passport.deserializeUser((user, done) => {
+    // const user = await
+    console.log("Deserialized User", user);
+    done(err, user);
+})

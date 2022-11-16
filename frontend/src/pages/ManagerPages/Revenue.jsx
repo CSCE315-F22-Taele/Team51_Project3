@@ -6,13 +6,10 @@ export default function Revenue() {
   const[items, setRevenue] = useState([]);
   const[startDate, setStartDate]= useState("");
   const[endDate, setEndDate]= useState("");
-  // const [id, setID] = useState(0);
  
-//this function does not display orderid
   async function getSalesBetweenDates() {
     try {
         const res = await fetch(`api/revenue/${startDate}/${endDate}`);
-        //const res = await fetch("api/revenue");
         const data = await res.json();
         setRevenue(data); 
              
@@ -20,33 +17,6 @@ export default function Revenue() {
         console.error(err);
     }
 }
-
-
-  // async function getSalesBetweenDates() {
-  //   try {
-  //       const res = await fetch(`api/revenue/${startDate}/${endDate}`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //           "Acces-Control-Allow-Methods": "GET",
-  //         },
-  //         body: JSON.stringify({
-  //           id: parseInt(id),
-  //           date : date,
-  //           amount : amount
-  //         }),
-  //       });
-  //       const data = await res.json();
-  //       setRevenue(data);
-  //       window.location = "/Revenue";
-  //   }
-  //   catch (err) {
-  //       console.log(err);
-  //   }
-  //  }
-   
-
 
    const displayInfo = items.map((item) => {
       return (

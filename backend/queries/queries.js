@@ -17,9 +17,9 @@ const removeMenuItem = "DELETE FROM menu WHERE id = $1";
 
 //REVENUE (SALES REPORT)
 // const getAllRevenueDates = "SELECT orderid, date, amount FROM orders";
-// const getRevenueBetweenDates = "SELECT orderid, date, amount FROM orders WHERE date BETWEEN $1 AND $2";
+const getRevenueBetweenDates = "SELECT orderid, date, amount FROM orders WHERE date BETWEEN $1 AND $2";
 const getAllRevenueDates = "SELECT * FROM orders";
-const getRevenueBetweenDates = "SELECT * FROM orders WHERE date BETWEEN $1 AND $2";
+//const getRevenueBetweenDates = "SELECT * FROM orders WHERE date BETWEEN $1 AND $2";
 
 //RESTOCK REPORT
 const showRestock = "SELECT * FROM ingredients where inventory < $1"

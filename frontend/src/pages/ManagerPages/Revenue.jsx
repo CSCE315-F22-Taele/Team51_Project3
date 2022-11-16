@@ -51,11 +51,9 @@ export default function Revenue() {
    const displayInfo = items.map((item) => {
       return (
         <tr>
-          <td> {item.id} </td>
+          <td> {item.orderid} </td>
           <td>{moment(item.date).utc().format("YYYY-MM-DD")}</td>
           <td> {item.amount} </td>
-          <td> {item.count} </td>
-
         </tr>
       );
    });
@@ -94,7 +92,6 @@ export default function Revenue() {
                     <th>ITEM</th>
                     <th>DATE</th>
                     <th>REVENUE</th>
-                    <th>ITEM COUNT</th>
                 </tr>
             </thead>
             <tbody>{displayInfo}</tbody>

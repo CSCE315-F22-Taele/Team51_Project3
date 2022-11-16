@@ -72,7 +72,6 @@ export default function Inventory() {
      */
     async function updateIngredientInventory(id, quantity) {
         try {
-            console.log(JSON.stringify(parseInt(quantity)));
             const res = await fetch(`/api/inventory/${id}`, {
                 method: "PATCH",
                 headers: {

@@ -12,6 +12,9 @@ h2 {
 h3 {
   font-size: 1rem;
 }
+/*h3:hover {
+  font-size: 2rem;
+}*/
 
 a {
   text-decoration: none;
@@ -42,8 +45,8 @@ a {
   align-items: center;
 }
 
-.image.small {
-    max-width: 8rem;
+.small {
+    max-width: 15rem;
 }
 
 button {

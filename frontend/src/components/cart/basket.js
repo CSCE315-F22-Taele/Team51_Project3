@@ -2,10 +2,13 @@ import React from 'react';
 import './index.css';
 
 export default function Basket(props) {
-    const { cartItems, onAdd, onRemove } = props;
+    const { cartItems, onAdd, onRemove, onCheckout } = props;
     const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0); //basically, loop for adding prices
     const taxPrice = itemsPrice * 0.0825; //texas sales taxes are typically 8.25% for restaurants
     const totalPrice = itemsPrice + taxPrice;
+
+
+
     return (
         <aside className='block col-1'>
             <h2>Cart Items</h2>
@@ -20,14 +23,6 @@ export default function Basket(props) {
                     <div className='col-2 text-right'>
                         {item.qty} x ${item.price.toFixed(2)}
                     </div>
-                    {item.options !== null && (
-                        <>
-                            <div className='row'>
-                                <div className='col-2'>Customize Item</div>
-                            </div>
-                        </>
-                    )}
-
                 </div>
             ))}
             {cartItems.length !== 0 && (
@@ -47,7 +42,7 @@ export default function Basket(props) {
                     </div>
                     <hr />
                     <div className='row'>
-                        <button onClick={() => alert('Thank you for your order!')}>Checkout</button>
+                        <button onClick={onCheckout}>Checkout</button>
                     </div>
                 </>
             )}
@@ -55,11 +50,3 @@ export default function Basket(props) {
     );
 }
 
-/*
-{item.options.map((option) => (
-    <div className="row">
-        <button className="removeSmall">-</button>
-        <button className="addSmall">+</button>
-    </div> 
-))}
-*/

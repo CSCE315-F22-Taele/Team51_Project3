@@ -6,6 +6,7 @@ const addIngredient = "INSERT INTO ingredients (id, name, inventory) VALUES ($1,
 const removeIngredient = "DELETE FROM ingredients WHERE id = $1";
 const decrementInventoryById = "UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1";
 const editInventoryById = "UPDATE ingredients set inventory = $1 where id = $1";
+const decreaseIngredientInventory = "UPDATE ingredients WHERE id = $1 SET inventory = inventory - $2"
 
 //MENU ITEMS (For POS)
 const getMenuItems = "SELECT * FROM menu";
@@ -50,4 +51,5 @@ module.exports = {
     showRestock,
     pairReportDates,
     pairReport,
+    decreaseIngredientInventory,
 }

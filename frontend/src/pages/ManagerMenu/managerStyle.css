@@ -2,6 +2,12 @@ img.statButton {
     max-width: 8rem;
 }
 
-button {
+button.statButton {
     display: inline-block;
+}
+
+.backbutton {
+    max-width: 5rem;
+    display: inline-block;
+    background-color: transparent;
 }

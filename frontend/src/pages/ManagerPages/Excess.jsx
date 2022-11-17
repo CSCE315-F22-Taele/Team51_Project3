@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
 
 export default function Excess() {
     const [sales, setTable] = useState([]);
@@ -9,7 +11,7 @@ export default function Excess() {
     const [endDate, setEndDate] = useState("");
     const [excessReportCalled, setExcess] = useState(false);
 
-
+    const navigate = useNavigate();
 
     /**
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
@@ -49,6 +51,18 @@ export default function Excess() {
 
     return (
         <div className="App">
+            <div>
+                <button>
+                    <img
+                        onClick={() => {
+                        navigate("/ManagerMenu")
+                        }}
+                        className="backbutton"
+                        src={backbutton}
+                        alt="back">
+                    </img>
+                </button>
+            </div>
             <h1>Excess Report </h1>
             <form
                 onSubmit={(event) => {

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
 
 export default function Inventory() {
     const [inventory, setInventory] = useState([]);
@@ -8,6 +10,8 @@ export default function Inventory() {
     const [idRemove, setIdRemove] = useState(0);
     const [newName, setNewName] = useState('');
     const [inventoryEnter, inventoryEnterSet] = useState(0);
+
+    const navigate = useNavigate();
 
 
     /**
@@ -146,6 +150,18 @@ export default function Inventory() {
 
     return (
         <div className="App">
+            <div>
+                <button>
+                    <img
+                        onClick={() => {
+                        navigate("/ManagerMenu")
+                        }}
+                        className="backbutton"
+                        src={backbutton}
+                        alt="back">
+                    </img>
+                </button>
+            </div>
             <form onSubmit={(event) => {
                 ingredientCreate()
             }}>

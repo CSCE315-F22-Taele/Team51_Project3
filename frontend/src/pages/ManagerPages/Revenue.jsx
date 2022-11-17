@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
 
 
 export default function Revenue() {
   const[sales, setRevenue] = useState([]);
   const[startDate, setStartDate]= useState();
   const[endDate, setEndDate]= useState();
+
+  const navigate = useNavigate();
 
   async function getSales() {
     try {
@@ -62,6 +66,18 @@ useEffect(() => {
 
    return (
       <div className="App">
+        <div>
+          <button>
+            <img
+              onClick={() => {
+              navigate("/ManagerMenu")
+              }}
+              className="backbutton"
+              src={backbutton}
+              alt="back">
+            </img>
+          </button>
+        </div>
         <h1>Sales Report </h1>
       <form
        /*onSubmit={(event) => {

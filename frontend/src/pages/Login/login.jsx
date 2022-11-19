@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import React from "react";
 import { useState } from "react";
 import { onLogin, onRegister } from "../../components/auth/auth";
@@ -12,6 +13,43 @@ const Login = () => {
     });
     const [message, setMessage] = useState(false);
     const [callSwitch, setCallSwitch] = useState(false);
+
+    const google = () => {
+        const googleAuthURL = "http://localhost:3001/api/login/google";
+
+        const dScreenLeft =
+            window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+        const dScreenTop =
+            window.screenTop !== undefined ? window.screenTop : window.screenY;
+
+        const width = window.innerWidth
+            ? window.innerWidth
+            : document.documentElement.clientWidth
+            ? document.documentElement.clientWidth
+            : screen.width;
+        const height = window.innerHeight
+            ? window.innerHeight
+            : document.documentElement.clientHeight
+            ? document.documentElement.clientHeight
+            : screen.height;
+
+        const systemZoom = width / window.screen.availWidth;
+        const left = (width - 500) / 2 / systemZoom + dScreenLeft;
+        const top = (height - 600) / 2 / systemZoom + dScreenTop;
+
+        const authWindow = window.open(
+            googleAuthURL,
+            "_blank",
+            `scrollbars=yes, 
+            width=${500 / systemZoom}, 
+            height=${600 / systemZoom}, 
+            top=${top}, left=${left}`
+        );
+
+        if (window.focus) {
+            authWindow.focus();
+        }
+    };
 
     const onChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -43,6 +81,7 @@ const Login = () => {
             }
             setMessage(res.message);
             setValues({ username: "", password: "" });
+            switchButton();
         } catch (err) {
             setMessage("Sign up was unsuccessful.");
         }
@@ -60,7 +99,7 @@ const Login = () => {
                 password: "",
             });
             setMessage(false);
-        }, 250)
+        }, 250);
     };
 
     return (
@@ -97,6 +136,9 @@ const Login = () => {
                         </button>
                         <div className="description status-message">{message}</div>
                     </form>
+                    <div onClick={google}>
+                        <button>Google</button>
+                    </div>
                 </div>
                 <div
                     className={`box__container box__container--b ${

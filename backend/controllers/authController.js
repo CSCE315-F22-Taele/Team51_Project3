@@ -17,11 +17,19 @@ exports.getUsers = async (req, res) => {
 exports.register = async (req, res) => {
     const { username, password } = req.body;
     try {
-        const type = "user";
-        const userID = ("" + Math.random()).substring(2, 7);
+        const type = "local";
+        const role = "user";
+        let userID;
+        while (true) {
+            userID = ("" + Math.random()).substring(2, 7);
+            const { rows } = await pool.query("SELECT * FROM accounts WHERE userid = $1", [userID]);
+            if (!rows.length) {
+                break;
+            }
+        }
         await pool.query(
-            "INSERT INTO accounts(type, userid, username, password) VALUES ($1, $2, $3, $4)",
-            [type, userID, username, password]
+            "INSERT INTO accounts(type, role, userid, username, password) VALUES ($1, $2, $3, $4, $5)",
+            [type, role, userID, username, password]
         );
 
         return res.status(201).json({

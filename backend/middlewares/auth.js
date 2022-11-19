@@ -5,5 +5,5 @@ exports.googleAuth = passport.authenticate("google", { scope: ["profile", "email
 exports.googleAuthCB = passport.authenticate("google", {
     failureMessage: "Cannot login to Google...",
     failureRedirect: "/",
-    successRedirect: "/login",
+    successRedirect: "http://localhost:3000/login/success",
 });

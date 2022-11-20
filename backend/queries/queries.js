@@ -30,10 +30,13 @@ const showRestock = "SELECT * FROM ingredients where inventory < $1"
 const pairReportDates = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
 const pairReport = "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN $1 AND $2) GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;";
 
+//Excess report
+const excessReport = "select * from daily_inventory where date between $1 and $2";
 module.exports = {
     getMenuItems,
     getMenuItemById,
     checkMenuItemExists,
+    excessReport,
     addMenuItem,
     removeMenuItem,
     getIngredients,

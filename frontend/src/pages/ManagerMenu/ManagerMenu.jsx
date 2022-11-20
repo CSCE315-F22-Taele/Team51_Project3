@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import inventoryImg from "../../images/inventory.png";
 import boxImg from "../../images/orderHistory.png";
@@ -12,6 +13,7 @@ import "./managerStyle.css";
 
 export default function ManagerPage() {
   const navigate = useNavigate();
+
   return (
     <div>
       <div>
@@ -58,7 +60,8 @@ export default function ManagerPage() {
           navigate("/Pair");
         }}
       >
-        <img className="statButton" src={statButton} alt="Pair Report"></img>
+        <img 
+        className="statButton" src={statButton} alt="Pair Report"></img>
         Pair Report
       </button>
       <button

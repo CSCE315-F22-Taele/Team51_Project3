@@ -11,6 +11,8 @@ export default function Inventory() {
     const [newName, setNewName] = useState('');
     const [inventoryEnter, inventoryEnterSet] = useState(0);
 
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
     const navigate = useNavigate();
 
 
@@ -119,9 +121,15 @@ export default function Inventory() {
     const displayData = inventory.map((ingredient) => {
         return (
             <tr>
-                <td>{ingredient.id}</td>
-                <td>{ingredient.name}</td>
-                <td>{ingredient.inventory}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{ingredient.id}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{ingredient.name}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{ingredient.inventory}</td>
                 <td>
                     <form
                         onSubmit={(event) => {
@@ -150,6 +158,12 @@ export default function Inventory() {
 
     return (
         <div className="App">
+            <button onClick={() => setFontSize(fontSize + 2)} > 
+            + increase font size 
+            </button>
+            <button onClick={() => setFontSize(fontSize - 2)} > 
+            - decrease font size 
+            </button>  
             <div>
                 <button>
                     <img
@@ -226,10 +240,18 @@ export default function Inventory() {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Inventory</th>
-                        <th>Change Amount</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >ID</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Name</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Inventory</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Change Amount</th>
                     </tr>
                 </thead>
                 <tbody>{displayData}</tbody>

@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import { useState, useEffect } from 'react';
-
+import moment from "moment";
 
 export default function Revenue() {
-  const[sales, setRevenue] = useState([]);
-  const[startDate, setStartDate]= useState();
-  const[endDate, setEndDate]= useState();
+  const[items, setRevenue] = useState([]);
+  const[startDate, setStartDate]= useState("");
+  const[endDate, setEndDate]= useState("");
 
-  async function getSales() {
+  const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
+ 
+  async function getSalesBetweenDates() {
     try {
         const res = await fetch(`api/revenue/${startDate}/${endDate}`);
         const data = await res.json();
@@ -21,27 +24,27 @@ export default function Revenue() {
    const displayInfo = items.map((item) => {
       return (
         <tr>
-          <td> {item.orderid} </td>
-          <td>{moment(item.date).utc().format("YYYY-MM-DD")}</td>
-          <td> {item.amount} </td>
+          <td
+          style={{fontSize: `${fontSize}px`}}
+          > {item.orderid} </td>
+          <td
+          style={{fontSize: `${fontSize}px`}}
+          >{moment(item.date).utc().format("YYYY-MM-DD")}</td>
+          <td
+          style={{fontSize: `${fontSize}px`}}
+          > {item.amount} </td>
         </tr>
       );
    });
 
    return (
       <div className="App">
-        <div>
-          <button>
-            <img
-              onClick={() => {
-              navigate("/ManagerMenu")
-              }}
-              className="backbutton"
-              src={backbutton}
-              alt="back">
-            </img>
-          </button>
-        </div>
+        <button onClick={() => setFontSize(fontSize + 2)} > 
+            + increase font size 
+            </button>
+            <button onClick={() => setFontSize(fontSize - 2)} > 
+            - decrease font size 
+            </button>
         <h1>Sales Report </h1>
       <form
         onSubmit={(e) => {
@@ -71,9 +74,15 @@ export default function Revenue() {
         <table className="table table-striped">
             <thead>
                 <tr>
-                    <th>ITEM</th>
-                    <th>DATE</th>
-                    <th>REVENUE</th>
+                    <th
+                    style={{fontSize: `${fontSize}px`}}
+                    >ITEM</th>
+                    <th
+                    style={{fontSize: `${fontSize}px`}}
+                    >DATE</th>
+                    <th
+                    style={{fontSize: `${fontSize}px`}}
+                    >REVENUE</th>
                 </tr>
             </thead>
             <tbody>{displayInfo}</tbody>

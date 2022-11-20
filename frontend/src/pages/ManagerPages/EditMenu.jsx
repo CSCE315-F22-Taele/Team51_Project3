@@ -17,6 +17,9 @@ export default function EditMenu() {
     const [idRemove, setIdRemove] = useState();
     const [saveError, setError] = useState();
     const navigate = useNavigate();
+
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
     /**
      * Sends a HTTP get for all menu items, then gets all ids for data validation
      * @author  Joshua
@@ -181,13 +184,27 @@ export default function EditMenu() {
     const displayInfo = menu.map((item) => {
         return (
             <tr>
-                <td>{item.category}</td>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.price}</td>
-                <td>{item.ingredients}</td>
-                <td>{item.options}</td>
-                <td>{item.png}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.category}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.id}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.name}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.price}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.ingredients}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.options}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.png}</td>
             </tr>
         );
     });
@@ -196,6 +213,12 @@ export default function EditMenu() {
     });
     return (
         <div className="App">
+            <button onClick={() => setFontSize(fontSize + 2)} > 
+            + increase font size 
+            </button>
+            <button onClick={() => setFontSize(fontSize - 2)} > 
+            - decrease font size 
+            </button>
             <div>
                 <button>
                     <img
@@ -321,13 +344,27 @@ export default function EditMenu() {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>Category</th>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Ingredients</th>
-                        <th>Options</th>
-                        <th>PNG</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Category</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Id</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Name</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Price</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Ingredients</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Options</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >PNG</th>
                     </tr>
                 </thead>
                 <tbody>{displayInfo}</tbody>

@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
 
 export default function Inventory() {
     const [inventory, setInventory] = useState([]);
     const [quantity, setQuantity] = useState();
     const [idCheckList, setIDChecker] = useState();
-    const [newId, setNewID] = useState();
-    const [newName, setNewName] = useState();
-    const [inventoryEnter, inventoryEnterSet] = useState();
+    const [newId, setNewID] = useState(0);
+    const [idRemove, setIdRemove] = useState(0);
+    const [newName, setNewName] = useState('');
+    const [inventoryEnter, inventoryEnterSet] = useState(0);
+
+    const navigate = useNavigate();
 
 
     /**
@@ -38,7 +43,7 @@ export default function Inventory() {
             setNewID(idCheckList[idCheckList.length - 1] + 1);
         }
         try {
-            let res = await fetch(`api/inventory/${newId}`, {
+            let res = await fetch("api/inventory/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -46,9 +51,9 @@ export default function Inventory() {
                     "Access-Control-Allow-Methods": "POST",
                 },
                 body: JSON.stringify({
-                    id: parseInt(newId),
-                    name: newName,
-                    inventory: parseInt(inventoryEnter),
+                    newId: parseInt(newId),
+                    newName: newName,
+                    inventoryEnter: parseInt(inventoryEnter),
                 }),
             });
             const data = await res.json();
@@ -71,7 +76,6 @@ export default function Inventory() {
      */
     async function updateIngredientInventory(id, quantity) {
         try {
-            console.log(JSON.stringify(parseInt(quantity)));
             const res = await fetch(`/api/inventory/${id}`, {
                 method: "PATCH",
                 headers: {
@@ -87,7 +91,31 @@ export default function Inventory() {
             console.error(err);
         }
     }
+    /**
+     * Sends a HTTP deete request with the quantity of the ID to be removed
+     * @author  Joshua,
+     * @param   {int} id the identification value of the ingredient being modified
 
+     */
+
+    async function ingredientRemove()
+    {
+        try {
+            const res = await fetch("/api/inventory/", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "DELETE",
+                },
+                body: JSON.stringify({
+                    idRemove: parseInt(idRemove),
+                }),
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
     const displayData = inventory.map((ingredient) => {
         return (
             <tr>
@@ -122,6 +150,18 @@ export default function Inventory() {
 
     return (
         <div className="App">
+            <div>
+                <button>
+                    <img
+                        onClick={() => {
+                        navigate("/ManagerMenu")
+                        }}
+                        className="backbutton"
+                        src={backbutton}
+                        alt="back">
+                    </img>
+                </button>
+            </div>
             <form onSubmit={(event) => {
                 ingredientCreate()
             }}>
@@ -138,16 +178,17 @@ export default function Inventory() {
                             // if it exists find the last id and add 1
                             setNewID(idCheckList[idCheckList.length - 1] + 1);
                         }
-
+                        console.log(newId)
                     }}
-                ></input>
+                    ></input>
                 <input
                     type="string"
                     placeholder="name"
                     onChange={(event) => {
                         setNewName(event.target.value);
+                        console.log(newName)
                     }}
-                ></input>
+                    ></input>
                 <input
                     type="number"
                     placeholder="inventory"
@@ -156,13 +197,32 @@ export default function Inventory() {
                             inventoryEnterSet(event.target.value);
                         }
                         else {
-
+                            
                             inventoryEnterSet(1000);
                         }
+                        console.log(inventoryEnter)
                     }}
                 ></input>
                 <button>Create New Ingredient</button>
             </form>
+            <form onSubmit={(event) => {
+                setIdRemove(event.target.value)
+                ingredientRemove()
+                
+            }}>
+                <input
+                    type="number"
+                    placeholder="id"
+                    onChange={(event) => {
+                        // see if the id exists already
+                        setIdRemove(event.target.value)
+                        console.log(idRemove)
+                    }}
+                    >
+
+                    </input>
+                    <button> remove ingredient button</button>
+                </form>
             <table className="table table-striped">
                 <thead>
                     <tr>

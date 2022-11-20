@@ -7,3 +7,4 @@ exports.googleAuthCB = passport.authenticate("google", {
     failureRedirect: "/",
     successRedirect: "http://localhost:3000/login/success",
 });
+

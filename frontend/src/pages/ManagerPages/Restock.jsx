@@ -1,10 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
 
 export default function Restock() {
   const [items, setTable] = useState([]);
   const [inventory, setInventory] = useState();
   const [inventoryCheck, setCheck] = useState(100);
+
+  const navigate = useNavigate();
 
   useEffect(() => { getTable(); }, []
   );
@@ -33,7 +37,7 @@ export default function Restock() {
         <td>{item.id}</td>
         <td>{item.name}</td>
         <td>{item.inventory}</td>
-        <td>{restockNeeded()}</td> 
+        <td>{restockNeeded()}</td>
 
       </tr>
     );
@@ -43,6 +47,18 @@ export default function Restock() {
 
   return (
     <div className="App">
+      <div>
+        <button>
+          <img
+            onClick={() => {
+              navigate("/ManagerMenu")
+            }}
+            className="backbutton"
+            src={backbutton}
+            alt="back">
+          </img>
+        </button>
+      </div>
       <h1>Restock Report </h1>
       <table className="table table-striped">
         <thead>

@@ -25,6 +25,8 @@ const decrementInventoryById = (req, res) => {
     });
 };
 
+
+
 const getIngredients = (req, res) => {
     pool.query(queries.getIngredients, (error, results) => {
         if (error) throw error;
@@ -41,11 +43,11 @@ const getIngredientById = (req, res) => {
 };
 
 const addIngredient = (req, res) => {
-    const { id, name, inventory } = req.body;
+    const { newId, newName, inventoryEnter } = req.body;
             //add ingredient to db
             pool.query(
-                queries.addIngredient,
-                [id, name, inventory],
+                "INSERT INTO ingredients (id, name, inventory) VALUES ($1, $2, $3)",
+                [newId, newName, inventoryEnter],
                 (error, results) => {
                     if (error) throw error;
                     res.status(201).send("Ingredient Created Successfully!");
@@ -53,20 +55,12 @@ const addIngredient = (req, res) => {
 };
 
 const removeIngredient = (req, res) => {
-    const id = parseInt(req.params.id);
+    const { idRemove } = req.body;
 
-    //make sure ingredient actually exists
-    pool.query(queries.getIngredientById, [id], (error, results) => {
-        const noIngredientFound = !results.rows.length;
-        if (noIngredientFound) {
-            res.send("Ingredient does not exist in database.");
-        } else {
-            pool.query(queries.removeIngredient, [id], (error, results) => {
+            pool.query("DELETE FROM ingredients WHERE id = $1", [idRemove], (error, results) => {
                 if (error) throw error;
                 res.status(200).send("Ingredient removed successfully.");
             });
-        }
-    });
 };
 
 /**

@@ -24,3 +24,5 @@ router.get("/auth/user", isAuth, (req, res) => {
     res.json(req.user);
 });
 router.get("/logout", userAuth, logout);
+
+module.exports = router;

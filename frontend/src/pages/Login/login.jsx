@@ -14,9 +14,28 @@ const Login = () => {
     const [message, setMessage] = useState(false);
     const [callSwitch, setCallSwitch] = useState(false);
 
-    const google = () => {
+    const fetchUser = async () => {
+        try {
+            const response = await fetch("api/auth/user", {
+                credentials: "include",
+            })
+                .then(function (res) {
+                    return res.json();
+                })
+                .then(function (data) {
+                    dispatch(authenticateUser());
+                    localStorage.setItem("isAuth", "true");
+                });
+        } catch (err) {
+            console.log("[ERROR] User is not Authenticated");
+        }
+    };
+
+    const openGoogle = () => {
         const googleAuthURL = "http://localhost:3001/api/login/google";
 
+        // Process for Determining Window Center Placement
+        // Credit: http://www.xtf.dk/2011/08/center-new-popup-window-even-on.html
         const dScreenLeft =
             window.screenLeft !== undefined ? window.screenLeft : window.screenX;
         const dScreenTop =
@@ -45,9 +64,20 @@ const Login = () => {
             height=${600 / systemZoom}, 
             top=${top}, left=${left}`
         );
-
         if (window.focus) {
             authWindow.focus();
+        }
+
+        // If there's a Google SSO Window, check when it's closed.
+        if (authWindow) {
+            let timer = setInterval(() => {
+                if (authWindow.closed) {
+                    fetchUser();
+                    if (timer) {
+                        clearInterval(timer);
+                    }
+                }
+            }, 500);
         }
     };
 
@@ -56,6 +86,8 @@ const Login = () => {
     };
 
     const dispatch = useDispatch();
+
+    // Local Login Submit
     const onLoginSubmit = async (e) => {
         e.preventDefault();
 
@@ -71,6 +103,7 @@ const Login = () => {
         }
     };
 
+    // Local Register Submit
     const onRegisterSubmit = async (e) => {
         e.preventDefault();
 
@@ -108,7 +141,8 @@ const Login = () => {
                 <div
                     className={`box__container box__container--a ${
                         callSwitch ? "left--active" : ""
-                    }`}>
+                    }`}
+                >
                     <form onSubmit={(e) => onLoginSubmit(e)} className="form__container">
                         <h1 className="form__header">Login</h1>
                         <input
@@ -136,17 +170,19 @@ const Login = () => {
                         </button>
                         <div className="description status-message">{message}</div>
                     </form>
-                    <div onClick={google}>
+                    <div onClick={openGoogle}>
                         <button>Google</button>
                     </div>
                 </div>
                 <div
                     className={`box__container box__container--b ${
                         callSwitch ? "left--active overlap--active" : ""
-                    }`}>
+                    }`}
+                >
                     <form
                         onSubmit={(e) => onRegisterSubmit(e)}
-                        className="form__container">
+                        className="form__container"
+                    >
                         <h1 className="form__header">Register</h1>
                         <input
                             className="form--input"
@@ -176,18 +212,20 @@ const Login = () => {
                 </div>
                 <div
                     className={`switch ${callSwitch ? "right--active" : ""}`}
-                    id="switch-cnt">
+                    id="switch-cnt"
+                >
                     <div
-                        className={`neumo-circle" ${
-                            callSwitch ? "right--active" : ""
-                        }`}></div>
+                        className={`neumo-circle" ${callSwitch ? "right--active" : ""}`}
+                    ></div>
                     <div
                         className={`neumo-circle neumo-circle--active ${
                             callSwitch ? "right--active" : ""
-                        }`}></div>
+                        }`}
+                    ></div>
                     <div
                         className={`switch__container ${callSwitch ? "hidden" : ""}`}
-                        id="switch-c1">
+                        id="switch-c1"
+                    >
                         <h2 className="switch__title title">NOT A USER ?</h2>
                         <p className="switch__description description">
                             Create an account and start a journey with us, the future to
@@ -199,7 +237,8 @@ const Login = () => {
                     </div>
                     <div
                         className={`switch__container ${callSwitch ? "" : "hidden"}`}
-                        id="switch-c2">
+                        id="switch-c2"
+                    >
                         <h2 className="switch__title title">WELCOME BACK</h2>
                         <p className="switch__description description">
                             Already have an account? Login now to continue where you left

@@ -1,4 +1,5 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
+const expressSession = require("express-session");
 const express = require("express");
 const app = express();
 const port = 3001;
@@ -6,9 +7,13 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const cors = require("cors");
 
-// FOR FIXING CORS ERROR IN REACT
-const { application } = require("express");
-
+app.use(
+    expressSession({
+        secret: process.env.SECRET,
+        resave: false,
+        saveUninitialized: true,
+    })
+);
 // Import Middlewares
 require("../middlewares/passport");
 app.use(express.json());
@@ -20,6 +25,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(passport.initialize());
+app.use(passport.session());
 
 // Import Routes
 const authRoutes = require("../routes/auth");

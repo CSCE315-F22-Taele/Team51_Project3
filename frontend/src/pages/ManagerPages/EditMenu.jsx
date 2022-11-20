@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
+
 export default function EditMenu() {
     const [menu, setMenu] = useState([]);
     const [category, setCategory] = useState("");
@@ -13,7 +16,7 @@ export default function EditMenu() {
     const [ingredientList, setInventory] = useState([]);
     const [idRemove, setIdRemove] = useState();
     const [saveError, setError] = useState();
-
+    const navigate = useNavigate();
     /**
      * Sends a HTTP get for all menu items, then gets all ids for data validation
      * @author  Joshua
@@ -193,6 +196,18 @@ export default function EditMenu() {
     });
     return (
         <div className="App">
+            <div>
+                <button>
+                    <img
+                        onClick={() => {
+                        navigate("/ManagerMenu")
+                        }}
+                        className="backbutton"
+                        src={backbutton}
+                        alt="back">
+                    </img>
+                </button>
+            </div>
             <h1>Edit Menu </h1>
             <form
                 onSubmit={(event) => {

@@ -7,12 +7,25 @@ import statButton from "../../images/statsbutton.png";
 import restockButton from "../../images/restock.png";
 import revenueButton from "../../images/revenue.jpg";
 import menuButton from "../../images/editMenu.png";
+import backbutton from "../../images/backbutton.png"
 import "./managerStyle.css";
 
 export default function ManagerPage() {
   const navigate = useNavigate();
   return (
     <div>
+      <div>
+        <button>
+          <img
+            onClick={() => {
+              navigate("/")
+            }}
+              className="backbutton"
+              src={backbutton}
+              alt="back">
+          </img>
+        </button>
+      </div>
       <button>
         <img
           onClick={() => {

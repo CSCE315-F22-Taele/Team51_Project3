@@ -8,6 +8,7 @@ import Layout from "../layouts/layout";
 const POSPage = () => {
     const [menu, setMenu] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    //const [ingredientData, setIngredientData] = useState([]);
 
     //CART ADD/REMOVE
     const onAdd = (product) => {
@@ -36,6 +37,43 @@ const POSPage = () => {
         }
     };
 
+    /*async function getIngredient(id) {
+        try {
+            const res = await fetch(`api/inventory/${id}`);
+            const data = await res.json();
+            setIngredientData(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }*/
+
+    async function decreaseIngredientInventory(id, quantity) {
+        try {
+            const res = await fetch(`api/checkout/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PATCH",
+                },
+                body: JSON.stringify({quantity: parseInt(quantity)}),
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const onCheckout = () => {
+        cartItems.map((menuItem) => (
+            menuItem.ingredients.split(",").map((ingredient) => (
+                decreaseIngredientInventory(ingredient, menuItem.qty)
+                //console.log(menuItem.qty)
+            ))
+        ))
+        alert("Thank you for your order!");
+        window.location = "/";
+    }
+
     //DYNAMIC MENU LOADING
     useEffect(() => {
         getMenu();
@@ -60,6 +98,7 @@ const POSPage = () => {
                     <Basket
                         onAdd={onAdd}
                         onRemove={onRemove}
+                        onCheckout={onCheckout}
                         cartItems={cartItems}></Basket>
                 </div>
             </Layout>

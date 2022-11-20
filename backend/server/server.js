@@ -30,6 +30,7 @@ const excessRoutes = require("../routes/excess");
 const restockRoutes = require("../routes/restock");
 const pairRoutes = require("../routes/pair");
 const menuRoutes = require("../routes/menuManager");
+const checkoutRoutes = require("../routes/checkout");
 
 app.get("/", (req, res) => {
     res.send("RevPOS Application: Pinging Test to Server");
@@ -38,12 +39,12 @@ app.get("/", (req, res) => {
 // Initialize Routes
 app.use("/api/", authRoutes);
 app.use("/api/pos", posRoutes);
-// app.use("/api/menu", posRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/revenue", revenueRoutes);
 app.use("/api/excess", excessRoutes);
 app.use("/api/restock", restockRoutes);
 app.use("/api/pair", pairRoutes);
 app.use("/api/menuManager", menuRoutes);
+app.use("/api/checkout", checkoutRoutes);
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

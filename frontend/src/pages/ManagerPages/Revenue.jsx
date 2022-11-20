@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { useState, useEffect } from 'react';
-import moment from "moment";
+
 
 export default function Revenue() {
-  const[items, setRevenue] = useState([]);
-  const[startDate, setStartDate]= useState("");
-  const[endDate, setEndDate]= useState("");
- 
-  async function getSalesBetweenDates() {
+  const[sales, setRevenue] = useState([]);
+  const[startDate, setStartDate]= useState();
+  const[endDate, setEndDate]= useState();
+
+  async function getSales() {
     try {
         const res = await fetch(`api/revenue/${startDate}/${endDate}`);
         const data = await res.json();
@@ -30,6 +30,18 @@ export default function Revenue() {
 
    return (
       <div className="App">
+        <div>
+          <button>
+            <img
+              onClick={() => {
+              navigate("/ManagerMenu")
+              }}
+              className="backbutton"
+              src={backbutton}
+              alt="back">
+            </img>
+          </button>
+        </div>
         <h1>Sales Report </h1>
       <form
         onSubmit={(e) => {

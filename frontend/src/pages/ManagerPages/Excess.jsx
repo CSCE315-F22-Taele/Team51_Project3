@@ -56,6 +56,7 @@ export default function Excess() {
             var excessItems = [];
             for (let i = 0; i < data.length; i++) {
                 excessItems.push(data[i][ingredients[i]]);
+                // excessItems.push(data[i][JSON.stringify(ingredients[i])]);
                 // console.log(data[i][ingredients[i]])
             }
             console.log(excessItems)

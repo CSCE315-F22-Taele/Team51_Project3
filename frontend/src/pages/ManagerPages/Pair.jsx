@@ -13,7 +13,7 @@ export default function Pair() {
 
     /**
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
-     * @author  Joshua
+     * @author  Mohnish
      * @param   {date} startDate first date for btwn
      * @param   {date} endDate second date in btwn
      */

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "react-image-zooom": "^1.0.4",
+    "react-inner-image-zoom": "^3.0.2",
+    "react-zoom-pan-pinch": "^2.1.3"
+  }
+}

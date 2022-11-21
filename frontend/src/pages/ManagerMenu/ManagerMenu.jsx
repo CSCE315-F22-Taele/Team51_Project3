@@ -14,6 +14,8 @@ import "./managerStyle.css";
 export default function ManagerPage() {
   const navigate = useNavigate();
 
+
+
   return (
     <div>
       <div>

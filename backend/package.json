@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^3.2.4",
+    "@google-cloud/translate": "^7.0.4",
     "concurrently": "^7.5.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -24,11 +25,14 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
+    "i": "^0.3.7",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.20",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
-    "pg": "^8.8.0"
+    "pg": "^8.8.0",
+    "react-auto-translate": "^0.0.6",
+    "react-i18next": "^12.0.0"
   }
 }

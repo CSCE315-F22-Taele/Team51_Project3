@@ -87,7 +87,7 @@ export default function Pair() {
         return (
             <tr>
                 <td>{item.name}</td>
-                <td>1</td>
+                <td>{item.name}</td>
             </tr>
         );
     });

@@ -1,45 +1,95 @@
-import React, { Component } from "react";
-import { useState, useEffect } from "react";
-import moment from "moment";
+import React from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import backbutton from "../../images/backbutton.png";
 
 export default function Excess() {
-    const [sales, setTable] = useState([]);
-
     const [firstDate, setStartDate] = useState("");
     const [secondDate, setEndDate] = useState("");
-    const [excessItems, setExcess] = useState();
-    const [ingredients , setIngredients] = useState();
+    const [ingredientsID, setIngredientsID] = useState();
+    const [usageCount, setUsageCount] = useState([]);
+    const [inventory, setInventory] = useState([]);
+    const [initialInventory, setInitialInventory] = useState([]);
+    const [excessItems, setExcessItems] = useState([]);
+    const [displayData, setDisplayData] = useState([]);
+
+    const didMount = useRef(false);
+    const didMount2 = useRef(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         getInventory();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ingredientsID]);
+
+    useEffect(() => {
+        if (!didMount.current) {
+            didMount.current = true;
+        } else {
+            checkExcessGivenDate();
+        }
+    }, [usageCount]);
+
+    useEffect(() => {
+        if (!didMount2.current) {
+            didMount2.current = true;
+        } else {
+            setDisplayData(setTableView());
+        }
+    }, [excessItems]);
+
     /**
      * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
      */
-     async function getInventory() {
+    async function getInventory() {
         try {
-            const res = await fetch(`api/inventory`);
-            const data = await res.json();
-
-            var idList = [];
+            let ids = [];
+            const data = await (await fetch("api/inventory")).json();
+            setInventory(data);
 
             for (let i = 0; i < data.length; i++) {
-                idList.push(data[i]['name']);
+                ids[i] = data[i]["id"];
             }
-            // const idList = data['id']
-
-
-            idList.sort();
-            //console.log(idList);
-            setIngredients(idList);
+            if (JSON.stringify(ids) !== JSON.stringify(ingredientsID)) {
+                setIngredientsID(ids);
+            }
         } catch (err) {
             console.error(err);
         }
-
     }
+
+    const getIngredientUsage = async (event) => {
+        event.preventDefault();
+        try {
+            await fetch("api/excess/ingredientusage", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({
+                    ids: ingredientsID,
+                    firstDate: firstDate,
+                    secondDate: secondDate,
+                }),
+            }).then((response) => {
+                response
+                    .json()
+                    .then((data) => ({
+                        data: data,
+                        status: response.status,
+                    }))
+                    .then((res) => {
+                        setUsageCount(res.data);
+                    });
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     /**
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
      * @author  Joshua
@@ -47,35 +97,48 @@ export default function Excess() {
      * @param   {date} secondDate second date in btwn
      */
 
-    async function editExcessDates() {
+    async function checkExcessGivenDate() {
         try {
-            let res = await fetch(`api/excess/${firstDate}/${secondDate}`);
-
-            const data = await res.json();
-            console.log(ingredients)
-            var excessItems = [];
-            for (let i = 0; i < data.length; i++) {
-                excessItems.push(data[i][ingredients[i]]);
-                // excessItems.push(data[i][JSON.stringify(ingredients[i])]);
-                // console.log(data[i][ingredients[i]])
-            }
-            console.log(excessItems)
+            await fetch(`api/excess/dailyinventory/${firstDate}`).then((response) => {
+                response.json().then((data) => {
+                    setInitialInventory(data);
+                });
+            });
         } catch (err) {
             console.error(err);
         }
+
+        const excessed = inventory.filter(function (item) {
+            try {
+                if (usageCount[item.id] < initialInventory[0][item.id] * 0.1) {
+                    return true;
+                }
+            } catch (err) {
+                return false;
+            }
+            return false;
+        });
+        setExcessItems(excessed);
     }
 
-    const displayInfo = sales.map((item) => {
-        return (
-            <tr>
-                <td>{item.id}</td>
-                <td>{moment(item.date).utc().format("YYYY-MM-DD")}</td>
-                <td>{item.amount}</td>
-                <td>{excessItems}</td>
-                <td>{item.inventory_ordered}</td>
-            </tr>
-        );
-    });
+    function setTableView() {
+        
+        const displayInfo = excessItems.map((item) => {
+            return (
+                <tr>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{Number(
+                    usageCount[item.id] / parseFloat(initialInventory[0][item.id])
+                ).toLocaleString(undefined, {
+                    style: "percent",
+                    minimumFractionDigits: 2,
+                })}</td>
+                </tr>
+            );
+        });
+        return displayInfo;
+    }
 
     return (
         <div className="App">
@@ -83,20 +146,17 @@ export default function Excess() {
                 <button>
                     <img
                         onClick={() => {
-                            navigate("/ManagerMenu")
+                            navigate("/ManagerMenu");
                         }}
                         className="backbutton"
                         src={backbutton}
-                        alt="back">
-                    </img>
+                        alt="back"></img>
                 </button>
             </div>
             <h1>Excess Report </h1>
             <form
                 onSubmit={(event) => {
-                    setExcess(editExcessDates());
-                    event.preventDefault();
-                    setExcess(editExcessDates());
+                    getIngredientUsage(event);
                 }}>
                 <input
                     type="string"
@@ -104,29 +164,26 @@ export default function Excess() {
                     onChange={(event) => {
                         setStartDate(event.target.value);
                     }}
-                    onKeyPress="setStorage(this)"></input>
+                    required></input>
                 <input
                     type="string"
                     placeholder="yyyy-mm-dd"
                     onChange={(event) => {
                         setEndDate(event.target.value);
                     }}
-                    onKeyPress="setStorage(this)"></input>
+                    required></input>
                 <button>Submit</button>
             </form>
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>orderId</th>
-                        <th>date</th>
-                        <th>amount</th>
-                        <th>items</th>
-                        <th>inventory_ordered</th>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>Percentage Sold</th>
                     </tr>
                 </thead>
-                <tbody>{displayInfo}</tbody>
+                <tbody>{displayData}</tbody>
             </table>
         </div>
     );
 }
-

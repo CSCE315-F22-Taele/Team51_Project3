@@ -24,7 +24,7 @@ import Loading from "./components/loading/loading";
 import { LoginSuccess } from "./containers/Login/google";
 
 const PrivateRoutes = () => {
-    const { isAuth } = useSelector((state) => state.auth);
+    const { isAuth, type } = useSelector((state) => state.auth);
     return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
 

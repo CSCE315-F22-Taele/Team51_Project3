@@ -19,7 +19,7 @@ passport.use(
     async ({ userid }, done) => {
       try {
         const { rows } = await pool.query(
-          "SELECT userid, username FROM accounts WHERE type = $1 AND userid = $1",
+          "SELECT userid, username FROM accounts WHERE type = $1 AND userid = $2",
           ["local", userid]
         );
 
@@ -49,6 +49,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       // Create User Object
       const user = {
+        role: "user",
         email: profile.emails[0].value,
         googleId: profile.id,
         displayName: profile.displayName,

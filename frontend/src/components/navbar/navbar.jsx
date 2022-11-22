@@ -4,9 +4,8 @@ import { unauthenticateUser } from "../../redux/slices/authSlice";
 import { onLogout } from "../auth/auth";
 
 const Navbar = () => {
-    const { isAuth } = useSelector((state) => state.auth);
+    const { isAuth, type } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-
     const logout = async () => {
         try {
             await onLogout();
@@ -31,9 +30,9 @@ const Navbar = () => {
                         <NavLink to="/POSPage" className="mx-3">
                             <span>POS</span>
                         </NavLink>
-                        <NavLink to="/ManagerMenu" className="mx-3">
+                        {type['type'] === "manager" ? (<NavLink to="/ManagerMenu" className="mx-3">
                             <span>Manager</span>
-                        </NavLink>
+                        </NavLink>) : null }
                         <button onClick={() => logout()}>Logout</button>
                     </div>
                 ) : (

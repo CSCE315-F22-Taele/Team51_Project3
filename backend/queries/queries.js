@@ -6,6 +6,7 @@ const addIngredient = "INSERT INTO ingredients (id, name, inventory) VALUES ($1,
 const removeIngredient = "DELETE FROM ingredients WHERE id = $1";
 const decrementInventoryById = "UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1";
 const editInventoryById = "UPDATE ingredients set inventory = $1 where id = $1";
+const decreaseIngredientInventory = "UPDATE ingredients WHERE id = $1 SET inventory = inventory - $2"
 
 //MENU ITEMS (For POS)
 const getMenuItems = "SELECT * FROM menu";
@@ -16,10 +17,8 @@ const removeMenuItem = "DELETE FROM menu WHERE id = $1";
 
 
 //REVENUE (SALES REPORT)
-// const getAllRevenueDates = "SELECT orderid, date, amount FROM orders";
 const getRevenueBetweenDates = "SELECT orderid, date, amount FROM orders WHERE date BETWEEN $1 AND $2";
 const getAllRevenueDates = "SELECT * FROM orders";
-//const getRevenueBetweenDates = "SELECT * FROM orders WHERE date BETWEEN $1 AND $2";
 
 //RESTOCK REPORT
 const showRestock = "SELECT * FROM ingredients where inventory < $1"
@@ -28,10 +27,13 @@ const showRestock = "SELECT * FROM ingredients where inventory < $1"
 const pairReportDates = "select * from orders join orderinfo on orders.orderid = orderinfo.orderid where orders.date between $1 and $2";
 const pairReport = "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN $1 AND $2) GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;";
 
+//Excess report
+const excessReport = "select * from daily_inventory where date between $1 and $2";
 module.exports = {
     getMenuItems,
     getMenuItemById,
     checkMenuItemExists,
+    excessReport,
     addMenuItem,
     removeMenuItem,
     getIngredients,
@@ -43,7 +45,9 @@ module.exports = {
     editInventoryById,
     getAllRevenueDates,
     getRevenueBetweenDates,
+    getRevenueByDate,
     showRestock,
     pairReportDates,
     pairReport,
+    decreaseIngredientInventory,
 }

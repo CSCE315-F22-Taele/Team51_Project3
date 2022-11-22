@@ -21,15 +21,6 @@ const getRevenueBetweenDates = (req, res) => { //check params
     });
 }
 
-// const getRevenueBetweenDates = (req, res) => { //check params
-//     //const startDate = req.params.date;
-//     //const { date } = req.body;
-//     pool.query(queries.getRevenueBetweenDates, [date,date], (error, results) => {
-//         if (error) throw error;
-//         res.status(200).json(results.rows)
-//     });
-// }
-
 
 module.exports = {
     getAllRevenueDates,

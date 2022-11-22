@@ -25,6 +25,8 @@ const decrementInventoryById = (req, res) => {
     });
 };
 
+
+
 const getIngredients = (req, res) => {
     pool.query(queries.getIngredients, (error, results) => {
         if (error) throw error;

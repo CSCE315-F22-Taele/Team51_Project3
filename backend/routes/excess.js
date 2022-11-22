@@ -1,9 +1,9 @@
-const { Router } = require('express');
-const controller = require('../controllers/excessController');
+const { Router } = require("express");
+const { getDailyInventory, getIngredientUsage } = require("../controllers/excessController");
 
 const router = Router();
 
-router.get("/", controller.getExcess)
-router.get("/:firstDate/:secondDate", controller.getExcessDates)
+router.get("/dailyinventory/:date", getDailyInventory);
+router.post("/ingredientusage/", getIngredientUsage)
 
 module.exports = router;

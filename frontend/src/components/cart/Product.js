@@ -14,8 +14,8 @@ export default function Product(props) {
                     src={`./posPhotos/${product.png}`}
                     alt={product.name}></img>
             ) : null}
-            <h3>{product.name}</h3>
-            <div>${product.price}</div>
+            <h3 className="products">{product.name}</h3>
+            <div className="products">${product.price}</div>
             <div>
                 <button onClick={() => onAdd(product)}>Add To Cart</button>
             </div>

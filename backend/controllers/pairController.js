@@ -25,7 +25,7 @@ const createTable = (req, res) => {
 
 const insertPair = (req, res) => {
     pool.query(
-        "INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders) GROUP BY productid ORDER BY count DESC;",
+        "TRUNCATE TABLE X; INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders) AND NOT EXISTS (SELECT * FROM X) GROUP BY productid ORDER BY count DESC;",
         (error, results) => {
             if (error) throw error;
             res.status(200).json(results.rows);
@@ -39,7 +39,7 @@ const insertPairDates = (req, res) => {
     pool.query(
         // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
         // "SELECT menu.name FROM menu JOIN X ON menu.id = X.pid",
-        "INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN $1 and $2) GROUP BY productid ORDER BY count DESC;",
+        "INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN $1 AND $2) AND NOT EXISTS (SELECT * FROM X) GROUP BY productid ORDER BY count DESC;",
         [firstDate, secondDate],
         (error, results) => {
             if (error) throw error;

@@ -53,6 +53,19 @@ export default function Pair() {
       }
     }
 
+    async function removePair() {
+        try {
+            console.log(`api/pair/:t`);
+            const res = await fetch(`api/pair/:t`);
+            const data = await res.json();
+            setTable(data);
+            setPair(true);
+
+        } catch (err) {
+            console.error(err);
+        }
+      }
+
     async function editPairDates() {
       try {
           console.log(`api/pair/`);
@@ -74,7 +87,7 @@ export default function Pair() {
         return (
             <tr>
                 <td>{item.name}</td>
-                <td>{moment(item.date).utc().format("YYYY-MM-DD")}</td>
+                <td>1</td>
             </tr>
         );
     });
@@ -87,6 +100,7 @@ export default function Pair() {
                     insertPairDates();
                     editPairDates();
                     event.preventDefault();
+                    insertPairDates();
                     editPairDates();
                 }}>
                 <input

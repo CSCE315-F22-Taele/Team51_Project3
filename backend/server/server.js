@@ -1,5 +1,5 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
-const expressSession = require("express-session");
+const session = require("cookie-session");
 const express = require("express");
 const app = express();
 const port = 3001;
@@ -8,10 +8,9 @@ const passport = require("passport");
 const cors = require("cors");
 
 app.use(
-    expressSession({
-        secret: process.env.SECRET,
-        resave: false,
-        saveUninitialized: true,
+    session({
+        maxAge: 24 * 60 * 60 * 1000,
+        keys: [process.env.SECRET],
     })
 );
 // Import Middlewares

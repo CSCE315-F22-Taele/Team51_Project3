@@ -54,6 +54,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     let user = req.user;
+    
     let payload = {
         userid: user.userid,
         username: user.username,
@@ -62,6 +63,7 @@ exports.login = async (req, res) => {
         const token = sign(payload, process.env.SECRET);
         return res.status(200).cookie("token", token, { httpOnly: true }).json({
             success: true,
+            user: user,
             message: "Logged in successfully",
         });
     } catch (err) {

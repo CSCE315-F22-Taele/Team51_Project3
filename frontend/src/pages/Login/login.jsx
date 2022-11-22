@@ -23,7 +23,7 @@ const Login = () => {
                     return res.json();
                 })
                 .then(function (data) {
-                    dispatch(authenticateUser());
+                    dispatch(authenticateUser({ type: "user" }));
                     localStorage.setItem("isAuth", "true");
                 });
         } catch (err) {
@@ -92,11 +92,13 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const res = await onLogin(values);
-            if (!res.ok) {
-                throw new Error(res.statusText);
+            const response = await onLogin(values);
+            if (!response.ok) {
+                throw new Error(response.statusText);
             }
-            dispatch(authenticateUser());
+            const data = response.json().then(function (res) {
+                dispatch(authenticateUser({ type: res["user"]["role"] }));
+            });
             localStorage.setItem("isAuth", "true");
         } catch (err) {
             setMessage("Invalid credentials, try again!");
@@ -141,8 +143,7 @@ const Login = () => {
                 <div
                     className={`box__container box__container--a ${
                         callSwitch ? "left--active" : ""
-                    }`}
-                >
+                    }`}>
                     <form onSubmit={(e) => onLoginSubmit(e)} className="form__container">
                         <h1 className="form__header">Login</h1>
                         <input
@@ -170,19 +171,19 @@ const Login = () => {
                         </button>
                         <div className="description status-message">{message}</div>
                     </form>
-                    <div onClick={openGoogle}>
-                        <button>Google</button>
+                    <div className="submit--google" onClick={openGoogle}>
+                        <img
+                            className="google--logo"
+                            src={require("../../images/google.png")}></img>
                     </div>
                 </div>
                 <div
                     className={`box__container box__container--b ${
                         callSwitch ? "left--active overlap--active" : ""
-                    }`}
-                >
+                    }`}>
                     <form
                         onSubmit={(e) => onRegisterSubmit(e)}
-                        className="form__container"
-                    >
+                        className="form__container">
                         <h1 className="form__header">Register</h1>
                         <input
                             className="form--input"
@@ -212,20 +213,18 @@ const Login = () => {
                 </div>
                 <div
                     className={`switch ${callSwitch ? "right--active" : ""}`}
-                    id="switch-cnt"
-                >
+                    id="switch-cnt">
                     <div
-                        className={`neumo-circle" ${callSwitch ? "right--active" : ""}`}
-                    ></div>
+                        className={`neumo-circle" ${
+                            callSwitch ? "right--active" : ""
+                        }`}></div>
                     <div
                         className={`neumo-circle neumo-circle--active ${
                             callSwitch ? "right--active" : ""
-                        }`}
-                    ></div>
+                        }`}></div>
                     <div
                         className={`switch__container ${callSwitch ? "hidden" : ""}`}
-                        id="switch-c1"
-                    >
+                        id="switch-c1">
                         <h2 className="switch__title title">NOT A USER ?</h2>
                         <p className="switch__description description">
                             Create an account and start a journey with us, the future to
@@ -237,8 +236,7 @@ const Login = () => {
                     </div>
                     <div
                         className={`switch__container ${callSwitch ? "" : "hidden"}`}
-                        id="switch-c2"
-                    >
+                        id="switch-c2">
                         <h2 className="switch__title title">WELCOME BACK</h2>
                         <p className="switch__description description">
                             Already have an account? Login now to continue where you left

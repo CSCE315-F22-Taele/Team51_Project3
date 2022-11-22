@@ -9,6 +9,9 @@ export default function Pair() {
     const [endDate, setEndDate] = useState("");
     const [pairReportCalled, setPair] = useState(false);
 
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
+
 
 
     /**
@@ -86,14 +89,24 @@ export default function Pair() {
         }
         return (
             <tr>
-                <td>{item.name}</td>
-                <td>{item.name}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.name}</td>
+                <td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.name}</td>
             </tr>
         );
     });
 
     return (
         <div className="App">
+            <button onClick={() => setFontSize(fontSize + 2)} > 
+            + increase font size 
+            </button>
+            <button onClick={() => setFontSize(fontSize - 2)} > 
+            - decrease font size 
+            </button>  
             <h1>Pair Report </h1>
             <form
                 onSubmit={(event) => {
@@ -122,8 +135,12 @@ export default function Pair() {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>Item 1</th>
-                        <th>Item 2</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Item 1</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Item 2</th>
                     </tr>
                 </thead>
                 <tbody>{displayInfo}</tbody>

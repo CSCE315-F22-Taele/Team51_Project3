@@ -17,6 +17,8 @@ export default function Excess() {
     const didMount2 = useRef(false);
 
     const navigate = useNavigate();
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
 
     useEffect(() => {
         getInventory();
@@ -126,9 +128,15 @@ export default function Excess() {
         const displayInfo = excessItems.map((item) => {
             return (
                 <tr>
-                    <td>{item.id}</td>
-                    <td>{item.name}</td>
-                    <td>{Number(
+                    <td
+                    style={{fontSize: `${fontSize}px`}}
+                    >{item.id}</td>
+                    <td
+                    style={{fontSize: `${fontSize}px`}}
+                    >{item.name}</td>
+                    <td
+                    style={{fontSize: `${fontSize}px`}}
+                    >{Number(
                     usageCount[item.id] / parseFloat(initialInventory[0][item.id])
                 ).toLocaleString(undefined, {
                     style: "percent",
@@ -142,6 +150,12 @@ export default function Excess() {
 
     return (
         <div className="App">
+            <button onClick={() => setFontSize(fontSize + 2)} > 
+            + increase font size 
+            </button>
+            <button onClick={() => setFontSize(fontSize - 2)} > 
+            - decrease font size 
+            </button>  
             <div>
                 <button>
                     <img
@@ -177,9 +191,15 @@ export default function Excess() {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>Item ID</th>
-                        <th>Item Name</th>
-                        <th>Percentage Sold</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Item ID</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Item Name</th>
+                        <th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Percentage Sold</th>
                     </tr>
                 </thead>
                 <tbody>{displayData}</tbody>

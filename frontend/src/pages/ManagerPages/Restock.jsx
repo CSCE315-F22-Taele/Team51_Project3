@@ -9,6 +9,8 @@ export default function Restock() {
   const [inventoryCheck, setCheck] = useState(100);
 
   const navigate = useNavigate();
+  const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
 
   useEffect(() => { getTable(); }, []
   );
@@ -34,9 +36,15 @@ export default function Restock() {
     }
     return (
       <tr>
-        <td>{item.id}</td>
-        <td>{item.name}</td>
-        <td>{item.inventory}</td>
+        <td
+        style={{fontSize: `${fontSize}px`}}
+        >{item.id}</td>
+        <td
+        style={{fontSize: `${fontSize}px`}}
+        >{item.name}</td>
+        <td
+        style={{fontSize: `${fontSize}px`}}
+        >{item.inventory}</td>
         <td>{restockNeeded()}</td>
 
       </tr>
@@ -47,6 +55,12 @@ export default function Restock() {
 
   return (
     <div className="App">
+      <button onClick={() => setFontSize(fontSize + 2)} > 
+            + increase font size 
+            </button>
+            <button onClick={() => setFontSize(fontSize - 2)} > 
+            - decrease font size 
+            </button> 
       <div>
         <button>
           <img
@@ -63,10 +77,18 @@ export default function Restock() {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>inventory</th>
-            <th>Restock Needed?</th>
+            <th
+            style={{fontSize: `${fontSize}px`}}
+            >id</th>
+            <th
+            style={{fontSize: `${fontSize}px`}}
+            >name</th>
+            <th
+            style={{fontSize: `${fontSize}px`}}
+            >inventory</th>
+            <th
+            style={{fontSize: `${fontSize}px`}}
+            >Restock Needed?</th>
 
           </tr>
         </thead>

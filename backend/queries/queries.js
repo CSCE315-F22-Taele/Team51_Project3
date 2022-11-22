@@ -45,7 +45,6 @@ module.exports = {
     editInventoryById,
     getAllRevenueDates,
     getRevenueBetweenDates,
-    getRevenueByDate,
     showRestock,
     pairReportDates,
     pairReport,

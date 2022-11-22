@@ -53,7 +53,7 @@ const getPair = (req, res) => {
 //     const secondDate = req.params.secondDate;
     pool.query(
         // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
-        "SELECT menu.name FROM menu JOIN X ON menu.id = X.pid",
+        "SELECT menu.name FROM menu JOIN X ON menu.id = X.pid ORDER BY menu.id",
         // [firstDate, secondDate],
         (error, results) => {
             if (error) throw error;

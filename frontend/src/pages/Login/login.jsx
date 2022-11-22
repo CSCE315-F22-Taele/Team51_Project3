@@ -97,7 +97,7 @@ const Login = () => {
                 throw new Error(response.statusText);
             }
             const data = response.json().then(function (res) {
-                dispatch(authenticateUser({ type: res['user']['role']}));
+                dispatch(authenticateUser({ type: res["user"]["role"] }));
             });
             localStorage.setItem("isAuth", "true");
         } catch (err) {
@@ -171,8 +171,10 @@ const Login = () => {
                         </button>
                         <div className="description status-message">{message}</div>
                     </form>
-                    <div onClick={openGoogle}>
-                        <button>Google</button>
+                    <div className="submit--google" onClick={openGoogle}>
+                        <img
+                            className="google--logo"
+                            src={require("../../images/google.png")}></img>
                     </div>
                 </div>
                 <div

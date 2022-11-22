@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home/home";
 import Login from "./pages/Login/login";
-import Register from "./pages/Register/register";
 import POSPage from "./pages/POSPage";
 import ManagerMenu from "./pages/ManagerMenu/ManagerMenu";
 import Inventory from "./pages/ManagerPages/Inventory";
@@ -53,7 +52,6 @@ const App = () => {
                 <Route element={<RestrictedRoutes />}>
                     <Route path="/login" element={<Login />} />
                     <Route path="/login/success" element={LoginSuccess()} />
-                    <Route path="/register" element={<Register />} />
                 </Route>
             </Routes>
         </Router>

@@ -40,10 +40,6 @@ const Navbar = () => {
                         <NavLink to="/login">
                             <span>Login</span>
                         </NavLink>
-
-                        <NavLink to="/register" className="mx-3">
-                            <span>Register</span>
-                        </NavLink>
                     </div>
                 )}
             </div>

@@ -12,9 +12,29 @@ h2 {
 h3 {
   font-size: 1rem;
 }
-/*h3:hover {
-  font-size: 2rem;
+/*ZOOM FEATURE
+h1:hover {
+  font-size: 3rem; 
+}
+h2:hover {
+  font-size: 3rem;
+}
+h3:hover {
+  font-size: 2rem; 
 }*/
+
+button:hover {
+  font-size: 1.3rem;
+}
+
+.small:hover {
+  transform: scale(1.5); /*Zoom in on pics of food*/
+}
+
+.products:hover {
+  font-size: 2rem;
+}
+
 
 a {
   text-decoration: none;

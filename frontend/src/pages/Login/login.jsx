@@ -28,6 +28,7 @@ const Login = () => {
                 });
         } catch (err) {
             console.log("[ERROR] User is not Authenticated");
+            console.log(err)
         }
     };
 

@@ -183,27 +183,13 @@ export default function EditMenu() {
     const displayInfo = menu.map((item) => {
         return (
             <tr>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.category}</td>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.id}</td>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.name}</td>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.price}</td>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.ingredients}</td>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.options}</td>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.png}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.category}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.id}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.name}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.price}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.ingredients}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.options}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.png}</td>
             </tr>
         );
     });
@@ -212,22 +198,21 @@ export default function EditMenu() {
     });
     return (
         <div className="App">
-            <button onClick={() => setFontSize(fontSize + 2)} > 
-            + increase font size 
+            <button onClick={() => setFontSize(fontSize + 2)}>
+                + increase font size
             </button>
-            <button onClick={() => setFontSize(fontSize - 2)} > 
-            - decrease font size 
+            <button onClick={() => setFontSize(fontSize - 2)}>
+                - decrease font size
             </button>
             <div>
                 <button>
                     <img
                         onClick={() => {
-                        navigate("/ManagerMenu")
+                            navigate("/ManagerMenu");
                         }}
                         className="backbutton"
                         src={backbutton}
-                        alt="back">
-                    </img>
+                        alt="back"></img>
                 </button>
             </div>
             <h1>Edit Menu </h1>
@@ -257,17 +242,12 @@ export default function EditMenu() {
                     onChange={(event) => {
                         // see if the id exists already
 
-                        if (
-                            !idChecker.includes(event.target.value) &&
-                            event.target.value < 10000 &&
-                            event.target.value > 8999
-                        ) {
+                        if (!idChecker.includes(event.target.value)) {
                             setID(event.target.value);
                         } else {
                             // if it exists find the last id and add 1
                             setID(idChecker[idChecker.length - 1] + 1);
                         }
-                        console.log(id);
                     }}></input>
                 <input
                     type="string"
@@ -343,27 +323,13 @@ export default function EditMenu() {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Category</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Id</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Name</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Price</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Ingredients</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Options</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >PNG</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Category</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Id</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Name</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Price</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Ingredients</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Options</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>PNG</th>
                     </tr>
                 </thead>
                 <tbody>{displayInfo}</tbody>

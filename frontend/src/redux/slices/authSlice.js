@@ -10,7 +10,7 @@ const userAuthFromLocalStorage = () => {
 
 const initialState = {
     isAuth: userAuthFromLocalStorage(),
-    type: "user"
+    type: { type: "user" },
 };
 
 export const authSlice = createSlice({

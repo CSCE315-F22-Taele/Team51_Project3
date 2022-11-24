@@ -4,7 +4,7 @@ import inventoryImg from "../../images/inventory.png";
 import boxImg from "../../images/orderHistory.png";
 import excessReportImg from "../../images/excess.png";
 import statButton from "../../images/statsbutton.png";
-import restockButton from "../../images/restock.png";
+// import restockButton from "../../images/restock.png";
 import revenueButton from "../../images/revenue.jpg";
 import menuButton from "../../images/editMenu.png";
 import backbutton from "../../images/backbutton.png"
@@ -61,7 +61,7 @@ export default function ManagerPage() {
         <img className="statButton" src={statButton} alt="Pair Report"></img>
         Pair Report
       </button>
-      <button
+      {/* <button
         onClick={() => {
           navigate("/Restock");
         }}
@@ -72,7 +72,7 @@ export default function ManagerPage() {
           alt="Restock Report"
         ></img>
         Restock Report
-      </button>
+      </button> */}
       <button
         onClick={() => {
           navigate("/Revenue");

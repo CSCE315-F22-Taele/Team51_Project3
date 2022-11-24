@@ -150,23 +150,26 @@ export default function Excess() {
 
     return (
         <div className="App">
-            <button onClick={() => setFontSize(fontSize + 2)} > 
-            + increase font size 
-            </button>
-            <button onClick={() => setFontSize(fontSize - 2)} > 
-            - decrease font size 
-            </button>  
-            <div>
-                <button>
-                    <img
-                        onClick={() => {
-                            navigate("/ManagerMenu");
-                        }}
-                        className="backbutton"
-                        src={backbutton}
-                        alt="back"></img>
-                </button>
-            </div>
+            <tr>
+                <th> <div>
+                    <button>
+                        <img
+                            onClick={() => {
+                                navigate("/ManagerMenu")
+                            }}
+                            className="backbutton"
+                            src={backbutton}
+                            alt="back">
+                        </img>
+                    </button>
+                </div> </th>
+                <th><button onClick={() => setFontSize(fontSize + 2)} >
+                    + increase font size
+                </button> </th>
+                <th> <button onClick={() => setFontSize(fontSize - 2)} >
+                    - decrease font size
+                </button> </th>
+            </tr>
             <h1>Excess Report </h1>
             <form
                 onSubmit={(event) => {

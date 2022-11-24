@@ -39,6 +39,13 @@ export default function Inventory() {
         }
 
     }
+    /**
+      * Sends a HTTP POST request of a new ingredient
+      * @author  Joshua
+      * @param   {int} id the identification value of the ingredient being modified
+      * @param   {string} newName the new name of the ingredient
+      * @param   {int} inventoryEnter the new inventory value to be assigned to the ingredient
+      */
     async function ingredientCreate() {
         if (!newId) {
             setNewID(idCheckList[idCheckList.length - 1] + 1);
@@ -73,7 +80,7 @@ export default function Inventory() {
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
      * @author  Joshua, Johnny
      * @param   {int} id the identification value of the ingredient being modified
-     * @param   {any} quantity the new inventory value to be assigned to the ingredient
+     * @param   {int} quantity the new inventory value to be assigned to the ingredient
      */
     async function updateIngredientInventory(id, quantity) {
         try {
@@ -99,8 +106,7 @@ export default function Inventory() {
 
      */
 
-    async function ingredientRemove()
-    {
+    async function ingredientRemove() {
         try {
             const res = await fetch("/api/inventory/", {
                 method: "DELETE",
@@ -118,16 +124,24 @@ export default function Inventory() {
         }
     }
     const displayData = inventory.map((ingredient) => {
+        const restockNeeded = () => {
+            if (ingredient.inventory < 10) {
+                return "restock needed"
+            }
+            else {
+                return "item is fine"
+            }
+        }
         return (
             <tr>
                 <td
-                style={{fontSize: `${fontSize}px`}}
+                    style={{ fontSize: `${fontSize}px` }}
                 >{ingredient.id}</td>
                 <td
-                style={{fontSize: `${fontSize}px`}}
+                    style={{ fontSize: `${fontSize}px` }}
                 >{ingredient.name}</td>
                 <td
-                style={{fontSize: `${fontSize}px`}}
+                    style={{ fontSize: `${fontSize}px` }}
                 >{ingredient.inventory}</td>
                 <td>
                     <form
@@ -151,30 +165,35 @@ export default function Inventory() {
                         ></input>
                     </form>
                 </td>
+                <td style={{ fontSize: `${fontSize}px` }}>
+                    {restockNeeded()}
+                </td>
             </tr>
         );
     });
 
     return (
         <div className="App">
-            <button onClick={() => setFontSize(fontSize + 2)} > 
-            + increase font size 
-            </button>
-            <button onClick={() => setFontSize(fontSize - 2)} > 
-            - decrease font size 
-            </button> 
-            <div>
-                <button>
-                    <img
-                        onClick={() => {
-                        navigate("/ManagerMenu")
-                        }}
-                        className="backbutton"
-                        src={backbutton}
-                        alt="back">
-                    </img>
-                </button>
-            </div>
+            <tr>
+                <th> <div>
+                    <button>
+                        <img
+                            onClick={() => {
+                                navigate("/ManagerMenu")
+                            }}
+                            className="backbutton"
+                            src={backbutton}
+                            alt="back">
+                        </img>
+                    </button>
+                </div> </th>
+                <th><button onClick={() => setFontSize(fontSize + 2)} >
+                    + increase font size
+                </button> </th>
+                <th> <button onClick={() => setFontSize(fontSize - 2)} >
+                    - decrease font size
+                </button> </th>
+            </tr>
             <form onSubmit={(event) => {
                 ingredientCreate()
             }}>
@@ -193,7 +212,7 @@ export default function Inventory() {
                         }
                         console.log(newId)
                     }}
-                    ></input>
+                ></input>
                 <input
                     type="string"
                     placeholder="name"
@@ -201,7 +220,7 @@ export default function Inventory() {
                         setNewName(event.target.value);
                         console.log(newName)
                     }}
-                    ></input>
+                ></input>
                 <input
                     type="number"
                     placeholder="inventory"
@@ -210,7 +229,7 @@ export default function Inventory() {
                             inventoryEnterSet(event.target.value);
                         }
                         else {
-                            
+
                             inventoryEnterSet(1000);
                         }
                         console.log(inventoryEnter)
@@ -221,7 +240,7 @@ export default function Inventory() {
             <form onSubmit={(event) => {
                 setIdRemove(event.target.value)
                 ingredientRemove()
-                
+
             }}>
                 <input
                     type="number"
@@ -231,26 +250,29 @@ export default function Inventory() {
                         setIdRemove(event.target.value)
                         console.log(idRemove)
                     }}
-                    >
+                >
 
-                    </input>
-                    <button> remove ingredient button</button>
-                </form>
+                </input>
+                <button> remove ingredient button</button>
+            </form>
             <table className="table table-striped">
                 <thead>
                     <tr>
-                    <th
-                        style={{fontSize: `${fontSize}px`}}
+                        <th
+                            style={{ fontSize: `${fontSize}px` }}
                         >ID</th>
                         <th
-                        style={{fontSize: `${fontSize}px`}}
+                            style={{ fontSize: `${fontSize}px` }}
                         >Name</th>
                         <th
-                        style={{fontSize: `${fontSize}px`}}
+                            style={{ fontSize: `${fontSize}px` }}
                         >Inventory</th>
                         <th
-                        style={{fontSize: `${fontSize}px`}}
+                            style={{ fontSize: `${fontSize}px` }}
                         >Change Amount</th>
+                        <th
+                            style={{ fontSize: `${fontSize}px` }}
+                        >Restock Needed?</th>
                     </tr>
                 </thead>
                 <tbody>{displayData}</tbody>

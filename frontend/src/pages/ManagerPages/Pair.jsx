@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
 
 export default function Pair() {
     const [sales, setTable] = useState([]);
@@ -8,7 +10,7 @@ export default function Pair() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [pairReportCalled, setPair] = useState(false);
-
+    const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(16); //for inc and dec font size
 
 
@@ -101,12 +103,26 @@ export default function Pair() {
 
     return (
         <div className="App">
-            <button onClick={() => setFontSize(fontSize + 2)} > 
-            + increase font size 
-            </button>
-            <button onClick={() => setFontSize(fontSize - 2)} > 
-            - decrease font size 
-            </button>  
+            <tr>
+                <th> <div>
+                    <button>
+                        <img
+                            onClick={() => {
+                                navigate("/ManagerMenu")
+                            }}
+                            className="backbutton"
+                            src={backbutton}
+                            alt="back">
+                        </img>
+                    </button>
+                </div> </th>
+                <th><button onClick={() => setFontSize(fontSize + 2)} >
+                    + increase font size
+                </button> </th>
+                <th> <button onClick={() => setFontSize(fontSize - 2)} >
+                    - decrease font size
+                </button> </th>
+            </tr>
             <h1>Pair Report </h1>
             <form
                 onSubmit={(event) => {

@@ -5,60 +5,64 @@ import { useNavigate } from "react-router-dom";
 import backbutton from "../../images/backbutton.png";
 
 export default function Revenue() {
-  const[items, setRevenue] = useState([]);
-  const[startDate, setStartDate]= useState("");
-  const[endDate, setEndDate]= useState("");
+  const [items, setRevenue] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const navigate = useNavigate();
   const [fontSize, setFontSize] = useState(16); //for inc and dec font size
 
- 
+
   async function getSalesBetweenDates() {
     try {
-        const res = await fetch(`api/revenue/${startDate}/${endDate}`);
-        const data = await res.json();
-        setRevenue(data); 
-             
+      const res = await fetch(`api/revenue/${startDate}/${endDate}`);
+      const data = await res.json();
+      setRevenue(data);
+
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
-}
+  }
 
-   const displayInfo = items.map((item) => {
-      return (
-        <tr>
-          <td
-          style={{fontSize: `${fontSize}px`}}
-          > {item.orderid} </td>
-          <td
-          style={{fontSize: `${fontSize}px`}}
-          >{moment(item.date).utc().format("YYYY-MM-DD")}</td>
-          <td
-          style={{fontSize: `${fontSize}px`}}
-          > {item.amount} </td>
-        </tr>
-      );
-   });
+  const displayInfo = items.map((item) => {
+    return (
+      <tr>
+        <td
+          style={{ fontSize: `${fontSize}px` }}
+        > {item.orderid} </td>
+        <td
+          style={{ fontSize: `${fontSize}px` }}
+        >{moment(item.date).utc().format("YYYY-MM-DD")}</td>
+        <td
+          style={{ fontSize: `${fontSize}px` }}
+        > {item.amount} </td>
+      </tr>
+    );
+  });
 
-   return (
-      <div className="App">
-        <button>
+  return (
+    <div className="App">
+      <tr>
+        <th> <div>
+          <button>
             <img
               onClick={() => {
-              navigate("/ManagerMenu")
+                navigate("/ManagerMenu")
               }}
               className="backbutton"
               src={backbutton}
               alt="back">
             </img>
           </button>
-        <button onClick={() => setFontSize(fontSize + 2)} > 
-            + increase font size 
-            </button>
-            <button onClick={() => setFontSize(fontSize - 2)} > 
-            - decrease font size 
-            </button>
-        <h1>Sales Report </h1>
+        </div> </th>
+        <th><button onClick={() => setFontSize(fontSize + 2)} >
+          + increase font size
+        </button> </th>
+        <th> <button onClick={() => setFontSize(fontSize - 2)} >
+          - decrease font size
+        </button> </th>
+      </tr>
+      <h1>Sales Report </h1>
       <form
         onSubmit={(e) => {
           getSalesBetweenDates();
@@ -67,42 +71,41 @@ export default function Revenue() {
         }}
       >
         <input
-        type="string"
-        placeholder="yyyy-mm-dd"
-        onChange={(event) => {
-          setStartDate(event.target.value);
-        }}
-        
-      >
-      </input>
-      <input
-        type="string"
-        placeholder="yyyy-mm-dd"
-        onChange={(event) => {
-          setEndDate(event.target.value);
-        }}
-      ></input>
-      <button>Submit</button>
-    </form>
-        <table className="table table-striped">
-            <thead>
-                <tr>
-                    <th
-                    style={{fontSize: `${fontSize}px`}}
-                    >ITEM</th>
-                    <th
-                    style={{fontSize: `${fontSize}px`}}
-                    >DATE</th>
-                    <th
-                    style={{fontSize: `${fontSize}px`}}
-                    >REVENUE</th>
-                </tr>
-            </thead>
-            <tbody>{displayInfo}</tbody>
-        </table>
+          type="string"
+          placeholder="yyyy-mm-dd"
+          onChange={(event) => {
+            setStartDate(event.target.value);
+          }}
+
+        >
+        </input>
+        <input
+          type="string"
+          placeholder="yyyy-mm-dd"
+          onChange={(event) => {
+            setEndDate(event.target.value);
+          }}
+        ></input>
+        <button>Submit</button>
+      </form>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th
+              style={{ fontSize: `${fontSize}px` }}
+            >ITEM</th>
+            <th
+              style={{ fontSize: `${fontSize}px` }}
+            >DATE</th>
+            <th
+              style={{ fontSize: `${fontSize}px` }}
+            >REVENUE</th>
+          </tr>
+        </thead>
+        <tbody>{displayInfo}</tbody>
+      </table>
     </div>
-    
-   );
+
+  );
 
 }
-  

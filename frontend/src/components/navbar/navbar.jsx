@@ -6,6 +6,11 @@ import { onLogout } from "../auth/auth";
 const Navbar = () => {
     const { isAuth, type } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+
+    /**
+     * [Logout] Request a log out from the user, unauthenticating them from the system
+     * @author  Johnny
+     */
     const logout = async () => {
         try {
             await onLogout();
@@ -17,32 +22,42 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="navbar navbar-light bg-light">
-            <div className="container">
-                <div>
-                    <NavLink to="/">
-                        <span className="navbar-brand mb-0 h1">Home</span>
-                    </NavLink>
-                </div>
-
-                {isAuth ? (
-                    <div>
-                        <NavLink to="/POSPage" className="mx-3">
+        <nav className="navbar">
+            <NavLink to="/" className="nav--logo">
+                <img src={require("../../images/logo.png")} alt="logo of revpos"></img>
+            </NavLink>
+            {isAuth ? (
+                <ul>
+                    <li>
+                        <NavLink to="/POSPage" className="nav--links">
                             <span>POS</span>
                         </NavLink>
-                        {type['type'] === "manager" ? (<NavLink to="/ManagerMenu" className="mx-3">
+                    </li>
+                    <li className={type["type"] === "manager" ? "" : "hidden"}>
+                        <NavLink to="/ManagerMenu" className="nav--links">
                             <span>Manager</span>
-                        </NavLink>) : null }
-                        <button onClick={() => logout()}>Logout</button>
-                    </div>
-                ) : (
-                    <div>
-                        <NavLink to="/login">
+                        </NavLink>
+                    </li>
+                    <li>
+                        <button className="nav--links" onClick={() => logout()}>
+                            Logout
+                        </button>
+                    </li>
+                </ul>
+            ) : (
+                <ul>
+                    <li>
+                        <NavLink to="/" className="nav--links">
+                            <span>Home</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/login" className="nav--links">
                             <span>Login</span>
                         </NavLink>
-                    </div>
-                )}
-            </div>
+                    </li>
+                </ul>
+            )}
         </nav>
     );
 };

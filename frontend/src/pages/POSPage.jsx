@@ -1,4 +1,3 @@
-//import { cardActionAreaClasses } from '@mui/material';
 import Header from "./../components/cart/header";
 import Main from "./../components/cart/main";
 import Basket from "./../components/cart/basket";
@@ -56,7 +55,7 @@ const POSPage = () => {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "PATCH",
                 },
-                body: JSON.stringify({quantity: parseInt(quantity)}),
+                body: JSON.stringify({ quantity: parseInt(quantity) }),
             });
         } catch (err) {
             console.error(err);
@@ -64,15 +63,15 @@ const POSPage = () => {
     }
 
     const onCheckout = () => {
-        cartItems.map((menuItem) => (
-            menuItem.ingredients.split(",").map((ingredient) => (
+        cartItems.map((menuItem) =>
+            menuItem.ingredients.split(",").map((ingredient) =>
                 decreaseIngredientInventory(ingredient, menuItem.qty)
                 //console.log(menuItem.qty)
-            ))
-        ))
+            )
+        );
         alert("Thank you for your order!");
         window.location = "/";
-    }
+    };
 
     //DYNAMIC MENU LOADING
     useEffect(() => {
@@ -100,7 +99,8 @@ const POSPage = () => {
                         onAdd={onAdd}
                         onRemove={onRemove}
                         onCheckout={onCheckout}
-                        cartItems={cartItems}></Basket>
+                        cartItems={cartItems}
+                    ></Basket>
                 </div>
             </Layout>
         </div>

@@ -1,9 +1,5 @@
 @import url("../../index.css");
 
-* {
-    box-sizing: border-box;
-}
-
 /* DEFAULTS */
 .home__body {
     width: 100%;
@@ -11,8 +7,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Montserrat", sans-serif;
-    font-size: 12px;
     background-color: var(--snow);
     color: #a0a5a8;
 }
@@ -83,7 +77,12 @@
     box-shadow: inset 2px 2px 4px #E6D1D1, inset -2px -2px 4px #FFFFFF;
 }
 .form__header {
+    color: var(--candy-pink);
+    font-family: "Lato";
+    font-weight: 600;
+    letter-spacing: 2px;
     margin-bottom: 25px;
+    text-transform: uppercase;
 }
 
 .title {
@@ -193,12 +192,17 @@
 }
 
 .submit--google {
+    position: absolute;
     background-color: var(--bittersweet);
     box-shadow: 5px 5px 10px #E6D1D1, -5px -5px 10px #FFFFFF;
-    margin-top: 10px;
+    bottom: 15%;
     padding: 8px;
     border-radius: 100%;
     cursor: pointer;
+    transition: all .5s;
+}
+.submit--google:hover {
+    transform: translateY(-5px);
 }
 .google--logo {
     width: 25px;

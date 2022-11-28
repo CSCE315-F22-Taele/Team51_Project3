@@ -6,9 +6,8 @@ const Main = (props) => {
     const {menu, onAdd} = props;
 
     return (
-        <main className="">
-            <h2>Products</h2>
-            <div className='row'>
+        <main className="menu">
+            <div className="menu__container">
             {menu.map((product) => (
                 <Product key={product.id} product = {product} onAdd={onAdd}></Product>
             ))}

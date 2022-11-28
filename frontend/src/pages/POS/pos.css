@@ -1,0 +1,121 @@
+@import url("../../index.css");
+
+.pos {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    background-color: var(--jet);
+    padding: 25px;
+    
+}
+.pos__box {
+    height: 100%;
+    padding-top: 5%;
+}
+.pos__container {
+    display: flex;
+    justify-content: space-between;
+    height: 95%;
+    gap: 50px;
+    overflow: hidden;
+}
+.menu {
+    flex: 3;
+}
+.cart {
+    flex: 1;
+}
+.menu__container {
+    background-color: transparent;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 175px);
+    grid-auto-rows: 175px;
+    gap: 25px;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.menu-item {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--platinum);
+    background-color: var(--maroon);
+    border-radius: 10%;
+    cursor: pointer;
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+}
+
+.cart__container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 10px;
+    background-color: var(--platinum);
+    border: 5px solid var(--maroon);
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+    font-family: "Lato";
+    gap: 50px;
+}
+.cart--basket {
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    height: 88%;
+    max-height: 88%;
+    overflow-y: scroll;
+    padding: 10px 0 10px 10px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.cart--basket .item--name {
+    flex: 1;
+}
+.cart--basket .item--action {
+    flex: 1;
+    text-align: center;
+}
+.cart--basket .item--price {
+    flex: .5;
+    text-align: right;
+    padding-right: 2%;
+}
+.item--action {
+    justify-content: center;
+    align-items: center;
+}
+.item--action button {
+    border: 2px solid black;
+    border-radius: 30%;
+    margin-right: 15px;
+}
+.item--action .add {
+    background-color: #52f040;
+    width: 1.5rem;
+}
+
+.item--action .remove {
+    background-color: #f04040;
+    width: 1.5rem;
+}
+.cart--info {
+    display: flex;
+    flex-direction: column;
+    height: 12%;
+    max-height: 12%;;
+    padding: 10px;
+    font-size: 22px;
+    font-weight: 700;
+}
+.cart--info__box {
+    display: grid;
+    grid-template-columns: 1fr .1fr;
+}
+.cart--checkout {
+    position: relative;
+    width: 100%;
+}

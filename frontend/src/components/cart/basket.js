@@ -1,5 +1,6 @@
-import React from 'react';
-import './index.css';
+import React, { useEffect } from "react";
+import "./index.css";
+import "../../pages/POS/pos.css";
 
 export default function Basket(props) {
     const { cartItems, onAdd, onRemove, onCheckout } = props;
@@ -7,46 +8,51 @@ export default function Basket(props) {
     const taxPrice = itemsPrice * 0.0825; //texas sales taxes are typically 8.25% for restaurants
     const totalPrice = itemsPrice + taxPrice;
 
-
+    useEffect(() => {
+        let basketDiv = document.getElementsByClassName("cart--basket")[0];
+        basketDiv.scrollTop = basketDiv.scrollHeight;
+    }, [cartItems]);
 
     return (
-        <aside className='block col-1'>
-            <h2>Cart Items</h2>
-            <div> {cartItems.length === 0 && <div>Cart is Empty</div>} </div>
-            {cartItems.map((item) => (
-                <div key={item.id} className="row">
-                    <div className='col-2'>{item.name}</div>
-                    <div className='col-2'>
-                        <button onClick={() => onRemove(item)} className="remove">-</button>
-                        <button onClick={() => onAdd(item)} className="add">+</button>
+        <div className="cart">
+            <div className="cart__container">
+                <div className="cart--basket">
+                    {cartItems.map((item) => (
+                        <div key={item.id} className="row">
+                            <div className="item--name">{item.name}</div>
+                            <div className="item--action">
+                                <button onClick={() => onRemove(item)} className="remove action-btn">
+                                    -
+                                </button>
+                                <button onClick={() => onAdd(item)} className="add action-btn">
+                                    +
+                                </button>
+                            </div>
+                            <div className="item--price">
+                                {item.qty} x ${item.price.toFixed(2)}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="cart--info">
+                    <hr></hr>
+                    <div className="cart--info__box">
+                        <div className="">Price of Items</div>
+                        <div className="">${itemsPrice.toFixed(2)}</div>
                     </div>
-                    <div className='col-2 text-right'>
-                        {item.qty} x ${item.price.toFixed(2)}
+                    <div className="cart--info__box">
+                        <div className="">Sales Tax</div>
+                        <div className="">${taxPrice.toFixed(2)}</div>
+                    </div>
+                    <div className="cart--info__box">
+                        <div className="">Total Price</div>
+                        <div className="">${totalPrice.toFixed(2)}</div>
                     </div>
                 </div>
-            ))}
-            {cartItems.length !== 0 && (
-                <>
-                    <hr></hr>
-                    <div className='row'>
-                        <div className='col-2'>Price of Items</div>
-                        <div className='col-1 text-right'>${itemsPrice.toFixed(2)}</div>
-                    </div>
-                    <div className='row'>
-                        <div className='col-2'>Sales Tax</div>
-                        <div className='col-1 text-right'>${taxPrice.toFixed(2)}</div>
-                    </div>
-                    <div className='row'>
-                        <div className='col-2'>Total Price</div>
-                        <div className='col-1 text-right'>${totalPrice.toFixed(2)}</div>
-                    </div>
-                    <hr />
-                    <div className='row'>
-                        <button onClick={onCheckout}>Checkout</button>
-                    </div>
-                </>
-            )}
-        </aside>
+            </div>
+            <div className="cart--checkout">
+                <button onClick={onCheckout}>Checkout</button>
+            </div>
+        </div>
     );
 }
-

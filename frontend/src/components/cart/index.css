@@ -51,7 +51,6 @@ h3:hover {
 .block {
     background-color: lightgrey;
     padding: 1rem;
-    margin: 0.5rem;
     border-radius: 0.5rem;
 }
 
@@ -74,16 +73,6 @@ h3:hover {
     width: 8rem;
     cursor: pointer;
 } */
-
-button.add {
-    background-color: #40c0f0;
-    width: 1.5rem;
-}
-
-button.remove {
-    background-color: #f04040;
-    width: 1.5rem;
-}
 
 button.badge {
     background-color: #f04040;

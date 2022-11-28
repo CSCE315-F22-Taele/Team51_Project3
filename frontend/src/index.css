@@ -1,16 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Oswald:wght@300;400;500;600;700&display=swap");
 
 :root {
-    --dark-sienna: #451717;
-    --white: #fffffe;
-    --candy-pink: #e66a6a;
-    --periwinkle-crayola: #bbc8ed;
+    --bittersweet: #C65252;
+    --snow: #F3ECEC;
+    --magnolia: #4D4D4D;
+    --cedar: #C05746;
 
-    --seashell: #faeee7;
-    --black-coffee: #33272a;
-    --bittersweet: #c65252;
-
-    --snow: #f3ecec;
+    --jet: #333333;
+    --black-coffee: #33272A;
+    --darkred: #990100;
+    --brightred: #B90504;
+    --white: #F6F6F6;
+    --platinum: #E8E8E8;
+    --maroon: #4f001f;
+    --gold: #F6BD12;
 }
 
 * {
@@ -48,7 +51,7 @@ code {
 
 */
 .highlight {
-    color: var(--bittersweet);
+    color: var(--darkred);
 }
 
 /*
@@ -58,7 +61,7 @@ code {
 */
 
 .nav--logo img {
-    width: 100px;
+    width: 125px;
 }
 .navbar {
     position: fixed;
@@ -70,7 +73,9 @@ code {
     width: 100%;
     height: 60px;
     z-index: 99999;
-    background-color: transparent;
+    background-color: var(--jet);
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+    transition: .3s ease-in-out;
 }
 .navbar ul {
     display: flex;
@@ -82,12 +87,12 @@ code {
     padding: 0px 25px;
     font-family: "Oswald";
     font-weight: 700;
-    font-size: 16px;
+    font-size: 20px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--black-coffee);
+    color: var(--platinum);
     background-color: transparent;
 }
 .navbar ul li .nav--links:hover {
-    color: var(--bittersweet);
+    color: var(--brightred);
 }

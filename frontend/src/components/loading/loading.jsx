@@ -7,7 +7,7 @@ const Loading = () => {
     useEffect(() => {
         setTimeout(function () {
             navigate("/POSPage");
-        }, 750);
+        }, 2000);
     });
     return (
         <div className="loading__container">

@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home/home";
 import Login from "./pages/Login/login";
-import POSPage from "./pages/POSPage";
+import POSPage from "./pages/POS/POSPage";
 import ManagerMenu from "./pages/ManagerMenu/ManagerMenu";
 import Inventory from "./pages/ManagerPages/Inventory";
 import OrderHistory from "./pages/ManagerPages/OrderHistory";

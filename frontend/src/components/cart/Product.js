@@ -13,16 +13,20 @@ export default function Product(props) {
     return (
         <div className="menu-item" onClick={() => onAdd(product)}>
             {userType === "user" ? (
-                <img
-                    className=""
-                    src={`./posPhotos/${png}`}
-                    alt={name}
-                ></img>
-            ) : null}
-            <h3 className="menu-item--name products">{name}</h3>
-            {userType === "user" ? (
-                <div className="menu-item--price products">{`${price}`}</div>
-            ) : null}
+                <div className="menu-item--info">
+                    <div className="menu-item--price text--right">{`$${price}`}</div>
+                    <img
+                        className="menu-item--photo"
+                        src={`./posPhotos/${png}`}
+                        alt={name}
+                    ></img>
+                    <h3 className="menu-item--name ">{name}</h3>
+                </div>
+            ) : (
+                <div>
+                    <h3 className="menu-item--name ">{name}</h3>
+                </div>
+            )}
         </div>
     );
 }

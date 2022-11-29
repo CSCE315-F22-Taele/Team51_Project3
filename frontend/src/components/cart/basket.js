@@ -51,7 +51,7 @@ export default function Basket(props) {
                 </div>
             </div>
             <div className="cart--checkout">
-                <button onClick={onCheckout}>Checkout</button>
+                <button className="checkout-btn" onClick={onCheckout}>Checkout</button>
             </div>
         </div>
     );

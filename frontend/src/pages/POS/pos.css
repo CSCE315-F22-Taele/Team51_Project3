@@ -1,5 +1,8 @@
 @import url("../../index.css");
 
+.text--right {
+    text-align: right;
+}
 .pos {
     position: relative;
     width: 100%;
@@ -35,11 +38,15 @@
     justify-content: space-evenly;
     align-items: center;
 }
+.m__c-user_ver {
+    grid-template-columns: repeat(auto-fill, 225px);
+    grid-auto-rows: 225px;
+}
 .menu-item {
     display: flex;
     width: 100%;
     height: 100%;
-    padding: 10px;
+    padding: 15px;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -49,11 +56,24 @@
     cursor: pointer;
     box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
 }
+.menu-item .menu-item--info {
+    height: 100%;
+}
+.menu-item--photo {
+    max-width: 100%;
+    max-height: 65%;
+    height: 65%;
+    margin: auto;
+}
+.menu-item--price {
+    font-weight: 700;
+}
 
 .cart__container {
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 90%;
     padding-bottom: 10px;
     background-color: var(--platinum);
     border: 5px solid var(--maroon);
@@ -103,13 +123,18 @@
     width: 1.5rem;
 }
 .cart--info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
     height: 12%;
     max-height: 12%;;
-    padding: 10px;
-    font-size: 22px;
+    padding: 0px 10px 0px 10px;
+    /* font-size: 21px; */
+    font-size: 1.1vw;
     font-weight: 700;
+    text-size-adjust: auto;
 }
 .cart--info__box {
     display: grid;
@@ -118,4 +143,17 @@
 .cart--checkout {
     position: relative;
     width: 100%;
+    margin-top: 2.5%;
+    height: 7.5%;
+    border: 5px solid #217528;
+}
+.checkout-btn {
+    width: 100%;
+    height: 100%;
+    background-color: #38ca44;
+    font-family: "Oswald";
+    font-size: 1.2vw;
+    font-weight: 700;
+    text-transform: uppercase;
+
 }

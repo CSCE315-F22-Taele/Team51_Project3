@@ -126,11 +126,12 @@ export default function Pair() {
             <h1>Pair Report </h1>
             <form
                 onSubmit={(event) => {
-                    insertPairDates();
-                    editPairDates();
+                    // insertPairDates();
+                    // editPairDates();
                     event.preventDefault();
-                    insertPairDates();
-                    editPairDates();
+                    // insertPairDates();
+                    // editPairDates();
+                    removePair();
                 }}>
                 <input
                     type="string"

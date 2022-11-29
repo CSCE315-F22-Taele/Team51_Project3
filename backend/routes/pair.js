@@ -6,6 +6,7 @@ const router = Router();
 // router.post("/", controller.createTable)
 router.patch("/", controller.insertPair)
 router.patch("/:firstDate/:secondDate", controller.insertPairDates)
+router.patch("/:t", controller.removePair)
 router.get("/", controller.getPair)
 // router.get("/:firstDate/:secondDate", controller.getPairDates)
 

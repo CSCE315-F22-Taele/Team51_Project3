@@ -25,6 +25,7 @@
 }
 .menu {
     flex: 3;
+    overflow-y: scroll;
 }
 .cart {
     flex: 1;
@@ -35,6 +36,7 @@
     grid-template-columns: repeat(auto-fill, 175px);
     grid-auto-rows: 175px;
     gap: 25px;
+    padding: 10px;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -92,6 +94,10 @@
     font-size: 18px;
     font-weight: 500;
 }
+.item__container {
+    display: flex;
+    justify-content: space-between;
+}
 .cart--basket .item--name {
     flex: 1;
 }
@@ -145,7 +151,6 @@
     width: 100%;
     margin-top: 2.5%;
     height: 7.5%;
-    border: 5px solid #217528;
 }
 .checkout-btn {
     width: 100%;
@@ -155,5 +160,8 @@
     font-size: 1.2vw;
     font-weight: 700;
     text-transform: uppercase;
-
+    letter-spacing: 2px;
+}
+.checkout-btn:hover {
+    background-color: #217528;
 }

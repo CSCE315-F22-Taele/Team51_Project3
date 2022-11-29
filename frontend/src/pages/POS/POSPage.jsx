@@ -1,6 +1,5 @@
-import Header from "../../components/cart/header";
-import Main from "../../components/cart/main";
-import Basket from "../../components/cart/basket";
+import Main from "./main";
+import Basket from "./basket";
 import React, { useEffect, useState } from "react";
 
 import "./pos.css";

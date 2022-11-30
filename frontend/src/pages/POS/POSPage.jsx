@@ -1,6 +1,7 @@
 import Main from "./main";
 import Basket from "./basket";
 import React, { useEffect, useState } from "react";
+//import React from "react";
 
 import "./pos.css";
 import Navbar from "../../components/navbar/navbar";
@@ -113,8 +114,60 @@ const POSPage = () => {
         }
     }
 
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+
+    /**
+     * @author Will
+     * [setColorBlindMode]
+     * Changes stylesheet to colorblind friendly palette
+     */
+     const setColorBlindMode = () => {
+        console.log('clicked colorblind');
+        var sheet = document.getElementsByTagName('link')[0];
+
+        if (sheet.getAttribute('href') !== 'colorblind.css') 
+        {
+            sheet.setAttribute('href', 'colorblind.css');
+        } 
+        else 
+        {
+            sheet.setAttribute('href', 'index.css');
+        }
+    };
+
+
+    /**
+     * @author Margaret
+     * [setFontZoom]
+     * edit this as you need
+     */
+
+    const setFontZoom = () => {
+        console.log('clicked zoom');
+
+        var sheet = document.getElementsByTagName('link')[0];
+
+        if (sheet.getAttribute('href') !== 'fontZoom.css') 
+        {
+            sheet.setAttribute('href', 'fontZoom.css');
+        } 
+        else 
+        {
+            sheet.setAttribute('href', 'index.css');
+        }
+    };
+
     return (
         <div className="pos">
+            <Dropdown
+                trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
+                menu={[
+                    <button onClick={setColorBlindMode}>Colorblind Mode</button>,
+                    <button onClick={setFontZoom}>Font Zoom</button>,
+                ]}
+            />
             <Navbar></Navbar>
             <div className="pos__box">
                 <div className="pos__container">
@@ -127,6 +180,40 @@ const POSPage = () => {
                     ></Basket>
                 </div>
             </div>
+        </div>
+    );
+};
+
+// # # # # # # # # # # # # # # # # # # # # #
+// CONTROLLER FOR THE SETTINGS DROPDOWN MENU
+// Shouldn't need to modify this
+// # # # # # # # # # # # # # # # # # # # # #
+const Dropdown = ({ trigger, menu }) => {
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(!open);
+    };
+
+    return (
+        <div className="dropdown">
+            {React.cloneElement(trigger, {
+                onClick: handleOpen,
+            })}
+            {open ? (
+                <ul className="droptext">
+                    {menu.map((menuOption, index) => (
+                        <li key={index}>
+                            {React.cloneElement(menuOption, {
+                                onClick: () => {
+                                    menuOption.props.onClick();
+                                    setOpen(false);
+                                },
+                            })}
+                        </li>
+                    ))}
+                </ul>
+            ) : null}
         </div>
     );
 };

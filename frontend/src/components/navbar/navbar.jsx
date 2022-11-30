@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { unauthenticateUser } from "../../redux/slices/authSlice";
 import { onLogout } from "../auth/auth";
+import React from "react";
 
 const Navbar = () => {
     const { isAuth, type } = useSelector((state) => state.auth);
@@ -10,6 +11,8 @@ const Navbar = () => {
 
     const [prevScroll, setPrevScroll] = useState(0);
     const [visible, setVisisble] = useState(true);
+
+
 
     const handleScroll = () => {
         const currentScroll = window.scrollY;
@@ -34,6 +37,52 @@ const Navbar = () => {
             localStorage.removeItem("isAuth");
         } catch (err) {
             console.log(err.response);
+        }
+    };
+
+
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+
+    /**
+     * @author Will
+     * [setColorBlindMode]
+     * Changes stylesheet to colorblind friendly palette
+     */
+    const setColorBlindMode = () => {
+        console.log('clicked colorblind');
+        var sheet = document.getElementsByTagName('link')[0];
+
+        if (sheet.getAttribute('href') !== 'colorblind.css') 
+        {
+            sheet.setAttribute('href', 'colorblind.css');
+        } 
+        else 
+        {
+            sheet.setAttribute('href', 'index.css');
+        }
+    };
+
+
+    /**
+     * @author Margaret
+     * [setFontZoom]
+     * edit this as you need
+     */
+
+    const setFontZoom = () => {
+        console.log('clicked zoom');
+
+        var sheet = document.getElementsByTagName('link')[0];
+
+        if (sheet.getAttribute('href') !== 'fontZoom.css') 
+        {
+            sheet.setAttribute('href', 'fontZoom.css');
+        } 
+        else 
+        {
+            sheet.setAttribute('href', 'index.css');
         }
     };
 
@@ -74,7 +123,50 @@ const Navbar = () => {
                     </li>
                 </ul>
             )}
+
+
+            <Dropdown
+                trigger={<button className="nav--links">Settings</button>}
+                menu={[
+                    <button onClick={setColorBlindMode}>Colorblind Mode</button>,
+                    <button onClick={setFontZoom}>Font Zoom</button>,
+                ]}
+            />
         </nav>
+    );
+};
+
+// # # # # # # # # # # # # # # # # # # # # #
+// CONTROLLER FOR THE SETTINGS DROPDOWN MENU
+// Shouldn't need to modify this
+// # # # # # # # # # # # # # # # # # # # # #
+const Dropdown = ({ trigger, menu }) => {
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(!open);
+    };
+
+    return (
+        <div className="dropdown">
+            {React.cloneElement(trigger, {
+                onClick: handleOpen,
+            })}
+            {open ? (
+                <ul className="drop">
+                    {menu.map((menuOption, index) => (
+                        <li key={index}>
+                            {React.cloneElement(menuOption, {
+                                onClick: () => {
+                                    menuOption.props.onClick();
+                                    setOpen(false);
+                                },
+                            })}
+                        </li>
+                    ))}
+                </ul>
+            ) : null}
+        </div>
     );
 };
 

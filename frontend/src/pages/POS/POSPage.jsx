@@ -1,9 +1,8 @@
 import Main from "./main";
 import Basket from "./basket";
 import React, { useEffect, useState } from "react";
-//import React from "react";
-
-import "./pos.css";
+//import "./colorblindPOS.css"
+//import "./pos.css";
 import Navbar from "../../components/navbar/navbar";
 
 /**
@@ -15,6 +14,7 @@ import Navbar from "../../components/navbar/navbar";
 const POSPage = () => {
     const [menu, setMenu] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const [stylePath, setStylePath] = useState("pos.css");
 
     //CART ADD/REMOVE
     /**
@@ -82,7 +82,7 @@ const POSPage = () => {
     /**
      * 
      * @author Will
-     * [onCheckout] call [decreaseIngredientInventory] when checkout button pressed, takes user back to home page
+     * [onCheckout] call [decreaseIngredientInventory] for all ingredients per item in cart when checkout button pressed, takes user back to home page
      */
     const onCheckout = () => {
         cartItems.map((menuItem) =>
@@ -94,11 +94,6 @@ const POSPage = () => {
         window.location = "/";
     };
 
-    // DYNAMIC MENU LOADING
-    useEffect(() => {
-        getMenu();
-    }, []);
-
     /**
      * @author Will
      * [getMenu] gets data to display all menu items
@@ -108,7 +103,7 @@ const POSPage = () => {
             const res = await fetch("api/pos");
             const data = await res.json();
             setMenu(data);
-            console.log(data);
+            //console.log(data);
         } catch (err) {
             console.log(err);
         }
@@ -124,18 +119,12 @@ const POSPage = () => {
      * Changes stylesheet to colorblind friendly palette
      */
      const setColorBlindMode = () => {
-        console.log('clicked colorblind');
-        var sheet = document.getElementsByTagName('link')[0];
-
-        if (sheet.getAttribute('href') !== 'colorblind.css') 
-        {
-            sheet.setAttribute('href', 'colorblind.css');
-        } 
-        else 
-        {
-            sheet.setAttribute('href', 'index.css');
-        }
+        setStylePath("colorblindPOS.css");
     };
+
+    const setDefaultMode = () => {
+        setStylePath('pos.css');
+    }
 
 
     /**
@@ -143,21 +132,26 @@ const POSPage = () => {
      * [setFontZoom]
      * edit this as you need
      */
-
     const setFontZoom = () => {
-        console.log('clicked zoom');
-
-        var sheet = document.getElementsByTagName('link')[0];
-
-        if (sheet.getAttribute('href') !== 'fontZoom.css') 
-        {
-            sheet.setAttribute('href', 'fontZoom.css');
-        } 
-        else 
-        {
-            sheet.setAttribute('href', 'index.css');
-        }
     };
+
+    // DYNAMIC MENU LOADING
+    useEffect(() => {
+        getMenu();
+        //for changing stylesheets
+        var head = document.head;
+        var link = document.createElement("link");
+
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = "/" + stylePath;
+
+        head.appendChild(link);
+
+        return () => { head.removeChild(link); }
+        
+        
+    }, [stylePath]);
 
     return (
         <div className="pos">
@@ -166,6 +160,7 @@ const POSPage = () => {
                 menu={[
                     <button onClick={setColorBlindMode}>Colorblind Mode</button>,
                     <button onClick={setFontZoom}>Font Zoom</button>,
+                    <button onClick={setDefaultMode}>Default</button>
                 ]}
             />
             <Navbar></Navbar>

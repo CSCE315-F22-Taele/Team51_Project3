@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
 import "./pos.css";
 
+/**
+ * @author Will
+ * @param props parameters include cartItems, onAdd, onRemove, onCheckout
+ * these are all given from POSPage
+ * @returns display data for the basket, dynamically updates
+ */
 export default function Basket(props) {
     const { cartItems, onAdd, onRemove, onCheckout } = props;
     const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0); //basically, loop for adding prices

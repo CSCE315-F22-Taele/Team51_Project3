@@ -5,12 +5,23 @@ import React, { useEffect, useState } from "react";
 import "./pos.css";
 import Navbar from "../../components/navbar/navbar";
 
+/**
+ * @function POSPage
+ * @author Will
+ * @returns display data for all menu items in the database, top-level controller for POS
+ * Contains logic for adding/removing from a cart (basket)
+ */
 const POSPage = () => {
     const [menu, setMenu] = useState([]);
     const [cartItems, setCartItems] = useState([]);
-    //const [ingredientData, setIngredientData] = useState([]);
 
     //CART ADD/REMOVE
+    /**
+     * 
+     * @param product same as a row in the menu table in database
+     * @author Will
+     * [onAdd] adds an item into the basket for checkout, increments quantity if already in cart
+     */
     const onAdd = (product) => {
         const exist = cartItems.find((x) => x.id === product.id);
         if (exist) {
@@ -24,6 +35,13 @@ const POSPage = () => {
         }
     };
 
+    /**
+     * 
+     * @param product same as a row in the menu table in database
+     * @author Will
+     * [onRemove] decrements quantity of an item from the basket by 1,
+     * removes item if the quanity is 1
+     */
     const onRemove = (product) => {
         const exist = cartItems.find((x) => x.id === product.id);
         if (exist.qty === 1) {
@@ -37,16 +55,13 @@ const POSPage = () => {
         }
     };
 
-    /*async function getIngredient(id) {
-        try {
-            const res = await fetch(`api/inventory/${id}`);
-            const data = await res.json();
-            setIngredientData(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }*/
-
+    /**
+     * 
+     * @param id the id of an ingredient in the database
+     * @param quantity quantity of the ingredient to be removed from database (# of menu items containing that ingredient)
+     * @author Will
+     * [decreaseIngredientInventory] decreases the inventory of the ingredient given by id by quantity
+     */
     async function decreaseIngredientInventory(id, quantity) {
         try {
             const res = await fetch(`api/checkout/${id}`, {
@@ -63,11 +78,15 @@ const POSPage = () => {
         }
     }
 
+    /**
+     * 
+     * @author Will
+     * [onCheckout] call [decreaseIngredientInventory] when checkout button pressed, takes user back to home page
+     */
     const onCheckout = () => {
         cartItems.map((menuItem) =>
             menuItem.ingredients.split(",").map(
                 (ingredient) => decreaseIngredientInventory(ingredient, menuItem.qty)
-                //console.log(menuItem.qty)
             )
         );
         alert("Thank you for your order!");
@@ -79,6 +98,10 @@ const POSPage = () => {
         getMenu();
     }, []);
 
+    /**
+     * @author Will
+     * [getMenu] gets data to display all menu items
+     */
     async function getMenu() {
         try {
             const res = await fetch("api/pos");

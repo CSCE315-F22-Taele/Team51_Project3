@@ -3,6 +3,11 @@ import { useSelector } from "react-redux";
 import Product from "./Product";
 import "./pos.css";
 
+/**
+ * @author Will
+ * @param {} props menu and onAdd from POSPage
+ * @returns call to Product.js function for each menu item, used in POSPage
+ */
 const Main = (props) => {
     const { menu, onAdd } = props;
     const { type } = useSelector((state) => state.auth);

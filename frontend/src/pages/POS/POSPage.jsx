@@ -123,7 +123,7 @@ const POSPage = () => {
         } catch (err) {
             console.log(err);
         }
-    }    
+    }
 
     // DYNAMIC MENU LOADING
     useEffect(() => {
@@ -131,7 +131,7 @@ const POSPage = () => {
     }, []);
 
     return isColorBlind ? (
-        <div className="pos">
+            <div className="pos">
             <Dropdown
                 trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
                 menu={[
@@ -140,21 +140,21 @@ const POSPage = () => {
                     <button>Default</button>
                 ]}
             />
-            <Navbar></Navbar>
-            <div className="pos__box">
-                <div className="pos__container">
-                    <Main onAdd={onAdd} menu={menu} isColorBlind={isColorBlind}></Main>
-                    <Basket
-                        onAdd={onAdd}
-                        onRemove={onRemove}
-                        onCheckout={onCheckout}
-                        cartItems={cartItems}
-                    ></Basket>
+                <Navbar></Navbar>
+                <div className="pos__box">
+                    <div className="pos__container">
+                        <Main onAdd={onAdd} menu={menu} isColorBlind={isColorBlind}></Main>
+                        <Basket
+                            onAdd={onAdd}
+                            onRemove={onRemove}
+                            onCheckout={onCheckout}
+                            cartItems={cartItems}
+                        ></Basket>
+                    </div>
                 </div>
             </div>
-        </div>
     ) : (
-        <div className="pos">
+            <div className="posColorBlind">
             <Dropdown
                 trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
                 menu={[
@@ -163,19 +163,19 @@ const POSPage = () => {
                     <button>Default</button>
                 ]}
             />
-            <Navbar></Navbar>
-            <div className="pos__box">
-                <div className="pos__container">
-                    <Main onAdd={onAdd} menu={menu}></Main>
-                    <Basket
-                        onAdd={onAdd}
-                        onRemove={onRemove}
-                        onCheckout={onCheckout}
-                        cartItems={cartItems}
-                    ></Basket>
+                <Navbar></Navbar>
+                <div className="pos__box">
+                    <div className="pos__container">
+                        <Main onAdd={onAdd} menu={menu}></Main>
+                        <Basket
+                            onAdd={onAdd}
+                            onRemove={onRemove}
+                            onCheckout={onCheckout}
+                            cartItems={cartItems}
+                        ></Basket>
+                    </div>
                 </div>
             </div>
-        </div>
     );
 };
 

@@ -1,9 +1,8 @@
 import Main from "./main";
 import Basket from "./basket";
 import React, { useEffect, useState } from "react";
-//import "./colorblindPOS.css"
-//import "./pos.css";
 import Navbar from "../../components/navbar/navbar";
+import "./pos.css";
 
 /**
  * @function POSPage
@@ -14,7 +13,24 @@ import Navbar from "../../components/navbar/navbar";
 const POSPage = () => {
     const [menu, setMenu] = useState([]);
     const [cartItems, setCartItems] = useState([]);
-    const [stylePath, setStylePath] = useState("pos.css");
+    const [isColorBlind, setColorBlind] = useState(false);
+    const [isFontZoom, setFontZoom] = useState(false);
+
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+
+    /**
+     * @author Will
+     * [toggleColorBlind] toggles the options for colorblind friendly color pallete
+     */
+    const toggleColorBlind = () => {
+        setColorBlind(!isColorBlind);
+    }
+
+    const toggleFontZoom = () => {
+        setFontZoom(!isFontZoom);
+    }
 
     //CART ADD/REMOVE
     /**
@@ -107,60 +123,44 @@ const POSPage = () => {
         } catch (err) {
             console.log(err);
         }
-    }
-
-    // # # # # # # # # # # # # # # # # # # # # #
-    // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
-    // # # # # # # # # # # # # # # # # # # # # #
-
-    /**
-     * @author Will
-     * [setColorBlindMode]
-     * Changes stylesheet to colorblind friendly palette
-     */
-     const setColorBlindMode = () => {
-        setStylePath("colorblindPOS.css");
-    };
-
-    const setDefaultMode = () => {
-        setStylePath('pos.css');
-    }
-
-
-    /**
-     * @author Margaret
-     * [setFontZoom]
-     * edit this as you need
-     */
-    const setFontZoom = () => {
-    };
+    }    
 
     // DYNAMIC MENU LOADING
     useEffect(() => {
         getMenu();
-        //for changing stylesheets
-        var head = document.head;
-        var link = document.createElement("link");
+    }, []);
 
-        link.rel = "stylesheet";
-        link.type = "text/css";
-        link.href = "/" + stylePath;
-
-        head.appendChild(link);
-
-        return () => { head.removeChild(link); }
-        
-        
-    }, [stylePath]);
-
-    return (
+    return isColorBlind ? (
         <div className="pos">
             <Dropdown
                 trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
                 menu={[
-                    <button onClick={setColorBlindMode}>Colorblind Mode</button>,
-                    <button onClick={setFontZoom}>Font Zoom</button>,
-                    <button onClick={setDefaultMode}>Default</button>
+                    <button onClick={toggleColorBlind}>Colorblind Mode</button>,
+                    <button>Font Zoom</button>,
+                    <button>Default</button>
+                ]}
+            />
+            <Navbar></Navbar>
+            <div className="pos__box">
+                <div className="pos__container">
+                    <Main onAdd={onAdd} menu={menu} isColorBlind={isColorBlind}></Main>
+                    <Basket
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        onCheckout={onCheckout}
+                        cartItems={cartItems}
+                    ></Basket>
+                </div>
+            </div>
+        </div>
+    ) : (
+        <div className="pos">
+            <Dropdown
+                trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
+                menu={[
+                    <button onClick={toggleColorBlind}>Colorblind Mode</button>,
+                    <button>Font Zoom</button>,
+                    <button>Default</button>
                 ]}
             />
             <Navbar></Navbar>

@@ -12,6 +12,7 @@
     padding: 25px;
     
 }
+
 .pos__box {
     height: 100%;
     padding-top: 5%;
@@ -54,6 +55,21 @@
     text-align: center;
     color: var(--platinum);
     background-color: var(--maroon);
+    border-radius: 10%;
+    cursor: pointer;
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+}
+
+.menu-item-colorblind {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--platinum);
+    background-color: #FF94BE;
     border-radius: 10%;
     cursor: pointer;
     box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
@@ -197,4 +213,8 @@
 
 .dropdown ul li {
     font-size: 5px;
+}
+
+.dropdown button:hover {
+    color: var(--brightred);
 }

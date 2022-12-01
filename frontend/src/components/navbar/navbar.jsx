@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { unauthenticateUser } from "../../redux/slices/authSlice";
 import { onLogout } from "../auth/auth";
+import React from "react";
 
 const Navbar = () => {
     const { isAuth, type } = useSelector((state) => state.auth);
@@ -10,6 +11,8 @@ const Navbar = () => {
 
     const [prevScroll, setPrevScroll] = useState(0);
     const [visible, setVisisble] = useState(true);
+
+
 
     const handleScroll = () => {
         const currentScroll = window.scrollY;
@@ -36,6 +39,8 @@ const Navbar = () => {
             console.log(err.response);
         }
     };
+
+
 
     return (
         <nav className="navbar" style={{ top: visible ? "0" : "-60px" }}>
@@ -77,5 +82,7 @@ const Navbar = () => {
         </nav>
     );
 };
+
+
 
 export default Navbar;

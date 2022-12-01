@@ -15,7 +15,7 @@ export default function Product(props) {
     const png = product.png;
     const price = product.price;
 
-    return isColorBlind ? (
+    return !isColorBlind ? (
         <div className="menu-item" onClick={() => onAdd(product)}>
             {userType === "user" ? (
                 <div className="menu-item--info">

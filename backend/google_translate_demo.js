@@ -19,14 +19,10 @@ const translateText = async (text, targetLanguage) => {
     }
 };
 
-module.exports = {
-    translateText,
-};
-
-// translateText('Oggi è lunedì', 'en')
-//     .then((res) => {
-//         console.log(res);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
+translateText('Mi nombre es Mohnish', 'en')
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.log(err);
+    });

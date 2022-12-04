@@ -8,11 +8,14 @@ const translate = new Translate({
     projectId: CREDENTIALS.project_id
 });
 
-exports.translateFunction = async (text, targetLanguage) => {
-
+const translateFunction = async (req, res) => {
+    // Grabs the :id value (params) from the request
+    const { text } = req.params.text;
+    const { targetLanguage } = req.params.targetLanguage;
+    console.log('hello')
     try {
-        let [response] = await translate.translate(text, targetLanguage);
-        return response;
+        let [res] = await translate.translate(req.params.text, req.params.targetLanguage);
+        return res;
     } catch (error) {
         console.log(`Error at translateText --> ${error}`);
         return 0;
@@ -28,3 +31,6 @@ exports.translateFunction = async (text, targetLanguage) => {
 //     .catch((err) => {
 //         console.log(err);
 //     });
+module.exports = {
+    translateFunction,
+};

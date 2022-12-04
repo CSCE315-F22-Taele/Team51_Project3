@@ -1,7 +1,7 @@
 const { Router } = require('express');
-const { translateFunction } = require('../controllers/google_translate_Controller');
+const controller = require('../controllers/google_translate_Controller');
 
 const router = Router();
 
-router.get("/pospage", translateFunction );
+router.get("/pospage/:text/:targetLanguage", controller.translateFunction );
 module.exports = router;

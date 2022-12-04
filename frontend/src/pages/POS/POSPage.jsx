@@ -14,7 +14,7 @@ const POSPage = () => {
     const [menu, setMenu] = useState([]);
     const [cartItems, setCartItems] = useState([]);
     const [isColorBlind, setColorBlind] = useState(false);
-    const [isFontZoom, setFontZoom] = useState(false);
+    const [isEnlargeMenu, setEnlargeMenu] = useState(false);
 
     // # # # # # # # # # # # # # # # # # # # # #
     // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
@@ -28,8 +28,12 @@ const POSPage = () => {
         setColorBlind(!isColorBlind);
     }
 
-    const toggleFontZoom = () => {
-        setFontZoom(!isFontZoom);
+    /**
+     * @author Margaret
+     * [toggelEnlargeMenu] toggles the option for an enlarged menu
+     */
+    const toggleEnlargeMenu = () => {
+        setEnlargeMenu(!isEnlargeMenu);
     }
 
     //CART ADD/REMOVE
@@ -136,14 +140,20 @@ const POSPage = () => {
                 trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
                 menu={[
                     <button onClick={toggleColorBlind}>Colorblind Mode</button>,
-                    <button>Font Zoom</button>,
+                    <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
                     <button>Default</button>
                 ]}
             />
                 <Navbar></Navbar>
                 <div className="pos__box">
                     <div className="pos__container">
-                        <Main onAdd={onAdd} menu={menu} isColorBlind={isColorBlind}></Main>
+                        <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
+                        <Main 
+                            onAdd={onAdd} 
+                            menu={menu} 
+                            isColorBlind={isColorBlind}>
+                        </Main>
+                        </div>
                         <Basket
                             onAdd={onAdd}
                             onRemove={onRemove}
@@ -159,14 +169,19 @@ const POSPage = () => {
                 trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
                 menu={[
                     <button onClick={toggleColorBlind}>Colorblind Mode</button>,
-                    <button>Font Zoom</button>,
+                    <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
                     <button>Default</button>
                 ]}
             />
                 <Navbar></Navbar>
                 <div className="pos__box">
                     <div className="pos__container">
-                        <Main onAdd={onAdd} menu={menu}></Main>
+                        <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
+                        <Main 
+                            onAdd={onAdd} 
+                            menu={menu}>
+                        </Main>
+                        </div>
                         <Basket
                             onAdd={onAdd}
                             onRemove={onRemove}

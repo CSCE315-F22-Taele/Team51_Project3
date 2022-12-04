@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { unauthenticateUser } from "../../redux/slices/authSlice";
 import { onLogout } from "../auth/auth";
+import ManagerModal from "../modal/managerModal";
 import React from "react";
 
 const Navbar = () => {
@@ -11,6 +12,7 @@ const Navbar = () => {
 
     const [prevScroll, setPrevScroll] = useState(0);
     const [visible, setVisisble] = useState(true);
+    const [openManagerModal, setOpenManagerModal] = useState(false);
 
 
 
@@ -45,7 +47,7 @@ const Navbar = () => {
     return (
         <nav className="navbar" style={{ top: visible ? "0" : "-60px" }}>
             <NavLink to={isAuth ? "/pospage" : "/"} className="nav--logo">
-                <img src={require("../../images/logo.png")} alt="logo of revpos"></img>
+                <img src={require("../../images/banner.png")} alt="logo of revpos"></img>
             </NavLink>
             {isAuth ? (
                 <ul>
@@ -54,7 +56,7 @@ const Navbar = () => {
                             <span>POS</span>
                         </NavLink>
                     </li>
-                    <li className={type["type"] === "manager" ? "" : "hidden"}>
+                    <li className={type["type"] === "user" ? "hidden" : ""}>
                         <NavLink to="/ManagerMenu" className="nav--links">
                             <span>Manager</span>
                         </NavLink>

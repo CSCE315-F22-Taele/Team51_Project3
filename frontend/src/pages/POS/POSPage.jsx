@@ -163,23 +163,25 @@ const POSPage = () => {
                         cartItems={cartItems}
                     ></Basket>
                 </div>
+                <div className="dropdown__container">
+                    <Dropdown
+                        trigger={
+                            <button className="dropdown">
+                                <img
+                                    className="dropImage"
+                                    src="settings.png"
+                                    alt="Settings"
+                                ></img>
+                            </button>
+                        }
+                        menu={[
+                            <button onClick={toggleColorBlind}>Colorblind Mode</button>,
+                            <button>Font Zoom</button>,
+                            <button>Default</button>,
+                        ]}
+                    />
+                </div>
             </div>
-            <Dropdown
-                trigger={
-                    <button className="dropdown">
-                        <img
-                            className="dropImage"
-                            src="settings.png"
-                            alt="Settings"
-                        ></img>
-                    </button>
-                }
-                menu={[
-                    <button onClick={toggleColorBlind}>Colorblind Mode</button>,
-                    <button>Font Zoom</button>,
-                    <button>Default</button>,
-                ]}
-            />
         </div>
     ) : (
         <div className="posColorBlind">

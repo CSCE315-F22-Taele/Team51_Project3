@@ -38,6 +38,13 @@
     flex: 3;
     overflow-y: scroll;
 }
+
+.menu-englarge-menu { /*added*/
+    flex: 3;
+    zoom: 150%;
+    overflow-y: scroll;
+}
+
 .cart {
     flex: 1;
 }

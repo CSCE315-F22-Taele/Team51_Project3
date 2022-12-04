@@ -6,14 +6,14 @@ export default function Inventory() {
     const [inventory, setInventory] = useState([]);
     const [quantity, setQuantity] = useState();
     const [idCheckList, setIDChecker] = useState();
-    const [newId, setNewID] = useState(0);
-    const [idRemove, setIdRemove] = useState(0);
+    const [newID, setnewID] = useState(0);
+    const [removeID, setremoveID] = useState(0);
     const [newName, setNewName] = useState("");
-    const [inventoryEnter, inventoryEnterSet] = useState(0);
+    const [newInventory, setNewInventory] = useState(0);
 
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(20); //for inc and dec font size
-
+    
     /**
      * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
      * @author  Joshua
@@ -37,14 +37,15 @@ export default function Inventory() {
     }
     /**
      * Sends a HTTP POST request of a new ingredient
-     * @author  Joshua
+     * @author  Joshua, Johnny
      * @param   {int} id the identification value of the ingredient being modified
      * @param   {string} newName the new name of the ingredient
-     * @param   {int} inventoryEnter the new inventory value to be assigned to the ingredient
+     * @param   {int} newInventory the new inventory value to be assigned to the ingredient
      */
-    async function ingredientCreate() {
-        if (!newId) {
-            setNewID(idCheckList[idCheckList.length - 1] + 1);
+    async function ingredientCreate(event) {
+        event.preventDefault();
+        if (!newID) {
+            setnewID(idCheckList[idCheckList.length - 1] + 1);
         }
         try {
             await fetch("api/inventory/", {
@@ -55,9 +56,9 @@ export default function Inventory() {
                     "Access-Control-Allow-Methods": "POST",
                 },
                 body: JSON.stringify({
-                    newId: parseInt(newId),
+                    newID: parseInt(newID),
                     newName: newName,
-                    inventoryEnter: parseInt(inventoryEnter),
+                    newInventory: parseInt(newInventory),
                 }),
             });
         } catch (err) {
@@ -78,7 +79,7 @@ export default function Inventory() {
      */
     async function updateIngredientInventory(event, id, quantity) {
         event.preventDefault();
-        console.log(quantity)
+        console.log(quantity);
         try {
             await fetch(`/api/inventory/${id}`, {
                 method: "PATCH",
@@ -96,10 +97,11 @@ export default function Inventory() {
 
     /**
      * Sends a HTTP deete request with the quantity of the ID to be removed
-     * @author  Joshua
+     * @author  Joshua, Johnny
      * @param   {int} id the identification value of the ingredient being modified
      */
-    async function ingredientRemove() {
+    async function ingredientRemove(event) {
+        event.preventDefault();
         try {
             await fetch("/api/inventory/", {
                 method: "DELETE",
@@ -109,7 +111,7 @@ export default function Inventory() {
                     "Access-Control-Allow-Methods": "DELETE",
                 },
                 body: JSON.stringify({
-                    idRemove: parseInt(idRemove),
+                    removeID: parseInt(removeID),
                 }),
             });
         } catch (err) {
@@ -125,11 +127,11 @@ export default function Inventory() {
     const displayData = inventory.map((ingredient) => {
         const restockNeeded = () => {
             if (ingredient.inventory === 0) {
-                return (<p className="inventory-table--status status--red">Depleted</p>)
+                return <p className="inventory-table--status status--red">Depleted</p>;
             } else if (ingredient.inventory < 10) {
-                return (<p className="inventory-table--status status--yellow">Low</p>)
+                return <p className="inventory-table--status status--yellow">Low</p>;
             } else {
-                return (<p className="inventory-table--status status--green">Good</p>);
+                return <p className="inventory-table--status status--green">Good</p>;
             }
         };
         return (
@@ -137,12 +139,15 @@ export default function Inventory() {
                 <td style={{ fontSize: `${fontSize}px` }}>{ingredient.id}</td>
                 <td style={{ fontSize: `${fontSize}px` }}>{ingredient.name}</td>
                 <td style={{ fontSize: `${fontSize}px` }}>{ingredient.inventory}</td>
-                <td className="center-text" style={{ fontSize: `${fontSize}px` }}>{restockNeeded()}</td>
+                <td className="center-text" style={{ fontSize: `${fontSize}px` }}>
+                    {restockNeeded()}
+                </td>
                 <td>
                     <form
                         onSubmit={(event) => {
                             updateIngredientInventory(event, ingredient.id, quantity);
-                        }}>
+                        }}
+                    >
                         <input
                             type="number"
                             name={ingredient.name}
@@ -153,7 +158,8 @@ export default function Inventory() {
                                 } else {
                                     setQuantity(0);
                                 }
-                            }}></input>
+                            }}
+                        ></input>
                     </form>
                 </td>
             </tr>
@@ -166,11 +172,13 @@ export default function Inventory() {
                 <button
                     onClick={() => {
                         navigate("/managermenu");
-                    }}>
+                    }}
+                >
                     <img
                         className="backbutton"
                         src={require("../../images/backbutton.png")}
-                        alt="back"></img>
+                        alt="back"
+                    ></img>
                 </button>
             </div>
             <div className="inventory-table">
@@ -180,7 +188,12 @@ export default function Inventory() {
                             <th style={{ fontSize: `${fontSize}px` }}>ID</th>
                             <th style={{ fontSize: `${fontSize}px` }}>Name</th>
                             <th style={{ fontSize: `${fontSize}px` }}>Inventory</th>
-                            <th className="center-text" style={{ fontSize: `${fontSize}px` }}>Status</th>
+                            <th
+                                className="center-text"
+                                style={{ fontSize: `${fontSize}px` }}
+                            >
+                                Status
+                            </th>
                             <th style={{ fontSize: `${fontSize}px` }}>Change Amount</th>
                         </tr>
                     </thead>
@@ -203,8 +216,9 @@ export default function Inventory() {
                 </tr>
                 <form
                     onSubmit={(event) => {
-                        ingredientCreate();
-                    }}>
+                        ingredientCreate(event);
+                    }}
+                >
                     <input
                         type="number"
                         placeholder="id"
@@ -214,46 +228,48 @@ export default function Inventory() {
                                 !idCheckList.includes(event.target.value) &&
                                 event.target.value > 0
                             ) {
-                                setNewID(event.target.value);
+                                setnewID(event.target.value);
                             } else {
                                 // if it exists find the last id and add 1
-                                setNewID(idCheckList[idCheckList.length - 1] + 1);
+                                setnewID(idCheckList[idCheckList.length - 1] + 1);
                             }
-                        }}></input>
+                        }}
+                    ></input>
                     <input
                         type="string"
                         placeholder="name"
                         onChange={(event) => {
                             setNewName(event.target.value);
-                            console.log(newName);
-                        }}></input>
+                        }}
+                    ></input>
                     <input
                         type="number"
                         placeholder="inventory"
                         onChange={(event) => {
-                            if (event.target.value > 0) {
-                                inventoryEnterSet(event.target.value);
+                            if (event.target.value >= 0) {
+                                setNewInventory(event.target.value);
                             } else {
-                                inventoryEnterSet(1000);
+                                setNewInventory(0);
                             }
-                            console.log(inventoryEnter);
-                        }}></input>
-                    <button>Create New Ingredient</button>
+                        }}
+                    ></input>
+                    <button>Create Ingredient</button>
                 </form>
                 <form
+                    id="inventory-form--remove"
                     onSubmit={(event) => {
-                        setIdRemove(event.target.value);
-                        ingredientRemove();
-                    }}>
+                        ingredientRemove(event);
+                        document.getElementById("inventory-form--remove").reset();
+                    }}
+                >
                     <input
                         type="number"
-                        placeholder="id"
+                        placeholder="Ingredient ID"
                         onChange={(event) => {
-                            // see if the id exists already
-                            setIdRemove(event.target.value);
-                            console.log(idRemove);
-                        }}></input>
-                    <button> remove ingredient button</button>
+                            setremoveID(event.target.value);
+                        }}
+                    ></input>
+                    <button>Remove Ingredient</button>
                 </form>
             </div>
         </div>

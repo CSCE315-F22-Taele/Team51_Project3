@@ -15,6 +15,7 @@ const POSPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [isColorBlind, setColorBlind] = useState(false);
     const [isEnlargeMenu, setEnlargeMenu] = useState(false);
+    const [isLanguage, setLanguage] = useState(false);
 
     /**
      * Initialize a Revenue Entry for today's date on load
@@ -54,6 +55,17 @@ const POSPage = () => {
      */
     const toggleEnlargeMenu = () => {
         setEnlargeMenu(!isEnlargeMenu);
+    }   
+    
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS LANGUAGE SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+     /**
+     * @author Joshua
+     * [toggleLanguage] changes language to spanish
+     */
+    const toggleLanguage = () => {
+        setLanguage(!isLanguage);
     }
 
 
@@ -185,6 +197,7 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
+                            <button onClick={toggleLanguage}>Change Language to Spanish</button>,
                             <button>Default</button>,
                         ]}
                     />
@@ -220,6 +233,7 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
+                            <button onClick={toggleLanguage}> Change Language to Spanish</button>,
                             <button>Default</button>,
                         ]}
                     />

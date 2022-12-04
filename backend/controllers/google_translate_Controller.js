@@ -8,7 +8,7 @@ const translate = new Translate({
     projectId: CREDENTIALS.project_id
 });
 
-const translateText = async (text, targetLanguage) => {
+exports.translateFunction = async (text, targetLanguage) => {
 
     try {
         let [response] = await translate.translate(text, targetLanguage);
@@ -19,9 +19,7 @@ const translateText = async (text, targetLanguage) => {
     }
 };
 
-module.exports = {
-    translateText,
-};
+
 
 // translateText('Oggi è lunedì', 'en')
 //     .then((res) => {

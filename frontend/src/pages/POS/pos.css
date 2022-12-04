@@ -28,7 +28,7 @@
 .pos__container {
     display: flex;
     justify-content: space-between;
-    height: 95%;
+    height: 92.5%;
     gap: 50px;
     overflow: hidden;
     background-color: var(--jet);
@@ -208,35 +208,39 @@
 /*
         # # # # DROPDOWN MENU STYLING # # # #
 */
+.dropdown__container {
+    display: flex;
+    margin-top: 1%;
+    height: 6.5%;
+    align-items: center;
+}
+.dropdown {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+.dropdown ul {
+    gap: 25px;
+}
 .dropdown button {
     display: flex;
     align-items: center;
-    margin: 3px;
-    padding: 0px 25px;
     font-family: "Oswald";
     font-weight: 700;
-    font-size: 10px;
+    font-size: 16px;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--platinum);
     background-color: transparent;
-    margin-top: 22px;
 }
 
 .dropdown button .dropImage {
-    position: absolute;
     max-width: 3rem;
-    margin-top: 80px;
 }
 
 .dropdown .droptext {
-    display: inline-block;
+    display: flex;
     position: relative;
-    margin-top: 50px;
-}
-
-.dropdown ul li {
-    font-size: 5px;
 }
 
 .dropdown button:hover {

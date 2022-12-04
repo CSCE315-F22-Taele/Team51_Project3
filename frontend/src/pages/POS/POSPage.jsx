@@ -16,6 +16,25 @@ const POSPage = () => {
     const [isColorBlind, setColorBlind] = useState(false);
     const [isEnlargeMenu, setEnlargeMenu] = useState(false);
 
+    /**
+     * Initialize a Revenue Entry for today's date on load
+     * @author  Johnny
+     */
+    useEffect(() => {
+        try {
+            fetch("api/initialize", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
+
     // # # # # # # # # # # # # # # # # # # # # #
     // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
     // # # # # # # # # # # # # # # # # # # # # #
@@ -26,7 +45,8 @@ const POSPage = () => {
      */
     const toggleColorBlind = () => {
         setColorBlind(!isColorBlind);
-    }
+    };
+
 
     /**
      * @author Margaret
@@ -36,9 +56,9 @@ const POSPage = () => {
         setEnlargeMenu(!isEnlargeMenu);
     }
 
-    //CART ADD/REMOVE
+
     /**
-     * 
+     *
      * @param product same as a row in the menu table in database
      * @author Will
      * [onAdd] adds an item into the basket for checkout, increments quantity if already in cart
@@ -57,7 +77,7 @@ const POSPage = () => {
     };
 
     /**
-     * 
+     *
      * @param product same as a row in the menu table in database
      * @author Will
      * [onRemove] decrements quantity of an item from the basket by 1,
@@ -77,7 +97,7 @@ const POSPage = () => {
     };
 
     /**
-     * 
+     *
      * @param id the id of an ingredient in the database
      * @param quantity quantity of the ingredient to be removed from database (# of menu items containing that ingredient)
      * @author Will
@@ -85,7 +105,7 @@ const POSPage = () => {
      */
     async function decreaseIngredientInventory(id, quantity) {
         try {
-            const res = await fetch(`api/checkout/${id}`, {
+            await fetch(`api/checkout/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -100,18 +120,20 @@ const POSPage = () => {
     }
 
     /**
-     * 
+     *
      * @author Will
      * [onCheckout] call [decreaseIngredientInventory] for all ingredients per item in cart when checkout button pressed, takes user back to home page
      */
     const onCheckout = () => {
+        console.log(cartItems);
         cartItems.map((menuItem) =>
-            menuItem.ingredients.split(",").map(
-                (ingredient) => decreaseIngredientInventory(ingredient, menuItem.qty)
-            )
+            menuItem.ingredients
+                .split(",")
+                .map((ingredient) =>
+                    decreaseIngredientInventory(ingredient, menuItem.qty)
+                )
         );
         alert("Thank you for your order!");
-        window.location = "/";
     };
 
     /**
@@ -135,62 +157,75 @@ const POSPage = () => {
     }, []);
 
     return isColorBlind ? (
-            <div className="pos">
-            <Dropdown
-                trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
-                menu={[
-                    <button onClick={toggleColorBlind}>Colorblind Mode</button>,
-                    <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
-                    <button>Default</button>
-                ]}
-            />
-                <Navbar></Navbar>
-                <div className="pos__box">
-                    <div className="pos__container">
-                        <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
-                        <Main 
-                            onAdd={onAdd} 
-                            menu={menu} 
-                            isColorBlind={isColorBlind}>
-                        </Main>
-                        </div>
-                        <Basket
-                            onAdd={onAdd}
-                            onRemove={onRemove}
-                            onCheckout={onCheckout}
-                            cartItems={cartItems}
-                        ></Basket>
+        <div className="pos">
+            <Navbar></Navbar>
+            <div className="pos__box">
+                <div className="pos__container">
+                    <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
+                    <Main onAdd={onAdd} menu={menu} isColorBlind={isColorBlind}></Main>
                     </div>
+                    <Basket
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        onCheckout={onCheckout}
+                        cartItems={cartItems}
+                    ></Basket>
+                </div>
+                <div className="dropdown__container">
+                    <Dropdown
+                        trigger={
+                            <button className="dropdown">
+                                <img
+                                    className="dropImage"
+                                    src="settings.png"
+                                    alt="Settings"
+                                ></img>
+                            </button>
+                        }
+                        menu={[
+                            <button onClick={toggleColorBlind}>Colorblind Mode</button>,
+                            <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
+                            <button>Default</button>,
+                        ]}
+                    />
                 </div>
             </div>
+        </div>
     ) : (
-            <div className="posColorBlind">
-            <Dropdown
-                trigger={<button className="dropdown"><img className="dropImage" src="settings.png" alt="Settings"></img></button>}
-                menu={[
-                    <button onClick={toggleColorBlind}>Colorblind Mode</button>,
-                    <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
-                    <button>Default</button>
-                ]}
-            />
-                <Navbar></Navbar>
-                <div className="pos__box">
-                    <div className="pos__container">
-                        <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
-                        <Main 
-                            onAdd={onAdd} 
-                            menu={menu}>
-                        </Main>
-                        </div>
-                        <Basket
-                            onAdd={onAdd}
-                            onRemove={onRemove}
-                            onCheckout={onCheckout}
-                            cartItems={cartItems}
-                        ></Basket>
+        <div className="posColorBlind">
+            <Navbar></Navbar>
+            <div className="pos__box">
+                <div className="pos__container">
+                    <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
+                    <Main onAdd={onAdd} menu={menu}></Main>
                     </div>
+                    <Basket
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        onCheckout={onCheckout}
+                        cartItems={cartItems}
+                    ></Basket>
+                </div>
+                <div className="dropdown__container">
+                    <Dropdown
+                        trigger={
+                            <button className="dropdown">
+                                <img
+                                    className="dropImage"
+                                    src="settings.png"
+                                    alt="Settings"
+                                ></img>
+                            </button>
+                        }
+                        menu={[
+                            <button onClick={toggleColorBlind}>Colorblind Mode</button>,
+                            <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
+                            <button>Default</button>,
+                        ]}
+                    />
                 </div>
             </div>
+        </div>
     );
 };
 

@@ -23,6 +23,7 @@ export const authSlice = createSlice({
         },
         unauthenticateUser: (state) => {
             state.isAuth = false;
+            state.type = null;
         },
     },
 });

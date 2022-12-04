@@ -1,19 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Oswald:wght@300;400;500;600;700&display=swap");
 
 :root {
-    --bittersweet: #C65252;
-    --snow: #F3ECEC;
-    --magnolia: #4D4D4D;
-    --cedar: #C05746;
-
     --jet: #333333;
-    --black-coffee: #33272A;
+    --light-jet5: #5b5b5b;
+    --light-jet7: #7b7b7b;
+    --black-coffee: #33272a;
     --darkred: #990100;
-    --brightred: #B90504;
-    --white: #F6F6F6;
-    --platinum: #E8E8E8;
-    --maroon: #4f001f; 
-    --gold: #F6BD12;
+    --brightred: #b90504;
+    --white: #f6f6f6;
+    --platinum: #e8e8e8;
+    --maroon: #4f001f;
+    --gold: #f6bd12;
 }
 
 * {
@@ -27,6 +24,7 @@ body {
         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--jet);
 }
 ul {
     list-style: none;
@@ -47,11 +45,50 @@ code {
 
 /*
 
+        # # # # #   SCROLLBAR CSS  # # # # #
+
+*/
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #f6bd12;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--platinum);
+    border-radius: 0px 10px 10px 0px;
+}
+
+/*
+
         # # # # #   GENERAL CLASS  # # # # #
 
 */
 .highlight {
     color: var(--darkred);
+}
+.center-text {
+    text-align: center;
+}
+.back__container {
+    width: auto;
+    height: auto;
+}
+.back__container button {
+    background-color: transparent;
+    transition: all 0.5s;
+}
+.back__container button:hover {
+    transform: translateY(-5px);
 }
 
 /*
@@ -75,7 +112,7 @@ code {
     z-index: 99999;
     background-color: var(--jet);
     box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
 }
 .navbar ul {
     display: flex;
@@ -131,5 +168,4 @@ footer {
     text-align: center;
     background-color: var(--black-coffee);
     box-shadow: 8px 8px 12px #3b3b3b, -8px -8px 12px #2b2b2b;
-
 }

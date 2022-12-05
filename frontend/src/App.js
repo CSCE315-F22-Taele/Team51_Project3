@@ -27,8 +27,8 @@ const PrivateRoutes = () => {
 };
 const ManagerRoutes = () => {
     const { type } = useSelector((state) => state.auth);
-    
-}
+    return <>{type["type"] === "manager" ? <Outlet /> : <Navigate to="/pospage" />}</>;
+};
 const RestrictedRoutes = () => {
     const { isAuth } = useSelector((state) => state.auth);
     return <>{!isAuth ? <Outlet /> : <Navigate to="/pospage" />}</>;
@@ -42,13 +42,15 @@ const App = () => {
 
                 <Route element={<PrivateRoutes />}>
                     <Route path="/POSPage" element={<POSPage />} />
-                    <Route path="/ManagerMenu" element={<ManagerMenu />} />
-                    <Route path="/inventory" element={<Inventory />} />
-                    <Route path="/OrderHistory" element={<OrderHistory />} />
-                    <Route path="/Excess" element={<Excess />} />
-                    <Route path="/Pair" element={<Pair />} />
-                    <Route path="/Revenue" element={<Revenue />} />
-                    <Route path="/EditMenu" element={<EditMenu />} />
+                    <Route element={<ManagerRoutes />}>
+                        <Route path="/ManagerMenu" element={<ManagerMenu />} />
+                        <Route path="/inventory" element={<Inventory />} />
+                        <Route path="/OrderHistory" element={<OrderHistory />} />
+                        <Route path="/Excess" element={<Excess />} />
+                        <Route path="/Pair" element={<Pair />} />
+                        <Route path="/Revenue" element={<Revenue />} />
+                        <Route path="/EditMenu" element={<EditMenu />} />
+                    </Route>
                 </Route>
                 <Route element={<RestrictedRoutes />}>
                     <Route path="/login" element={<Login />} />

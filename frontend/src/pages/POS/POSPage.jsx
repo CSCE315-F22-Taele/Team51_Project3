@@ -156,6 +156,11 @@ const POSPage = () => {
         getMenu();
     }, []);
 
+    /**
+     * @author Will
+     * @returns Normal color palette if the user has not selected colorblind option,
+     *  colorblind scheme if they have
+     */
     return isColorBlind ? (
         <div className="pos">
             <Navbar></Navbar>

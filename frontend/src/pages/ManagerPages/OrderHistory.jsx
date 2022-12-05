@@ -4,10 +4,17 @@ import backbutton from "../../images/backbutton.png";
 import { useState, useEffect } from "react";
 
 
+/**
+ * @author Will
+ * @returns the table containing all order history data
+ */
 const OrderHistory = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
 
+  /**
+   * @function getOrderHistory pulls order history table data from api
+   */
   async function getOrderHistory() {
     try {
       const res = await fetch("api/revenue");
@@ -19,6 +26,10 @@ const OrderHistory = () => {
     }
   }
 
+  /**
+   * @function displayData
+   * @returns all the rows within the order history table in a nice format
+   */
   const displayData = orders.map((order) => (
     <div className="inventory-table">
       <table className="styled-table">
@@ -53,23 +64,18 @@ const OrderHistory = () => {
           </img>
         </button>
       </div>
-      OrderHistory
-      <div className="orders">
-        <div className="orderRow">
-          <div className="inventory-table">
-            <table className="styled-table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date</th>
-                  <th>Revenue</th>
-                  <th>Item Count</th>
-                </tr>
-              </thead>
-              <tbody>{displayData}</tbody>
-            </table>
-          </div>
-        </div>
+      <div className="inventory-table">
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Revenue</th>
+              <th>Item Count</th>
+            </tr>
+          </thead>
+          <tbody>{displayData}</tbody>
+        </table>
       </div>
     </div>
   )

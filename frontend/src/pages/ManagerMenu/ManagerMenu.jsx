@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ManagerModal from "../../components/modal/managerModal";
 import "./managerMenu.css";
+import { unverifyPermission } from "../../redux/slices/authSlice";
 
 export default function ManagerMenu() {
-    const { type } = useSelector((state) => state.auth);
-    const userType = type["type"];
     const [verified, setVerified] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     //
     const verifyManager = (status) => {
-        if (userType === "manager" || status) {
+        if (status) {
             setVerified(true);
         }
     };
@@ -27,6 +27,7 @@ export default function ManagerMenu() {
                 <button
                     onClick={() => {
                         navigate("/pospage");
+                        dispatch(unverifyPermission());
                     }}>
                     <img
                         className="backbutton"

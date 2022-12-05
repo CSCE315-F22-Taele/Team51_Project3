@@ -15,6 +15,9 @@ const POSPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [isColorBlind, setColorBlind] = useState(false);
     const [isEnlargeMenu, setEnlargeMenu] = useState(false);
+    const [isLanguage, setLanguage] = useState(false);
+    const [text, setTextToTranslate] = useState();
+    const [targetLanguage, setTargetLanguage] = useState();
 
     /**
      * Initialize a Revenue Entry for today's date on load
@@ -54,8 +57,38 @@ const POSPage = () => {
      */
     const toggleEnlargeMenu = () => {
         setEnlargeMenu(!isEnlargeMenu);
-    }
+    }   
 
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS LANGUAGE SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+     /**
+     * @author Joshua
+     * [toggleLanguage] changes boolean check for langauge
+     * [translateText] calls api in backend to return the change with params text and target
+      */
+    const translateText = async () => 
+    {
+        console.log(text)
+        try {
+            const res = await fetch(`api/google_translate/${text}/${targetLanguage}`);
+            const data = await res.json();
+            // .then(function (res) {
+            //     return res.json();
+            // })
+            return data;
+        } catch (err) {
+            console.log("translate error POSPAGE");
+            console.log(err);
+        }
+    }
+    const toggleLanguage = () => {
+        setLanguage(!isLanguage);
+        setTextToTranslate('hi');
+        setTargetLanguage('en');
+        console.log(translateText("hi","spanish"));
+        
+    }
 
     /**
      *
@@ -185,6 +218,7 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
+                            <button onClick={toggleLanguage}>Change Language to Spanish</button>,
                             <button>Default</button>,
                         ]}
                     />
@@ -220,6 +254,7 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
+                            <button onClick={toggleLanguage}> Change Language to Spanish</button>,
                             <button>Default</button>,
                         ]}
                     />

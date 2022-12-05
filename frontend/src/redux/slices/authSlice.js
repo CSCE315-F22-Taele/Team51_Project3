@@ -11,6 +11,7 @@ const userAuthFromLocalStorage = () => {
 const initialState = {
     isAuth: userAuthFromLocalStorage(),
     type: { type: "user" },
+    permission: false,
 };
 
 export const authSlice = createSlice({
@@ -24,10 +25,22 @@ export const authSlice = createSlice({
         unauthenticateUser: (state) => {
             state.isAuth = false;
             state.type = null;
+            state.permission = false;
+        },
+        verifyPermission: (state) => {
+            state.permission = true;
+        },
+        unverifyPermission: (state) => {
+            state.permission = false;
         },
     },
 });
 
-export const { authenticateUser, unauthenticateUser } = authSlice.actions;
+export const {
+    authenticateUser,
+    unauthenticateUser,
+    verifyPermission,
+    unverifyPermission,
+} = authSlice.actions;
 
 export default authSlice.reducer;

@@ -5,15 +5,18 @@ import "./managerPages.css";
 export default function Inventory() {
     const [inventory, setInventory] = useState([]);
     const [quantity, setQuantity] = useState();
-    const [idCheckList, setIDChecker] = useState();
-    const [newID, setnewID] = useState(0);
-    const [removeID, setremoveID] = useState(0);
-    const [newName, setNewName] = useState("");
-    const [newInventory, setNewInventory] = useState(0);
+    const [idCheckList, setCheckList] = useState();
+    const [removeID, setRemoveID] = useState(0);
+
+    const [newIngredientValues, setNewIngredientValues] = useState({
+        newID: "",
+        newName: "",
+        newInventory: "",
+    });
 
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(20); //for inc and dec font size
-    
+
     /**
      * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
      * @author  Joshua
@@ -30,7 +33,8 @@ export default function Inventory() {
             }
 
             idList.sort();
-            setIDChecker(idList);
+            setCheckList(idList);
+            console.log("INSIDE", idList);
         } catch (err) {
             console.error(err);
         }
@@ -40,14 +44,21 @@ export default function Inventory() {
      * @author  Joshua, Johnny
      * @param   {int} id the identification value of the ingredient being modified
      * @param   {string} newName the new name of the ingredient
-     * @param   {int} newInventory the new inventory value to be assigned to the ingredient
+     * @param   {int} newInventory the new inventory value to be assigned to the ingredient\
+     * @return  {boolean} returns true on success, false on fail
      */
     async function ingredientCreate(event) {
         event.preventDefault();
-        if (!newID) {
-            setnewID(idCheckList[idCheckList.length - 1] + 1);
+        let newID = parseInt(newIngredientValues.newID);
+        let newName = newIngredientValues.newName;
+        let newInventory = parseInt(newIngredientValues.newInventory);
+
+        // Checks if ID already exists in the Database, if so reassign
+        if (idCheckList.includes(newID) || newID < 0) {
+            newID = idCheckList[idCheckList.length - 1] + 1;
         }
         try {
+            console.log(parseInt(newID), newName, parseInt(newInventory));
             await fetch("api/inventory/", {
                 method: "POST",
                 headers: {
@@ -56,20 +67,23 @@ export default function Inventory() {
                     "Access-Control-Allow-Methods": "POST",
                 },
                 body: JSON.stringify({
-                    newID: parseInt(newID),
+                    newID: newID,
                     newName: newName,
-                    newInventory: parseInt(newInventory),
+                    newInventory: newInventory,
                 }),
             });
+            getInventory();
+            return true;
         } catch (err) {
             console.log(err.message);
+            return false;
         }
     }
 
     // Refreshes / Regrabs the Inventory on Update
     useEffect(() => {
         getInventory();
-    }, [updateIngredientInventory]);
+    }, []);
 
     /**
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
@@ -79,7 +93,6 @@ export default function Inventory() {
      */
     async function updateIngredientInventory(event, id, quantity) {
         event.preventDefault();
-        console.log(quantity);
         try {
             await fetch(`/api/inventory/${id}`, {
                 method: "PATCH",
@@ -90,6 +103,7 @@ export default function Inventory() {
                 },
                 body: JSON.stringify({ quantity: parseInt(quantity) }),
             });
+            getInventory();
         } catch (err) {
             console.error(err);
         }
@@ -114,15 +128,24 @@ export default function Inventory() {
                     removeID: parseInt(removeID),
                 }),
             });
+            getInventory();
         } catch (err) {
             console.error(err);
         }
     }
 
+    // Detects and Set Values When Called
+    const onChange = (e) => {
+        setNewIngredientValues({
+            ...newIngredientValues,
+            [e.target.name]: e.target.value,
+        });
+    };
+
     /**
      * Sets the information to be display given the ingredients
      * @author  Joshua, Johnny
-     * @param   {object} ingredients the object containing an ingredient's information
+     * @param   {object} ingredient the object containing an ingredient's information
      */
     const displayData = inventory.map((ingredient) => {
         const restockNeeded = () => {
@@ -146,8 +169,7 @@ export default function Inventory() {
                     <form
                         onSubmit={(event) => {
                             updateIngredientInventory(event, ingredient.id, quantity);
-                        }}
-                    >
+                        }}>
                         <input
                             type="number"
                             name={ingredient.name}
@@ -158,8 +180,7 @@ export default function Inventory() {
                                 } else {
                                     setQuantity(0);
                                 }
-                            }}
-                        ></input>
+                            }}></input>
                     </form>
                 </td>
             </tr>
@@ -172,13 +193,11 @@ export default function Inventory() {
                 <button
                     onClick={() => {
                         navigate("/managermenu");
-                    }}
-                >
+                    }}>
                     <img
                         className="backbutton"
                         src={require("../../images/backbutton.png")}
-                        alt="back"
-                    ></img>
+                        alt="back"></img>
                 </button>
             </div>
             <div className="inventory-table">
@@ -190,8 +209,7 @@ export default function Inventory() {
                             <th style={{ fontSize: `${fontSize}px` }}>Inventory</th>
                             <th
                                 className="center-text"
-                                style={{ fontSize: `${fontSize}px` }}
-                            >
+                                style={{ fontSize: `${fontSize}px` }}>
                                 Status
                             </th>
                             <th style={{ fontSize: `${fontSize}px` }}>Change Amount</th>
@@ -201,76 +219,80 @@ export default function Inventory() {
                 </table>
             </div>
             <div className="inventory-actions">
-                <tr>
-                    <th>
-                        <button onClick={() => setFontSize(fontSize + 2)}>
-                            + increase font size
-                        </button>{" "}
-                    </th>
-                    <th>
-                        {" "}
-                        <button onClick={() => setFontSize(fontSize - 2)}>
-                            - decrease font size
-                        </button>{" "}
-                    </th>
-                </tr>
                 <form
+                    id="inventory-form--create"
+                    className="inventory-actions__container"
                     onSubmit={(event) => {
-                        ingredientCreate(event);
-                    }}
-                >
+                        if (ingredientCreate(event)) {
+                            setNewIngredientValues({
+                                newID: "",
+                                newName: "",
+                                newInventory: "",
+                            });
+                        }
+                    }}>
                     <input
+                        className="inventory-actions--input"
                         type="number"
-                        placeholder="id"
+                        autoComplete="off"
+                        placeholder="ID"
                         onChange={(event) => {
-                            // Check if ID already exists in the Database
-                            if (
-                                !idCheckList.includes(event.target.value) &&
-                                event.target.value > 0
-                            ) {
-                                setnewID(event.target.value);
-                            } else {
-                                // if it exists find the last id and add 1
-                                setnewID(idCheckList[idCheckList.length - 1] + 1);
-                            }
+                            onChange(event);
                         }}
-                    ></input>
+                        name="newID"
+                        value={newIngredientValues.newID}
+                        required
+                    />
                     <input
+                        className="inventory-actions--input"
                         type="string"
-                        placeholder="name"
+                        autoComplete="off"
+                        placeholder="Name"
                         onChange={(event) => {
-                            setNewName(event.target.value);
+                            onChange(event);
                         }}
-                    ></input>
+                        name="newName"
+                        value={newIngredientValues.newName}
+                        required
+                    />
                     <input
+                        className="inventory-actions--input"
                         type="number"
-                        placeholder="inventory"
+                        autoComplete="off"
+                        placeholder="Quantity"
                         onChange={(event) => {
-                            if (event.target.value >= 0) {
-                                setNewInventory(event.target.value);
-                            } else {
-                                setNewInventory(0);
-                            }
+                            onChange(event);
                         }}
-                    ></input>
-                    <button>Create Ingredient</button>
+                        name="newInventory"
+                        value={newIngredientValues.newInventory}
+                        required
+                    />
+                    <button className="button">Create Ingredient</button>
                 </form>
                 <form
                     id="inventory-form--remove"
+                    className="inventory-actions__container"
                     onSubmit={(event) => {
                         ingredientRemove(event);
                         document.getElementById("inventory-form--remove").reset();
-                    }}
-                >
+                    }}>
                     <input
+                        className="inventory-actions--input"
                         type="number"
                         placeholder="Ingredient ID"
                         onChange={(event) => {
-                            setremoveID(event.target.value);
-                        }}
-                    ></input>
-                    <button>Remove Ingredient</button>
+                            setRemoveID(event.target.value);
+                        }}></input>
+                    <button className="button">Remove Ingredient</button>
                 </form>
+                <div className="inventory-accessibility">
+                    <button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    </button>
+                    <button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    </button>
+                </div>
             </div>
         </div>
     );

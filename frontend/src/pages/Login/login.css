@@ -11,10 +11,13 @@
     color: #a0a5a8;
 }
 .button {
-    width: 180px;
-    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
     border-radius: 25px;
-    margin-top: 50px;
+    padding: .7rem;
     letter-spacing: 1.15px;
     background-color: var(--darkred);
     color: #f9f9f9;
@@ -113,6 +116,10 @@
     left: calc(100% - 600px);
     z-index: 0;
 }
+.submit {
+    margin-top: 50px;
+    width: 150px;
+}
 
 /* Neumo Stuff */
 .neumo-circle {
@@ -162,6 +169,8 @@
     transition: 1.25s;
 }
 .switch__button {
+    width: 150px;
+    margin-top: 50px;
     transform: scale(1);
     transition: 0.25s;
 }

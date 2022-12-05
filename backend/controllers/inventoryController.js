@@ -35,11 +35,11 @@ const getIngredientById = (req, res) => {
 };
 
 const addIngredient = (req, res) => {
-    const { newId, newName, inventoryEnter } = req.body;
+    const { newID, newName, newInventory } = req.body;
     //add ingredient to db
     pool.query(
         "INSERT INTO ingredients (id, name, inventory) VALUES ($1, $2, $3)",
-        [newId, newName, inventoryEnter],
+        [newID, newName, newInventory],
         (error, results) => {
             if (error) throw error;
             res.status(201).send("Ingredient Created Successfully!");
@@ -48,9 +48,8 @@ const addIngredient = (req, res) => {
 };
 
 const removeIngredient = (req, res) => {
-    console.log(idRemove);
-    const { idRemove } = req.body;
-    pool.query("DELETE FROM ingredients WHERE id = $1", [idRemove], (error, results) => {
+    const { removeID } = req.body;
+    pool.query("DELETE FROM ingredients WHERE id = $1", [removeID], (error, results) => {
         if (error) throw error;
         res.status(200).send("Ingredient removed successfully.");
     });

@@ -52,7 +52,7 @@ export default function ManagerMenu() {
                         }}>
                         <img
                             className="statButton"
-                            src={require("../../images/orderhistory.png")}
+                            src={require("../../images/orders.png")}
                             alt="Order History"></img>
                         <p>Order History</p>
                     </button>

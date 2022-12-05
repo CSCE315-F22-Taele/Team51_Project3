@@ -54,6 +54,6 @@ app.use("/api/pair", pairRoutes);
 app.use("/api/menuManager", menuRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/initialize", initializeRoutes);
- app.use("/api/google_translate", google_translate);
+ app.use("/api/translate", google_translate);
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

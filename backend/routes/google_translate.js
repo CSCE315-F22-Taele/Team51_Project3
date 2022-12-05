@@ -3,5 +3,5 @@ const controller = require('../controllers/google_translate_Controller');
 
 const router = Router();
 
-router.get("/pospage/:text/:targetLanguage", controller.translateFunction );
+router.post("/:targetLanguage", controller.translateFunction );
 module.exports = router;

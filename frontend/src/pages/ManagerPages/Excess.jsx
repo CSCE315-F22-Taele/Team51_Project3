@@ -19,7 +19,6 @@ export default function Excess() {
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(16); //for inc and dec font size
 
-
     useEffect(() => {
         getInventory();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,24 +123,19 @@ export default function Excess() {
     }
 
     function setTableView() {
-        
         const displayInfo = excessItems.map((item) => {
             return (
                 <tr>
-                    <td
-                    style={{fontSize: `${fontSize}px`}}
-                    >{item.id}</td>
-                    <td
-                    style={{fontSize: `${fontSize}px`}}
-                    >{item.name}</td>
-                    <td
-                    style={{fontSize: `${fontSize}px`}}
-                    >{Number(
-                    usageCount[item.id] / parseFloat(initialInventory[0][item.id])
-                ).toLocaleString(undefined, {
-                    style: "percent",
-                    minimumFractionDigits: 2,
-                })}</td>
+                    <td style={{ fontSize: `${fontSize}px` }}>{item.id}</td>
+                    <td style={{ fontSize: `${fontSize}px` }}>{item.name}</td>
+                    <td style={{ fontSize: `${fontSize}px` }}>
+                        {Number(
+                            usageCount[item.id] / parseFloat(initialInventory[0][item.id])
+                        ).toLocaleString(undefined, {
+                            style: "percent",
+                            minimumFractionDigits: 2,
+                        })}
+                    </td>
                 </tr>
             );
         });
@@ -151,58 +145,63 @@ export default function Excess() {
     return (
         <div className="App">
             <tr>
-                <th> <div>
-                    <button>
-                        <img
-                            onClick={() => {
-                                navigate("/ManagerMenu")
-                            }}
-                            className="backbutton"
-                            src={backbutton}
-                            alt="back">
-                        </img>
-                    </button>
-                </div> </th>
-                <th><button onClick={() => setFontSize(fontSize + 2)} >
-                    + increase font size
-                </button> </th>
-                <th> <button onClick={() => setFontSize(fontSize - 2)} >
-                    - decrease font size
-                </button> </th>
+                <th>
+                    {" "}
+                    <div>
+                        <button>
+                            <img
+                                onClick={() => {
+                                    navigate("/ManagerMenu");
+                                }}
+                                className="backbutton"
+                                src={backbutton}
+                                alt="back"
+                            ></img>
+                        </button>
+                    </div>{" "}
+                </th>
+                <th>
+                    <button onClick={() => setFontSize(fontSize + 2)}>
+                        + increase font size
+                    </button>{" "}
+                </th>
+                <th>
+                    {" "}
+                    <button onClick={() => setFontSize(fontSize - 2)}>
+                        - decrease font size
+                    </button>{" "}
+                </th>
             </tr>
             <h1>Excess Report </h1>
             <form
                 onSubmit={(event) => {
                     getIngredientUsage(event);
-                }}>
+                }}
+            >
                 <input
                     type="string"
                     placeholder="yyyy-mm-dd"
                     onChange={(event) => {
                         setStartDate(event.target.value);
                     }}
-                    required></input>
+                    required
+                ></input>
                 <input
                     type="string"
                     placeholder="yyyy-mm-dd"
                     onChange={(event) => {
                         setEndDate(event.target.value);
                     }}
-                    required></input>
+                    required
+                ></input>
                 <button>Submit</button>
             </form>
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Item ID</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Item Name</th>
-                        <th
-                        style={{fontSize: `${fontSize}px`}}
-                        >Percentage Sold</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Item ID</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Item Name</th>
+                        <th style={{ fontSize: `${fontSize}px` }}>Percentage Sold</th>
                     </tr>
                 </thead>
                 <tbody>{displayData}</tbody>

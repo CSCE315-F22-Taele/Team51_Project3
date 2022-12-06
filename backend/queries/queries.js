@@ -29,6 +29,7 @@ const pairReport = "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, cou
 
 //Excess report
 const excessReport = "select * from daily_inventory where date between $1 and $2";
+
 module.exports = {
     getMenuItems,
     getMenuItemById,

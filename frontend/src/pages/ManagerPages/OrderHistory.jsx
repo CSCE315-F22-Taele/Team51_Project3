@@ -32,18 +32,12 @@ const OrderHistory = () => {
    * @returns all the rows within the order history table in a nice format
    */
   const displayData = orders.map((order) => (
-    <div className="orders-table">
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th>{order.orderid}</th>
-            <th>{moment(order.date).utc().format("YYYY-MM-DD")}</th>
-            <th>{order.amount}</th>
-            <th>{order.itemcount}</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
+    <tr>
+      <th>{order.orderid}</th>
+      <th>{moment(order.date).utc().format("YYYY-MM-DD")}</th>
+      <th>{order.amount}</th>
+      <th>{order.itemcount}</th>
+    </tr>
   ));
 
 
@@ -66,13 +60,13 @@ const OrderHistory = () => {
         </button>
       </div>
       <div className="orders-table">
-        <table className="styled-table">
+        <table className="styled-table-orders">
           <thead>
             <tr>
               <th className="table-head">Order ID</th>
-              <th className="table-head">Date</th>
-              <th className="table-head">Revenue</th>
-              <th className="table-head">Item Count</th>
+              <th className="table-head">Order Date</th>
+              <th className="table-head">Order Revenue</th>
+              <th className="table-head">Items Sold</th>
             </tr>
           </thead>
           <tbody>{displayData}</tbody>

@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import backbutton from "../../images/backbutton.png";
 import { useState, useEffect } from "react";
+import moment from "moment";
 
 
 /**
@@ -31,12 +32,12 @@ const OrderHistory = () => {
    * @returns all the rows within the order history table in a nice format
    */
   const displayData = orders.map((order) => (
-    <div className="inventory-table">
+    <div className="orders-table">
       <table className="styled-table">
         <thead>
           <tr>
             <th>{order.orderid}</th>
-            <th>{order.date}</th>
+            <th>{moment(order.date).utc().format("YYYY-MM-DD")}</th>
             <th>{order.amount}</th>
             <th>{order.itemcount}</th>
           </tr>
@@ -64,14 +65,14 @@ const OrderHistory = () => {
           </img>
         </button>
       </div>
-      <div className="inventory-table">
+      <div className="orders-table">
         <table className="styled-table">
           <thead>
             <tr>
-              <th>Order ID</th>
-              <th>Date</th>
-              <th>Revenue</th>
-              <th>Item Count</th>
+              <th className="table-head">Order ID</th>
+              <th className="table-head">Date</th>
+              <th className="table-head">Revenue</th>
+              <th className="table-head">Item Count</th>
             </tr>
           </thead>
           <tbody>{displayData}</tbody>

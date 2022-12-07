@@ -201,3 +201,31 @@ background-color: var(--light-jet5);
     grid-template-columns: 1fr 1fr;
     height: .2rem;
 }
+
+/*
+
+        # # # # #   REVENUE STYLING CODE  # # # # #
+
+*/
+.revenue-page {
+    height: 100vh;
+    background-color: var(--jet);
+}
+.revenue-table {
+    display: flex;
+    width: 100%;
+    height: 85%;
+    overflow-y: scroll;
+}
+.revenue-topbar {
+    width: 100%;
+    display: flex;
+    gap: 100px;
+    margin-bottom: 1.5rem;
+}
+.revenue-accessibility {
+    display: grid;
+    gap: 25px;
+    grid-template-columns: 1fr 1fr;
+    height: .2rem;
+}

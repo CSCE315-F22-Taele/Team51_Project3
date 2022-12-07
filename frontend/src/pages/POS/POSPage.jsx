@@ -47,15 +47,13 @@ const POSPage = () => {
         setColorBlind(!isColorBlind);
     };
 
-
     /**
      * @author Margaret
      * [toggelEnlargeMenu] toggles the option for an enlarged menu
      */
     const toggleEnlargeMenu = () => {
         setEnlargeMenu(!isEnlargeMenu);
-    }
-
+    };
 
     /**
      *
@@ -120,21 +118,41 @@ const POSPage = () => {
     }
 
     /**
+     * Calls the checkout logic in the backend to add orders to the Database
+     * @param  {double} totalPrice number representing the total cost of the order
+     * @param  {int} itemCount quantity of the ingredient to be removed from database (# of menu items containing that ingredient)
+     * @author Johnny
+     */
+
+    /**
      *
      * @author Will
      * [onCheckout] call [decreaseIngredientInventory] for all ingredients per item in cart when checkout button pressed, takes user back to home page
      */
-    const onCheckout = () => {
-        console.log(cartItems);
+    function onCheckout(totalPrice) {
+        // Request to Add Orders to the Database
+        try {
+            fetch("api/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({ cart: cartItems, totalPrice: totalPrice }),
+            });
+        } catch (err) {
+            console.error(err);
+        }
+
         cartItems.map((menuItem) =>
-            menuItem.ingredients
-                .split(",")
-                .map((ingredient) =>
-                    decreaseIngredientInventory(ingredient, menuItem.qty)
-                )
+            menuItem.ingredients.map((ingredient) =>
+                decreaseIngredientInventory(ingredient, menuItem.qty)
+            )
         );
+        setCartItems([]);
         alert("Thank you for your order!");
-    };
+    }
 
     /**
      * @author Will
@@ -161,15 +179,17 @@ const POSPage = () => {
             <Navbar></Navbar>
             <div className="pos__box">
                 <div className="pos__container">
-                    <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
-                    <Main onAdd={onAdd} menu={menu} isColorBlind={isColorBlind}></Main>
+                    <div className={isEnlargeMenu ? "menu-englarge-menu" : "menu"}>
+                        <Main
+                            onAdd={onAdd}
+                            menu={menu}
+                            isColorBlind={isColorBlind}></Main>
                     </div>
                     <Basket
                         onAdd={onAdd}
                         onRemove={onRemove}
                         onCheckout={onCheckout}
-                        cartItems={cartItems}
-                    ></Basket>
+                        cartItems={cartItems}></Basket>
                 </div>
                 <div className="dropdown__container">
                     <Dropdown
@@ -178,8 +198,7 @@ const POSPage = () => {
                                 <img
                                     className="dropImage"
                                     src="settings.png"
-                                    alt="Settings"
-                                ></img>
+                                    alt="Settings"></img>
                             </button>
                         }
                         menu={[
@@ -196,15 +215,14 @@ const POSPage = () => {
             <Navbar></Navbar>
             <div className="pos__box">
                 <div className="pos__container">
-                    <div className={isEnlargeMenu? "menu-englarge-menu" : "menu"}>
-                    <Main onAdd={onAdd} menu={menu}></Main>
+                    <div className={isEnlargeMenu ? "menu-englarge-menu" : "menu"}>
+                        <Main onAdd={onAdd} menu={menu}></Main>
                     </div>
                     <Basket
                         onAdd={onAdd}
                         onRemove={onRemove}
                         onCheckout={onCheckout}
-                        cartItems={cartItems}
-                    ></Basket>
+                        cartItems={cartItems}></Basket>
                 </div>
                 <div className="dropdown__container">
                     <Dropdown
@@ -213,8 +231,7 @@ const POSPage = () => {
                                 <img
                                     className="dropImage"
                                     src="settings.png"
-                                    alt="Settings"
-                                ></img>
+                                    alt="Settings"></img>
                             </button>
                         }
                         menu={[

@@ -20,7 +20,7 @@ const getIngredientUsage = async (req, res) => {
         ids,
         function (id, i, callback) {
             pool.query(
-                "SELECT COUNT(ingredientslist) FROM orders JOIN orderinfo ON orders.orderid = orderinfo.orderid WHERE $1=ANY(orderinfo.ingredientslist) AND (orders.date BETWEEN $2 AND $3)",
+                "SELECT COUNT(ingredients) FROM orders JOIN orderinfo ON orders.orderid = orderinfo.orderid WHERE $1=ANY(orderinfo.ingredients) AND (orders.date BETWEEN $2 AND $3)",
                 [id, firstDate, secondDate],
                 (err, res) => {
                     if (err) callback(err);

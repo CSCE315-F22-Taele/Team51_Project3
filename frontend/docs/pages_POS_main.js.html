@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: pages/POS/main.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,45 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: pages/POS/main.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useSelector } from "react-redux";
+import Product from "./Product";
+import "./pos.css";
 
+/**
+ * @author Will
+ * @param {} props menu and onAdd from POSPage
+ * @returns call to Product.js function for each menu item, used in POSPage
+ */
+const Main = (props) => {
+    const { menu, onAdd, isColorBlind } = props;
+    const { type } = useSelector((state) => state.auth);
+    const userType = type["type"];
 
-    <h3> </h3>
+    return (
+        &lt;main className="menu">
+            &lt;div className={userType === "user" ? "menu__container m__c-user_ver" : "menu__container"}>
+                {menu.map((product) => (
+                    &lt;Product key={product.id} product={product} onAdd={onAdd} isColorBlind={isColorBlind}>&lt;/Product>
+                ))}
+            &lt;/div>
+        &lt;/main>
+    );
+};
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default Main;
+</code></pre>
+        </article>
+    </section>
 
 
 

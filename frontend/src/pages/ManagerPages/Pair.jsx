@@ -23,21 +23,14 @@ export default function Pair() {
      * @param   {date} endDate second date in btwn
      */
 
-    // async function editPairDates() {
-    //     try {
-    //         console.log(`api/pair/${startDate}/${endDate}`);
-    //         const res = await fetch(`api/pair/${startDate}/${endDate}`);
-    //         const data = await res.json();
-    //         setTable(data);
-    //         setPair(true);
 
-    //         console.log(startDate, endDate);
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // }
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-    async function insertPairDates() {
+    async function insertPairDates(event) {
+      await delay(1000);
+      event.preventDefault();
       try {
           const res = await fetch(`/api/pair/${startDate}/${endDate}`, {
             method: "PATCH",
@@ -58,37 +51,64 @@ export default function Pair() {
       }
     }
 
-    async function removePair() {
+    async function removePair(event) {
+        event.preventDefault();
         try {
-            console.log(`api/pair/:t`);
-            const res = await fetch(`api/pair/:t`);
+          const res = await fetch("/api/pair/:t", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "DELETE",
+                },
+
+            });
+            
+          const data = await res.json();
+          setTable(data);
+          setPair(true);
+        
+          console.log(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // async function editPairDates(event) {
+    //   event.preventDefault();
+    //   try {
+    //       console.log(`api/pair/`);
+    //       const res = await fetch(`api/pair/`);
+    //       const data = await res.json();
+    //       setTable(data);
+    //       setPair(true);
+
+    //       console.log(startDate, endDate);
+    //   } catch (err) {
+    //       console.error(err);
+    //   }
+    // }
+
+    async function getPair(event) {
+        await delay(3000);
+        event.preventDefault();
+        try {
+            console.log(`api/pair/:p`);
+            const res = await fetch(`api/pair/:p`);
             const data = await res.json();
+            const temp = data;
             setTable(data);
             setPair(true);
-
+            // for (let i = 0; i < data.length; i++) {
+            //     temp[i] = data[data.length-i-1];
+            // }
+            console.log(data);
         } catch (err) {
             console.error(err);
         }
       }
 
-    async function editPairDates() {
-      try {
-          console.log(`api/pair/`);
-          const res = await fetch(`api/pair/`);
-          const data = await res.json();
-          setTable(data);
-          setPair(true);
-
-          console.log(startDate, endDate);
-      } catch (err) {
-          console.error(err);
-      }
-    }
-
     const displayInfo = sales.map((item) => {
-        if (pairReportCalled) {
-            // return functionality and parser here
-        }
         return (
             <tr>
                 <td
@@ -126,12 +146,18 @@ export default function Pair() {
             <h1>Pair Report </h1>
             <form
                 onSubmit={(event) => {
+<<<<<<< Updated upstream
                     // insertPairDates();
                     // editPairDates();
                     event.preventDefault();
                     // insertPairDates();
                     // editPairDates();
                     removePair();
+=======
+                    removePair(event);
+                    insertPairDates(event);
+                    getPair(event);
+>>>>>>> Stashed changes
                 }}>
                 <input
                     type="string"

@@ -25,7 +25,7 @@ const createTable = (req, res) => {
 
 const insertPair = (req, res) => {
     pool.query(
-        "TRUNCATE TABLE X; INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders) AND NOT EXISTS (SELECT * FROM X) GROUP BY productid ORDER BY count DESC;",
+        "INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders) AND NOT EXISTS (SELECT * FROM X) GROUP BY productid ORDER BY count DESC;",
         (error, results) => {
             if (error) throw error;
             res.status(200).json(results.rows);
@@ -67,7 +67,11 @@ const removePair = (req, res) => {
     //     const secondDate = req.params.secondDate;
         pool.query(
             // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
+<<<<<<< Updated upstream
             "TRUNCATE TABLE X",
+=======
+            "DELETE FROM X",
+>>>>>>> Stashed changes
             // [firstDate, secondDate],
             (error, results) => {
                 if (error) throw error;

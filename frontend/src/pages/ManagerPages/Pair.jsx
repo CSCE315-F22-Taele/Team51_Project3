@@ -108,12 +108,19 @@ export default function Pair() {
         }
       }
 
-    const displayInfo = sales.map((item) => {
+    const displayInfo1 = sales.slice(0, -1).map((item, index, array) => {
         return (
             <tr>
                 <td
                 style={{fontSize: `${fontSize}px`}}
-                >{item.name}</td>
+                >{item.name}</td>    
+            </tr>
+        );
+    });
+    
+    const displayInfo2 = sales.slice(1).map((item, index, array) => {
+        return (
+            <tr>
                 <td
                 style={{fontSize: `${fontSize}px`}}
                 >{item.name}</td>
@@ -177,7 +184,16 @@ export default function Pair() {
                         >Item 2</th>
                     </tr>
                 </thead>
-                <tbody>{displayInfo}</tbody>
+                <tbody>
+                    <tr>
+                        <td
+                        style={{fontSize: `${fontSize}px`}}
+                        >{displayInfo1}</td>
+                        <td
+                        style={{fontSize: `${fontSize}px`}}
+                        >{displayInfo2}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     );

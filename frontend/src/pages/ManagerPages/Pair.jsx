@@ -146,18 +146,9 @@ export default function Pair() {
             <h1>Pair Report </h1>
             <form
                 onSubmit={(event) => {
-<<<<<<< Updated upstream
-                    // insertPairDates();
-                    // editPairDates();
-                    event.preventDefault();
-                    // insertPairDates();
-                    // editPairDates();
-                    removePair();
-=======
                     removePair(event);
                     insertPairDates(event);
                     getPair(event);
->>>>>>> Stashed changes
                 }}>
                 <input
                     type="string"

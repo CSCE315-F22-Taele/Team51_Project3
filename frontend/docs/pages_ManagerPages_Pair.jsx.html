@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/ManagerPages/Pair.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/ManagerPages/Pair.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from "react";
+import { useState, useEffect } from "react";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import backbutton from "../../images/backbutton.png";
+
+export default function Pair() {
+    const [sales, setTable] = useState([]);
+
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [pairReportCalled, setPair] = useState(false);
+    const navigate = useNavigate();
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
+
+
+
+    /**
+     * Sends a HTTP PATCH request with the quantity of the ID to be modified
+     * @author  Mohnish
+     * @param   {date} startDate first date for btwn
+     * @param   {date} endDate second date in btwn
+     */
+
+    // async function editPairDates() {
+    //     try {
+    //         console.log(`api/pair/${startDate}/${endDate}`);
+    //         const res = await fetch(`api/pair/${startDate}/${endDate}`);
+    //         const data = await res.json();
+    //         setTable(data);
+    //         setPair(true);
+
+    //         console.log(startDate, endDate);
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }
+
+    async function insertPairDates() {
+      try {
+          const res = await fetch(`/api/pair/${startDate}/${endDate}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "PATCH",
+            },
+          });
+          
+          const data = await res.json();
+          setTable(data);
+          setPair(true);
+
+          console.log(startDate, endDate);
+      } catch (err) {
+          console.error(err);
+      }
+    }
+
+    async function removePair() {
+        try {
+            console.log(`api/pair/:t`);
+            const res = await fetch(`api/pair/:t`);
+            const data = await res.json();
+            setTable(data);
+            setPair(true);
+
+        } catch (err) {
+            console.error(err);
+        }
+      }
+
+    async function editPairDates() {
+      try {
+          console.log(`api/pair/`);
+          const res = await fetch(`api/pair/`);
+          const data = await res.json();
+          setTable(data);
+          setPair(true);
+
+          console.log(startDate, endDate);
+      } catch (err) {
+          console.error(err);
+      }
+    }
+
+    const displayInfo = sales.map((item) => {
+        if (pairReportCalled) {
+            // return functionality and parser here
+        }
+        return (
+            &lt;tr>
+                &lt;td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.name}&lt;/td>
+                &lt;td
+                style={{fontSize: `${fontSize}px`}}
+                >{item.name}&lt;/td>
+            &lt;/tr>
+        );
+    });
+
+    return (
+        &lt;div className="App">
+            &lt;tr>
+                &lt;th> &lt;div>
+                    &lt;button>
+                        &lt;img
+                            onClick={() => {
+                                navigate("/ManagerMenu")
+                            }}
+                            className="backbutton"
+                            src={backbutton}
+                            alt="back">
+                        &lt;/img>
+                    &lt;/button>
+                &lt;/div> &lt;/th>
+                &lt;th>&lt;button onClick={() => setFontSize(fontSize + 2)} >
+                    + increase font size
+                &lt;/button> &lt;/th>
+                &lt;th> &lt;button onClick={() => setFontSize(fontSize - 2)} >
+                    - decrease font size
+                &lt;/button> &lt;/th>
+            &lt;/tr>
+            &lt;h1>Pair Report &lt;/h1>
+            &lt;form
+                onSubmit={(event) => {
+                    insertPairDates();
+                    editPairDates();
+                    event.preventDefault();
+                    insertPairDates();
+                    editPairDates();
+                }}>
+                &lt;input
+                    type="string"
+                    placeholder="yyyy-mm-dd"
+                    onChange={(event) => {
+                        setStartDate(event.target.value);
+                    }}
+                    onKeyPress="setStorage(this)">&lt;/input>
+                &lt;input
+                    type="string"
+                    placeholder="yyyy-mm-dd"
+                    onChange={(event) => {
+                        setEndDate(event.target.value);
+                    }}
+                    onKeyPress="setStorage(this)">&lt;/input>
+                &lt;button>Submit&lt;/button>
+            &lt;/form>
+            &lt;table className="table table-striped">
+                &lt;thead>
+                    &lt;tr>
+                        &lt;th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Item 1&lt;/th>
+                        &lt;th
+                        style={{fontSize: `${fontSize}px`}}
+                        >Item 2&lt;/th>
+                    &lt;/tr>
+                &lt;/thead>
+                &lt;tbody>{displayInfo}&lt;/tbody>
+            &lt;/table>
+        &lt;/div>
+    );
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#getOrderHistorypullsorderhistorytabledatafromapi">getOrderHistory pulls order history table data from api</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Dec 06 2022 20:42:19 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

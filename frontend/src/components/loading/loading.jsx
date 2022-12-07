@@ -4,11 +4,6 @@ import "./loading.css";
 
 const Loading = () => {
     const navigate = useNavigate();
-    useEffect(() => {
-        setTimeout(function () {
-            navigate("/POSPage");
-        }, 750);
-    });
     return (
         <div className="loading__container">
             <div className="spinner">

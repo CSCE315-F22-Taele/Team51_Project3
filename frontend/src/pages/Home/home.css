@@ -1,0 +1,58 @@
+@import url("../../index.css");
+
+#home {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--jet);
+}
+.home__container {
+    height: 100vh;
+}
+.home--title {
+    position: absolute;
+    width: 550px;
+    left: 22%;
+	top: 17.5%;
+    margin-top: 25px;
+    padding: 0px 0px 20px 20px;
+    box-shadow: -2px 2px 1px var(--white);
+}
+.home--title h1 {
+    font-family: "Oswald";
+    font-weight: 700;
+    text-shadow: 8px 8px 16px #2b2b2b, -8px -8px 16px #3b3b3b;;
+}
+.l1 {
+    font-size: 55px;
+}
+.l2 {
+    color: var(--gold);
+    font-size: 70px;
+}
+.home--button {
+    font-family: "Oswald";
+    font-weight: 500;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.15px;
+    background-color: var(--brightred);
+    color: var(--white);
+    margin-top: 10px;
+    padding: 10px 15px;
+    box-shadow: 8px 8px 16px #2b2b2b, -8px -8px 16px #3b3b3b;
+    transition: 0.6s ease-in-out;
+}
+.home--button a:hover {
+    color: var(--gold);
+    transition: all 0.3s ease;
+}
+.home--title--img {
+    position: absolute;
+    right: 10%;
+    top: 15%;
+}
+.home--title--img img {
+    width: 500px;
+}

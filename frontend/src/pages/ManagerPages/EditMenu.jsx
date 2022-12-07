@@ -133,9 +133,10 @@ export default function EditMenu() {
             }
         }
     };
-    // makes the options human readable
+    // makes the ingredients human readable
     const displayChoice = () => {
         var ingredientReturn = "Return ingredients: ";
+        // prevents a option not being in the ingredient list
         checkOptionsInIDs();
         for (let index = 0; index < ingredientList.length; index++) {
             for (

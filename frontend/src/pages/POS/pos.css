@@ -1,0 +1,249 @@
+@import url("../../index.css");
+
+.text--right {
+    text-align: right;
+}
+.pos {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    background-color: var(--jet);
+    padding: 25px;
+}
+
+.posColorBlind {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    background-color: var(--jet);
+    padding: 25px;
+}
+
+.pos__box {
+    height: 100%;
+    padding-top: 5%;
+}
+.pos__container {
+    display: flex;
+    justify-content: space-between;
+    height: 92.5%;
+    gap: 50px;
+    overflow: hidden;
+    background-color: var(--jet);
+}
+
+.menu {
+    flex: 3;
+    overflow-y: scroll;
+}
+
+.menu-englarge-menu { /*added*/
+    flex: 3;
+    zoom: 150%;
+    overflow-y: scroll;
+}
+
+.cart {
+    flex: 1;
+}
+.menu__container {
+    background-color: transparent;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 175px);
+    grid-auto-rows: 175px;
+    gap: 25px;
+    padding: 10px;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--jet);
+}
+.m__c-user_ver {
+    grid-template-columns: repeat(auto-fill, 225px);
+    grid-auto-rows: 225px;
+}
+.menu-item {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--platinum);
+    background-color: var(--maroon);
+    border-radius: 10%;
+    cursor: pointer;
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+}
+
+.menu-item-colorblind {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--platinum);
+    background-color: #FF94BE;
+    border-radius: 10%;
+    cursor: pointer;
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+}
+
+.menu-item--info {
+    height: 100%;
+}
+
+.menu-item-colorblind .menu-item--info {
+    height: 100%;
+}
+.menu-item--photo {
+    max-width: 100%;
+    max-height: 65%;
+    height: 65%;
+    margin: auto;
+}
+.menu-item--price {
+    font-weight: 700;
+}
+
+.cart__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    padding-bottom: 10px;
+    background-color: var(--platinum);
+    border: 5px solid var(--maroon);
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+    font-family: "Lato";
+    gap: 50px;
+}
+.cart--basket {
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    height: 88%;
+    max-height: 88%;
+    overflow-y: scroll;
+    padding: 10px 0 10px 10px;
+    font-size: 18px;
+    font-weight: 500;
+}
+.item__container {
+    display: flex;
+    justify-content: space-between;
+}
+.cart--basket .item--name {
+    flex: 1;
+}
+.cart--basket .item--action {
+    flex: 1;
+    text-align: center;
+}
+.cart--basket .item--price {
+    flex: .5;
+    text-align: right;
+    padding-right: 2%;
+}
+.item--action {
+    justify-content: center;
+    align-items: center;
+}
+.item--action button {
+    border: 2px solid black;
+    border-radius: 30%;
+    margin-right: 15px;
+}
+.item--action .add {
+    background-color: #52f040;
+    width: 1.5rem;
+}
+
+.item--action .remove {
+    background-color: #f04040;
+    width: 1.5rem;
+}
+.cart--info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 12%;
+    max-height: 12%;;
+    padding: 0px 10px 0px 10px;
+    /* font-size: 21px; */
+    font-size: 1.1vw;
+    font-weight: 700;
+    text-size-adjust: auto;
+}
+.cart--info__box {
+    display: grid;
+    grid-template-columns: 1fr .1fr;
+}
+.cart--checkout {
+    position: relative;
+    width: 100%;
+    margin-top: 2.5%;
+    height: 7.5%;
+}
+.checkout-btn {
+    width: 100%;
+    height: 100%;
+    background-color: #38ca44;
+    font-family: "Oswald";
+    font-size: 1.2vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.checkout-btn:hover {
+    background-color: #217528;
+}
+
+/*
+        # # # # DROPDOWN MENU STYLING # # # #
+*/
+.dropdown__container {
+    display: flex;
+    margin-top: 1%;
+    height: 6.5%;
+    align-items: center;
+}
+.dropdown {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+.dropdown ul {
+    gap: 25px;
+}
+.dropdown button {
+    display: flex;
+    align-items: center;
+    font-family: "Oswald";
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--platinum);
+    background-color: transparent;
+}
+
+.dropdown button .dropImage {
+    max-width: 3rem;
+}
+
+.dropdown .droptext {
+    display: flex;
+    position: relative;
+}
+
+.dropdown button:hover {
+    color: var(--brightred);
+}
+

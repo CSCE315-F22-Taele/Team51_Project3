@@ -1,11 +1,37 @@
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { unauthenticateUser } from "../../redux/slices/authSlice";
 import { onLogout } from "../auth/auth";
+import ManagerModal from "../modal/managerModal";
+import React from "react";
 
 const Navbar = () => {
     const { isAuth, type } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+
+    const [prevScroll, setPrevScroll] = useState(0);
+    const [visible, setVisisble] = useState(true);
+    const [openManagerModal, setOpenManagerModal] = useState(false);
+
+
+
+    const handleScroll = () => {
+        const currentScroll = window.scrollY;
+        setVisisble(currentScroll < prevScroll);
+        setPrevScroll(currentScroll);
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, [prevScroll, visible, handleScroll]);
+    /**
+     * [Logout] Request a log out from the user, unauthenticating them from the system
+     * @author  Johnny
+     */
     const logout = async () => {
         try {
             await onLogout();
@@ -16,35 +42,49 @@ const Navbar = () => {
         }
     };
 
-    return (
-        <nav className="navbar navbar-light bg-light">
-            <div className="container">
-                <div>
-                    <NavLink to="/">
-                        <span className="navbar-brand mb-0 h1">Home</span>
-                    </NavLink>
-                </div>
 
-                {isAuth ? (
-                    <div>
-                        <NavLink to="/POSPage" className="mx-3">
+
+    return (
+        <nav className="navbar" style={{ top: visible ? "0" : "-60px" }}>
+            <NavLink to={isAuth ? "/pospage" : "/"} className="nav--logo">
+                <img src={require("../../images/banner.png")} alt="logo of revpos"></img>
+            </NavLink>
+            {isAuth ? (
+                <ul>
+                    <li>
+                        <NavLink to="/pospage" className="nav--links">
                             <span>POS</span>
                         </NavLink>
-                        {type['type'] === "manager" ? (<NavLink to="/ManagerMenu" className="mx-3">
+                    </li>
+                    <li className={type["type"] === "user" ? "hidden" : ""}>
+                        <NavLink to="/ManagerMenu" className="nav--links">
                             <span>Manager</span>
-                        </NavLink>) : null }
-                        <button onClick={() => logout()}>Logout</button>
-                    </div>
-                ) : (
-                    <div>
-                        <NavLink to="/login">
+                        </NavLink>
+                    </li>
+                    <li>
+                        <button className="nav--links" onClick={() => logout()}>
+                            Logout
+                        </button>
+                    </li>
+                </ul>
+            ) : (
+                <ul>
+                    <li>
+                        <NavLink to="/" className="nav--links">
+                            <span>Home</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/login" className="nav--links">
                             <span>Login</span>
                         </NavLink>
-                    </div>
-                )}
-            </div>
+                    </li>
+                </ul>
+            )}
         </nav>
     );
 };
+
+
 
 export default Navbar;

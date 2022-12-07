@@ -34,8 +34,10 @@ const revenueRoutes = require("../routes/revenue");
 const excessRoutes = require("../routes/excess");
 const restockRoutes = require("../routes/restock");
 const pairRoutes = require("../routes/pair");
+const google_translate = require("../routes/google_translate");
 const menuRoutes = require("../routes/menuManager");
 const checkoutRoutes = require("../routes/checkout");
+const initializeRoutes = require("../routes/initialize");
 
 app.get("/", (req, res) => {
     res.send("RevPOS Application: Pinging Test to Server");
@@ -51,5 +53,7 @@ app.use("/api/restock", restockRoutes);
 app.use("/api/pair", pairRoutes);
 app.use("/api/menuManager", menuRoutes);
 app.use("/api/checkout", checkoutRoutes);
+app.use("/api/initialize", initializeRoutes);
+ app.use("/api/translate", google_translate);
 
 app.listen(port, () => console.log(`Server Started on Port ${port}`));

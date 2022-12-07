@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/POS/POSPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/POS/POSPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Main from "./main";
+import Basket from "./basket";
+import React, { useEffect, useState } from "react";
+import Navbar from "../../components/navbar/navbar";
+import "./pos.css";
+
+/**
+ * @function POSPage
+ * @author Will
+ * @returns display data for all menu items in the database, top-level controller for POS
+ * Contains logic for adding/removing from a cart (basket)
+ */
+const POSPage = () => {
+    const [menu, setMenu] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
+    const [isColorBlind, setColorBlind] = useState(false);
+    const [isEnlargeMenu, setEnlargeMenu] = useState(false);
+    const [isLanguage, setLanguage] = useState(false);
+    // const [text, setTextToTranslate] = useState("");
+    // const [targetLanguage, setTargetLanguage] = useState("");
+
+    /**
+     * Initialize a Revenue Entry for today's date on load
+     * @author  Johnny
+     */
+    useEffect(() => {
+        try {
+            fetch("api/initialize", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
+
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS CSS SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+
+    /**
+     * @author Will
+     * [toggleColorBlind] toggles the options for colorblind friendly color pallete
+     */
+    const toggleColorBlind = () => {
+        setColorBlind(!isColorBlind);
+    };
+
+    /**
+     * @author Margaret
+     * [toggelEnlargeMenu] toggles the option for an enlarged menu
+     */
+    const toggleEnlargeMenu = () => {
+        setEnlargeMenu(!isEnlargeMenu);
+    };
+
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS LANGUAGE SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+    /**
+     * @author Joshua
+     * [toggleLanguage] changes boolean check for langauge
+     * [translateText] calls api in backend to return the change with params text and target
+     */
+    const translateText = async (text, targetLanguage) => {
+        console.log(text);
+        try {
+            const res = await fetch(`api/translate/${targetLanguage}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({ text: text }),
+            }).then((response) => {
+                response.json().then((data) => {
+                    console.log(data);
+                });
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const toggleLanguage = () => {
+        setLanguage(!isLanguage);
+        // setTextToTranslate('Hello');
+        // setTargetLanguage('es');
+        translateText("Hello", "es");
+    };
+
+    /**
+     *
+     * @param product same as a row in the menu table in database
+     * @author Will
+     * [onAdd] adds an item into the basket for checkout, increments quantity if already in cart
+     */
+    const onAdd = (product) => {
+        const exist = cartItems.find((x) => x.id === product.id);
+        if (exist) {
+            setCartItems(
+                cartItems.map((x) =>
+                    x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+                )
+            );
+        } else {
+            setCartItems([...cartItems, { ...product, qty: 1 }]);
+        }
+    };
+
+    /**
+     *
+     * @param product same as a row in the menu table in database
+     * @author Will
+     * [onRemove] decrements quantity of an item from the basket by 1,
+     * removes item if the quanity is 1
+     */
+    const onRemove = (product) => {
+        const exist = cartItems.find((x) => x.id === product.id);
+        if (exist.qty === 1) {
+            setCartItems(cartItems.filter((x) => x.id !== product.id));
+        } else {
+            setCartItems(
+                cartItems.map((x) =>
+                    x.id === product.id ? { ...exist, qty: exist.qty - 1 } : x
+                )
+            );
+        }
+    };
+
+    /**
+     *
+     * @param id the id of an ingredient in the database
+     * @param quantity quantity of the ingredient to be removed from database (# of menu items containing that ingredient)
+     * @author Will
+     * [decreaseIngredientInventory] decreases the inventory of the ingredient given by id by quantity
+     */
+    async function decreaseIngredientInventory(id, quantity) {
+        try {
+            await fetch(`api/checkout/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PATCH",
+                },
+                body: JSON.stringify({ quantity: parseInt(quantity) }),
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    /**
+     * Calls the checkout logic in the backend to add orders to the Database
+     * @param  {double} totalPrice number representing the total cost of the order
+     * @param  {int} itemCount quantity of the ingredient to be removed from database (# of menu items containing that ingredient)
+     * @author Johnny
+     */
+
+    /**
+     *
+     * @author Will
+     * [onCheckout] call [decreaseIngredientInventory] for all ingredients per item in cart when checkout button pressed, takes user back to home page
+     */
+    function onCheckout(totalPrice) {
+        // Request to Add Orders to the Database
+        try {
+            fetch("api/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({ cart: cartItems, totalPrice: totalPrice }),
+            });
+        } catch (err) {
+            console.error(err);
+        }
+
+        cartItems.map((menuItem) =>
+            menuItem.ingredients.map((ingredient) =>
+                decreaseIngredientInventory(ingredient, menuItem.qty)
+            )
+        );
+        setCartItems([]);
+        alert("Thank you for your order!");
+    }
+
+    /**
+     * @author Will
+     * [getMenu] gets data to display all menu items
+     */
+    async function getMenu() {
+        try {
+            const res = await fetch("api/pos");
+            const data = await res.json();
+            setMenu(data);
+            //console.log(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // DYNAMIC MENU LOADING
+    useEffect(() => {
+        getMenu();
+    }, []);
+
+    /**
+     * @author Will
+     * @returns Normal color palette if the user has not selected colorblind option,
+     *  colorblind scheme if they have
+     */
+    return isColorBlind ? (
+        &lt;div className="pos">
+            &lt;Navbar>&lt;/Navbar>
+            &lt;div className="pos__box">
+                &lt;div className="pos__container">
+                    &lt;div className={isEnlargeMenu ? "menu-englarge-menu" : "menu"}>
+                        &lt;Main
+                            onAdd={onAdd}
+                            menu={menu}
+                            isColorBlind={isColorBlind}>&lt;/Main>
+                    &lt;/div>
+                    &lt;Basket
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        onCheckout={onCheckout}
+                        cartItems={cartItems}>&lt;/Basket>
+                &lt;/div>
+                &lt;div className="dropdown__container">
+                    &lt;Dropdown
+                        trigger={
+                            &lt;button className="dropdown">
+                                &lt;img
+                                    className="dropImage"
+                                    src="settings.png"
+                                    alt="Settings">&lt;/img>
+                            &lt;/button>
+                        }
+                        menu={[
+                            &lt;button onClick={toggleColorBlind}>Colorblind Mode&lt;/button>,
+                            &lt;button onClick={toggleEnlargeMenu}>Enlarge Menu&lt;/button>,
+                            &lt;button onClick={toggleLanguage}>
+                                Change Language to Spanish
+                            &lt;/button>,
+                            &lt;button>Default&lt;/button>,
+                        ]}
+                    />
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    ) : (
+        &lt;div className="posColorBlind">
+            &lt;Navbar>&lt;/Navbar>
+            &lt;div className="pos__box">
+                &lt;div className="pos__container">
+                    &lt;div className={isEnlargeMenu ? "menu-englarge-menu" : "menu"}>
+                        &lt;Main onAdd={onAdd} menu={menu}>&lt;/Main>
+                    &lt;/div>
+                    &lt;Basket
+                        onAdd={onAdd}
+                        onRemove={onRemove}
+                        onCheckout={onCheckout}
+                        cartItems={cartItems}>&lt;/Basket>
+                &lt;/div>
+                &lt;div className="dropdown__container">
+                    &lt;Dropdown
+                        trigger={
+                            &lt;button className="dropdown">
+                                &lt;img
+                                    className="dropImage"
+                                    src="settings.png"
+                                    alt="Settings">&lt;/img>
+                            &lt;/button>
+                        }
+                        menu={[
+                            &lt;button onClick={toggleColorBlind}>Colorblind Mode&lt;/button>,
+                            &lt;button onClick={toggleEnlargeMenu}> Enlarge Menu&lt;/button>,
+                            &lt;button onClick={toggleLanguage}>
+                                {" "}
+                                Change Language to Spanish
+                            &lt;/button>,
+                            &lt;button>Default&lt;/button>,
+                        ]}
+                    />
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+};
+
+// # # # # # # # # # # # # # # # # # # # # #
+// CONTROLLER FOR THE SETTINGS DROPDOWN MENU
+// Shouldn't need to modify this
+// # # # # # # # # # # # # # # # # # # # # #
+const Dropdown = ({ trigger, menu }) => {
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(!open);
+    };
+
+    return (
+        &lt;div className="dropdown">
+            {React.cloneElement(trigger, {
+                onClick: handleOpen,
+            })}
+            {open ? (
+                &lt;ul className="droptext">
+                    {menu.map((menuOption, index) => (
+                        &lt;li key={index}>
+                            {React.cloneElement(menuOption, {
+                                onClick: () => {
+                                    menuOption.props.onClick();
+                                    setOpen(false);
+                                },
+                            })}
+                        &lt;/li>
+                    ))}
+                &lt;/ul>
+            ) : null}
+        &lt;/div>
+    );
+};
+
+export default POSPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#getOrderHistorypullsorderhistorytabledatafromapi">getOrderHistory pulls order history table data from api</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Tue Dec 06 2022 20:42:19 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

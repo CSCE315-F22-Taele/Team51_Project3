@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Home from "./pages/Home/home";
 import Login from "./pages/Login/login";
-import POSPage from "./pages/POSPage";
+import POSPage from "./pages/POS/POSPage";
 import ManagerMenu from "./pages/ManagerMenu/ManagerMenu";
 import Inventory from "./pages/ManagerPages/Inventory";
 import OrderHistory from "./pages/ManagerPages/OrderHistory";
@@ -19,17 +19,19 @@ import Revenue from "./pages/ManagerPages/Revenue";
 import EditMenu from "./pages/ManagerPages/EditMenu";
 
 import { useSelector } from "react-redux";
-import Loading from "./components/loading/loading";
 import { LoginSuccess } from "./containers/Login/google";
 
 const PrivateRoutes = () => {
     const { isAuth } = useSelector((state) => state.auth);
     return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
-
+const ManagerRoutes = () => {
+    const { type } = useSelector((state) => state.auth);
+    return <>{type["type"] === "manager" ? <Outlet /> : <Navigate to="/pospage" />}</>;
+};
 const RestrictedRoutes = () => {
     const { isAuth } = useSelector((state) => state.auth);
-    return <>{!isAuth ? <Outlet /> : <Loading />}</>;
+    return <>{!isAuth ? <Outlet /> : <Navigate to="/pospage" />}</>;
 };
 
 const App = () => {
@@ -41,13 +43,14 @@ const App = () => {
                 <Route element={<PrivateRoutes />}>
                     <Route path="/POSPage" element={<POSPage />} />
                     <Route path="/ManagerMenu" element={<ManagerMenu />} />
-                    <Route path="/inventory" element={<Inventory />} />
-                    <Route path="/OrderHistory" element={<OrderHistory />} />
-                    <Route path="/Excess" element={<Excess />} />
-                    <Route path="/Pair" element={<Pair />} />
-                    {/* <Route path="/Restock" element={<Restock />} /> */}
-                    <Route path="/Revenue" element={<Revenue />} />
-                    <Route path="/EditMenu" element={<EditMenu />} />
+                    <Route element={<ManagerRoutes />}>
+                        <Route path="/inventory" element={<Inventory />} />
+                        <Route path="/OrderHistory" element={<OrderHistory />} />
+                        <Route path="/Excess" element={<Excess />} />
+                        <Route path="/Pair" element={<Pair />} />
+                        <Route path="/Revenue" element={<Revenue />} />
+                        <Route path="/EditMenu" element={<EditMenu />} />
+                    </Route>
                 </Route>
                 <Route element={<RestrictedRoutes />}>
                     <Route path="/login" element={<Login />} />

@@ -1,22 +1,25 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import backbutton from "../../images/backbutton.png";
+import "./managerPages.css";
 
 export default function Inventory() {
     const [inventory, setInventory] = useState([]);
     const [quantity, setQuantity] = useState();
-    const [idCheckList, setIDChecker] = useState();
-    const [newId, setNewID] = useState(0);
-    const [idRemove, setIdRemove] = useState(0);
-    const [newName, setNewName] = useState('');
-    const [inventoryEnter, inventoryEnterSet] = useState(0);
+    const [idCheckList, setCheckList] = useState();
+    const [removeID, setRemoveID] = useState(0);
+
+    const [newIngredientValues, setNewIngredientValues] = useState({
+        newID: "",
+        newName: "",
+        newInventory: "",
+    });
 
     const navigate = useNavigate();
-    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
-
+    const [fontSize, setFontSize] = useState(20); //for inc and dec font size
 
     /**
      * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
+     * @author  Joshua
      */
     async function getInventory() {
         try {
@@ -26,32 +29,37 @@ export default function Inventory() {
             var idList = [];
 
             for (let i = 0; i < data.length; i++) {
-                idList.push(data[i]['id']);
+                idList.push(data[i]["id"]);
             }
-            // const idList = data['id']
-
 
             idList.sort();
-            //console.log(idList);
-            setIDChecker(idList);
+            setCheckList(idList);
+            console.log("INSIDE", idList);
         } catch (err) {
             console.error(err);
         }
-
     }
     /**
-      * Sends a HTTP POST request of a new ingredient
-      * @author  Joshua
-      * @param   {int} id the identification value of the ingredient being modified
-      * @param   {string} newName the new name of the ingredient
-      * @param   {int} inventoryEnter the new inventory value to be assigned to the ingredient
-      */
-    async function ingredientCreate() {
-        if (!newId) {
-            setNewID(idCheckList[idCheckList.length - 1] + 1);
+     * Sends a HTTP POST request of a new ingredient
+     * @author  Joshua, Johnny
+     * @param   {int} id the identification value of the ingredient being modified
+     * @param   {string} newName the new name of the ingredient
+     * @param   {int} newInventory the new inventory value to be assigned to the ingredient\
+     * @return  {boolean} returns true on success, false on fail
+     */
+    async function ingredientCreate(event) {
+        event.preventDefault();
+        let newID = parseInt(newIngredientValues.newID);
+        let newName = newIngredientValues.newName;
+        let newInventory = parseInt(newIngredientValues.newInventory);
+
+        // Checks if ID already exists in the Database, if so reassign
+        if (idCheckList.includes(newID) || newID < 0) {
+            newID = idCheckList[idCheckList.length - 1] + 1;
         }
         try {
-            let res = await fetch("api/inventory/", {
+            console.log(parseInt(newID), newName, parseInt(newInventory));
+            await fetch("api/inventory/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,19 +67,20 @@ export default function Inventory() {
                     "Access-Control-Allow-Methods": "POST",
                 },
                 body: JSON.stringify({
-                    newId: parseInt(newId),
+                    newID: newID,
                     newName: newName,
-                    inventoryEnter: parseInt(inventoryEnter),
+                    newInventory: newInventory,
                 }),
             });
-            const data = await res.json();
-            console.log(data)
-
+            getInventory();
+            return true;
         } catch (err) {
             console.log(err.message);
+            return false;
         }
     }
 
+    // Refreshes / Regrabs the Inventory on Update
     useEffect(() => {
         getInventory();
     }, []);
@@ -82,9 +91,10 @@ export default function Inventory() {
      * @param   {int} id the identification value of the ingredient being modified
      * @param   {int} quantity the new inventory value to be assigned to the ingredient
      */
-    async function updateIngredientInventory(id, quantity) {
+    async function updateIngredientInventory(event, id, quantity) {
+        event.preventDefault();
         try {
-            const res = await fetch(`/api/inventory/${id}`, {
+            await fetch(`/api/inventory/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -93,22 +103,21 @@ export default function Inventory() {
                 },
                 body: JSON.stringify({ quantity: parseInt(quantity) }),
             });
-
-            window.location = "/Inventory";
+            getInventory();
         } catch (err) {
             console.error(err);
         }
     }
+
     /**
      * Sends a HTTP deete request with the quantity of the ID to be removed
-     * @author  Joshua,
+     * @author  Joshua, Johnny
      * @param   {int} id the identification value of the ingredient being modified
-
      */
-
-    async function ingredientRemove() {
+    async function ingredientRemove(event) {
+        event.preventDefault();
         try {
-            const res = await fetch("/api/inventory/", {
+            await fetch("/api/inventory/", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -116,167 +125,175 @@ export default function Inventory() {
                     "Access-Control-Allow-Methods": "DELETE",
                 },
                 body: JSON.stringify({
-                    idRemove: parseInt(idRemove),
+                    removeID: parseInt(removeID),
                 }),
             });
+            getInventory();
         } catch (err) {
             console.error(err);
         }
     }
+
+    // Detects and Set Values When Called
+    const onChange = (e) => {
+        setNewIngredientValues({
+            ...newIngredientValues,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    /**
+     * Sets the information to be display given the ingredients
+     * @author  Joshua, Johnny
+     * @param   {object} ingredient the object containing an ingredient's information
+     */
     const displayData = inventory.map((ingredient) => {
         const restockNeeded = () => {
-            if (ingredient.inventory < 10) {
-                return "restock needed"
+            if (ingredient.inventory === 0) {
+                return <p className="inventory-table--status status--red">Depleted</p>;
+            } else if (ingredient.inventory < 10) {
+                return <p className="inventory-table--status status--yellow">Low</p>;
+            } else {
+                return <p className="inventory-table--status status--green">Good</p>;
             }
-            else {
-                return "item is fine"
-            }
-        }
+        };
         return (
             <tr>
-                <td
-                    style={{ fontSize: `${fontSize}px` }}
-                >{ingredient.id}</td>
-                <td
-                    style={{ fontSize: `${fontSize}px` }}
-                >{ingredient.name}</td>
-                <td
-                    style={{ fontSize: `${fontSize}px` }}
-                >{ingredient.inventory}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{ingredient.id}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{ingredient.name}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>{ingredient.inventory}</td>
+                <td className="center-text" style={{ fontSize: `${fontSize}px` }}>
+                    {restockNeeded()}
+                </td>
                 <td>
                     <form
                         onSubmit={(event) => {
-                            updateIngredientInventory(ingredient.id, quantity);
-                        }}
-                    >
+                            updateIngredientInventory(event, ingredient.id, quantity);
+                        }}>
                         <input
                             type="number"
                             name={ingredient.name}
                             defaultValue={ingredient.inventory}
                             onChange={(event) => {
-                                if (event.target.value > 0) {
+                                if (event.target.value >= 0) {
                                     setQuantity(event.target.value);
+                                } else {
+                                    setQuantity(0);
                                 }
-                                else {
-                                    setQuantity(1000);
-
-                                }
-                            }}
-                        ></input>
+                            }}></input>
                     </form>
-                </td>
-                <td style={{ fontSize: `${fontSize}px` }}>
-                    {restockNeeded()}
                 </td>
             </tr>
         );
     });
 
     return (
-        <div className="App">
-            <tr>
-                <th> <div>
-                    <button>
-                        <img
-                            onClick={() => {
-                                navigate("/ManagerMenu")
-                            }}
-                            className="backbutton"
-                            src={backbutton}
-                            alt="back">
-                        </img>
+        <div className="inventory-page manager-page">
+            <div className="back__container">
+                <button
+                    onClick={() => {
+                        navigate("/managermenu");
+                    }}>
+                    <img
+                        className="backbutton"
+                        src={require("../../images/backbutton.png")}
+                        alt="back"></img>
+                </button>
+            </div>
+            <div className="inventory-table">
+                <table className="styled-table">
+                    <thead>
+                        <tr>
+                            <th style={{ fontSize: `${fontSize}px` }}>ID</th>
+                            <th style={{ fontSize: `${fontSize}px` }}>Name</th>
+                            <th style={{ fontSize: `${fontSize}px` }}>Inventory</th>
+                            <th
+                                className="center-text"
+                                style={{ fontSize: `${fontSize}px` }}>
+                                Status
+                            </th>
+                            <th style={{ fontSize: `${fontSize}px` }}>Change Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>{displayData}</tbody>
+                </table>
+            </div>
+            <div className="inventory-actions">
+                <form
+                    id="inventory-form--create"
+                    className="inventory-actions__container"
+                    onSubmit={(event) => {
+                        if (ingredientCreate(event)) {
+                            setNewIngredientValues({
+                                newID: "",
+                                newName: "",
+                                newInventory: "",
+                            });
+                        }
+                    }}>
+                    <input
+                        className="inventory-actions--input"
+                        type="number"
+                        autoComplete="off"
+                        placeholder="ID"
+                        onChange={(event) => {
+                            onChange(event);
+                        }}
+                        name="newID"
+                        value={newIngredientValues.newID}
+                        required
+                    />
+                    <input
+                        className="inventory-actions--input"
+                        type="string"
+                        autoComplete="off"
+                        placeholder="Name"
+                        onChange={(event) => {
+                            onChange(event);
+                        }}
+                        name="newName"
+                        value={newIngredientValues.newName}
+                        required
+                    />
+                    <input
+                        className="inventory-actions--input"
+                        type="number"
+                        autoComplete="off"
+                        placeholder="Quantity"
+                        onChange={(event) => {
+                            onChange(event);
+                        }}
+                        name="newInventory"
+                        value={newIngredientValues.newInventory}
+                        required
+                    />
+                    <button className="button">Create Ingredient</button>
+                </form>
+                <form
+                    id="inventory-form--remove"
+                    className="inventory-actions__container"
+                    onSubmit={(event) => {
+                        ingredientRemove(event);
+                        document.getElementById("inventory-form--remove").reset();
+                    }}>
+                    <input
+                        className="inventory-actions--input"
+                        type="number"
+                        placeholder="Ingredient ID"
+                        onChange={(event) => {
+                            setRemoveID(event.target.value);
+                        }}></input>
+                    <button className="button">Remove Ingredient</button>
+                </form>
+                <div className="inventory-accessibility">
+                    <button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
                     </button>
-                </div> </th>
-                <th><button onClick={() => setFontSize(fontSize + 2)} >
-                    + increase font size
-                </button> </th>
-                <th> <button onClick={() => setFontSize(fontSize - 2)} >
-                    - decrease font size
-                </button> </th>
-            </tr>
-            <form onSubmit={(event) => {
-                ingredientCreate()
-            }}>
-                <input
-                    type="number"
-                    placeholder="id"
-                    onChange={(event) => {
-                        // see if the id exists already
-
-                        if (!idCheckList.includes(event.target.value) && event.target.value > 0) {
-                            setNewID(event.target.value);
-                        }
-                        else {
-                            // if it exists find the last id and add 1
-                            setNewID(idCheckList[idCheckList.length - 1] + 1);
-                        }
-                        console.log(newId)
-                    }}
-                ></input>
-                <input
-                    type="string"
-                    placeholder="name"
-                    onChange={(event) => {
-                        setNewName(event.target.value);
-                        console.log(newName)
-                    }}
-                ></input>
-                <input
-                    type="number"
-                    placeholder="inventory"
-                    onChange={(event) => {
-                        if (event.target.value > 0) {
-                            inventoryEnterSet(event.target.value);
-                        }
-                        else {
-
-                            inventoryEnterSet(1000);
-                        }
-                        console.log(inventoryEnter)
-                    }}
-                ></input>
-                <button>Create New Ingredient</button>
-            </form>
-            <form onSubmit={(event) => {
-                setIdRemove(event.target.value)
-                ingredientRemove()
-
-            }}>
-                <input
-                    type="number"
-                    placeholder="id"
-                    onChange={(event) => {
-                        // see if the id exists already
-                        setIdRemove(event.target.value)
-                        console.log(idRemove)
-                    }}
-                >
-
-                </input>
-                <button> remove ingredient button</button>
-            </form>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th
-                            style={{ fontSize: `${fontSize}px` }}
-                        >ID</th>
-                        <th
-                            style={{ fontSize: `${fontSize}px` }}
-                        >Name</th>
-                        <th
-                            style={{ fontSize: `${fontSize}px` }}
-                        >Inventory</th>
-                        <th
-                            style={{ fontSize: `${fontSize}px` }}
-                        >Change Amount</th>
-                        <th
-                            style={{ fontSize: `${fontSize}px` }}
-                        >Restock Needed?</th>
-                    </tr>
-                </thead>
-                <tbody>{displayData}</tbody>
-            </table>
+                    <button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

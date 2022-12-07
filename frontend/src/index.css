@@ -1,26 +1,171 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Oswald:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Oswald:wght@300;400;500;600;700&display=swap");
 
 :root {
-    --dark-sienna: #451717;
-    --white: #fffffe;
-    --candy-pink: #e66a6a;
-    --periwinkle-crayola: #bbc8ed;
+    --jet: #333333;
+    --light-jet5: #5b5b5b;
+    --light-jet7: #7b7b7b;
+    --black-coffee: #33272a;
+    --darkred: #990100;
+    --brightred: #b90504;
+    --white: #f6f6f6;
+    --platinum: #e8e8e8;
+    --maroon: #4f001f;
+    --gold: #f6bd12;
+}
 
-    --seashell: #FAEEE7;
-    --black-coffee: #33272A;
-    --bittersweet: #C65252;
-
-    --snow: #F3ECEC;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--jet);
+}
+ul {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+    color: var(--white);
+}
+button {
+    outline: none;
+    border: none;
+    cursor: pointer;
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/*
+
+        # # # # #   SCROLLBAR CSS  # # # # #
+
+*/
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #f6bd12;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--platinum);
+    border-radius: 0px 10px 10px 0px;
+}
+
+/*
+
+        # # # # #   GENERAL CLASS  # # # # #
+
+*/
+.highlight {
+    color: var(--darkred);
+}
+.center-text {
+    text-align: center;
+}
+.back__container {
+    width: auto;
+    height: auto;
+}
+.back__container button {
+    background-color: transparent;
+    transition: all 0.5s;
+}
+.back__container button:hover {
+    transform: translateY(-5px);
+}
+
+/*
+
+        # # # # #   NAVBAR STYLING CODE  # # # # #
+
+*/
+
+.nav--logo img {
+    width: 125px;
+}
+.navbar {
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 99999;
+    background-color: var(--jet);
+    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #3b3b3b;
+    transition: 0.3s ease-in-out;
+}
+.navbar ul {
+    display: flex;
+}
+.navbar ul li .nav--links {
+    display: flex;
+    align-items: center;
+    margin: 3px;
+    padding: 0px 25px;
+    font-family: "Oswald";
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--platinum);
+    background-color: transparent;
+}
+.navbar ul li .nav--links:hover {
+    color: var(--brightred);
+}
+
+/*
+
+        # # # # #   GOOGLE MAP STYLING CODE  # # # # #
+
+*/
+
+.map {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+}
+.map__container {
+    width: 70%;
+    height: 50vh;
+    box-shadow: 10px 10px 14px #2b2b2b, -10px -10px 12px #3b3b3b;
+}
+
+/*
+
+        # # # # #   FOOTER STYLING CODE  # # # # #
+
+*/
+footer {
+    display: flex;
+    height: 10vh;
+    justify-content: center;
+    align-items: center;
+    font-family: "Oswald";
+    text-transform: uppercase;
+    color: var(--platinum);
+    text-align: center;
+    background-color: var(--black-coffee);
+    box-shadow: 8px 8px 12px #3b3b3b, -8px -8px 12px #2b2b2b;
 }

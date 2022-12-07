@@ -5,6 +5,7 @@ import { onLogin, onRegister } from "../../components/auth/auth";
 import { authenticateUser } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import "./login.css";
+import Navbar from "../../components/navbar/navbar";
 
 const Login = () => {
     const [values, setValues] = useState({
@@ -16,7 +17,7 @@ const Login = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await fetch("api/auth/user", {
+            await fetch("api/auth/user", {
                 credentials: "include",
             })
                 .then(function (res) {
@@ -28,7 +29,7 @@ const Login = () => {
                 });
         } catch (err) {
             console.log("[ERROR] User is not Authenticated");
-            console.log(err)
+            console.log(err);
         }
     };
 
@@ -97,7 +98,7 @@ const Login = () => {
             if (!response.ok) {
                 throw new Error(response.statusText);
             }
-            const data = response.json().then(function (res) {
+            response.json().then(function (res) {
                 dispatch(authenticateUser({ type: res["user"]["role"] }));
             });
             localStorage.setItem("isAuth", "true");
@@ -140,11 +141,13 @@ const Login = () => {
 
     return (
         <div className="home__body">
+            <Navbar></Navbar>
             <div className="home__main">
                 <div
                     className={`box__container box__container--a ${
                         callSwitch ? "left--active" : ""
-                    }`}>
+                    }`}
+                >
                     <form onSubmit={(e) => onLoginSubmit(e)} className="form__container">
                         <h1 className="form__header">Login</h1>
                         <input
@@ -175,16 +178,20 @@ const Login = () => {
                     <div className="submit--google" onClick={openGoogle}>
                         <img
                             className="google--logo"
-                            src={require("../../images/google.png")}></img>
+                            src={require("../../images/google.png")}
+                            alt="google logo for the oauth sign in"
+                        ></img>
                     </div>
                 </div>
                 <div
                     className={`box__container box__container--b ${
                         callSwitch ? "left--active overlap--active" : ""
-                    }`}>
+                    }`}
+                >
                     <form
                         onSubmit={(e) => onRegisterSubmit(e)}
-                        className="form__container">
+                        className="form__container"
+                    >
                         <h1 className="form__header">Register</h1>
                         <input
                             className="form--input"
@@ -214,18 +221,20 @@ const Login = () => {
                 </div>
                 <div
                     className={`switch ${callSwitch ? "right--active" : ""}`}
-                    id="switch-cnt">
+                    id="switch-cnt"
+                >
                     <div
-                        className={`neumo-circle" ${
-                            callSwitch ? "right--active" : ""
-                        }`}></div>
+                        className={`neumo-circle" ${callSwitch ? "right--active" : ""}`}
+                    ></div>
                     <div
                         className={`neumo-circle neumo-circle--active ${
                             callSwitch ? "right--active" : ""
-                        }`}></div>
+                        }`}
+                    ></div>
                     <div
                         className={`switch__container ${callSwitch ? "hidden" : ""}`}
-                        id="switch-c1">
+                        id="switch-c1"
+                    >
                         <h2 className="switch__title title">NOT A USER ?</h2>
                         <p className="switch__description description">
                             Create an account and start a journey with us, the future to
@@ -237,7 +246,8 @@ const Login = () => {
                     </div>
                     <div
                         className={`switch__container ${callSwitch ? "" : "hidden"}`}
-                        id="switch-c2">
+                        id="switch-c2"
+                    >
                         <h2 className="switch__title title">WELCOME BACK</h2>
                         <p className="switch__description description">
                             Already have an account? Login now to continue where you left

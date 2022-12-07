@@ -26,10 +26,14 @@ export default function Basket(props) {
                         <div key={item.id} className="item__container">
                             <div className="item--name">{item.name}</div>
                             <div className="item--action">
-                                <button onClick={() => onRemove(item)} className="remove action-btn">
+                                <button
+                                    onClick={() => onRemove(item)}
+                                    className="remove action-btn">
                                     -
                                 </button>
-                                <button onClick={() => onAdd(item)} className="add action-btn">
+                                <button
+                                    onClick={() => onAdd(item)}
+                                    className="add action-btn">
                                     +
                                 </button>
                             </div>
@@ -56,7 +60,13 @@ export default function Basket(props) {
                 </div>
             </div>
             <div className="cart--checkout">
-                <button className="checkout-btn" onClick={onCheckout}>Checkout ${totalPrice.toFixed(2)}</button>
+                <button
+                    className="checkout-btn"
+                    onClick={() => {
+                        onCheckout(totalPrice.toFixed(2));
+                    }}>
+                    Checkout ${totalPrice.toFixed(2)}
+                </button>
             </div>
         </div>
     );

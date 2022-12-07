@@ -1,0 +1,76 @@
+[
+  {
+    "name": "onRegister",
+    "filePath": "src/components/auth/auth.js",
+    "lines": [
+      {
+        "lineNumber": 27,
+        "line": "/**\r"
+      },
+      {
+        "lineNumber": 28,
+        "line": " * Sends a HTTP POST request with the user's information to be added in the database.\r"
+      },
+      {
+        "lineNumber": 29,
+        "line": " * @author  Johnny\r"
+      },
+      {
+        "lineNumber": 30,
+        "line": " * @param   {object} loginData contains strings (username, password) holding the register info\r"
+      },
+      {
+        "lineNumber": 31,
+        "line": " * @return  {Promise} response from the HTTP request indicating status of login attempt\r"
+      },
+      {
+        "lineNumber": 32,
+        "line": " */\r"
+      },
+      {
+        "lineNumber": 33,
+        "line": " export async function onRegister(registerData) {\r"
+      }
+    ],
+    "codeParams": [
+      "registerData"
+    ],
+    "docParams": [
+      "loginData"
+    ]
+  },
+  {
+    "name": "Main",
+    "filePath": "src/pages/POS/main.js",
+    "lines": [
+      {
+        "lineNumber": 5,
+        "line": "/**\r"
+      },
+      {
+        "lineNumber": 6,
+        "line": " * @author Will\r"
+      },
+      {
+        "lineNumber": 7,
+        "line": " * @param {} props menu and onAdd from POSPage\r"
+      },
+      {
+        "lineNumber": 8,
+        "line": " * @returns call to Product.js function for each menu item, used in POSPage\r"
+      },
+      {
+        "lineNumber": 9,
+        "line": " */\r"
+      },
+      {
+        "lineNumber": 10,
+        "line": "const Main = (props) => {\r"
+      }
+    ],
+    "codeParams": [
+      "props"
+    ],
+    "docParams": []
+  }
+]

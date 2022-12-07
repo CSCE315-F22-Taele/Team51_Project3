@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/components/auth/auth.js | frontend</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#components-auth">components/auth</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-onLogin">onLogin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-onLogout">onLogout</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-onRegister">onRegister</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#containers-login">containers/Login</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-LoginSuccess">LoginSuccess</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#layouts">layouts</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Layout">Layout</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#pages-pos">pages/POS</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Product">Product</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Basket">Basket</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Main">Main</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#redux">redux</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-persistor">persistor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-store">store</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#redux-slices">redux/slices</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-authSlice">authSlice</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-authenticateUser">authenticateUser</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/components/auth/auth.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Sends a HTTP POST request with the login data to be validated in the server.
+ * @author  Johnny
+ * @param   {object} loginData contains strings (username, password) holding the login information
+ * @return  {Promise} response from the HTTP request indicating status of login attempt
+ */
+export async function onLogin(loginData) {
+    try {
+        let res = await fetch(&quot;/api/login&quot;, {
+            method: &quot;POST&quot;,
+            credentials: &quot;include&quot;,
+            headers: {
+                &quot;Content-Type&quot;: &quot;application/json&quot;,
+                &quot;Access-Control-Allow-Origin&quot;: &quot;*&quot;,
+                &quot;Access-Control-Allow-Methods&quot;: &quot;POST&quot;,
+            },
+            body: JSON.stringify({
+                username: loginData.username,
+                password: loginData.password,
+            }),
+        });
+        return res;
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+/**
+ * Sends a HTTP POST request with the user&apos;s information to be added in the database.
+ * @author  Johnny
+ * @param   {object} loginData contains strings (username, password) holding the register info
+ * @return  {Promise} response from the HTTP request indicating status of login attempt
+ */
+ export async function onRegister(registerData) {
+    try {
+        let res = await fetch(&quot;/api/register&quot;, {
+            method: &quot;POST&quot;,
+            credentials: &quot;include&quot;,
+            headers: {
+                &quot;Content-Type&quot;: &quot;application/json&quot;,
+                &quot;Access-Control-Allow-Origin&quot;: &quot;*&quot;,
+                &quot;Access-Control-Allow-Methods&quot;: &quot;POST&quot;,
+            },
+            body: JSON.stringify({
+                username: registerData.username,
+                password: registerData.password,
+            }),
+        });
+        return res;
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+/**
+ * Sends a HTTP GET request to logout of the system
+ * @author  Johnny
+ * @return  {Promise} response from the HTTP request indicating status of the logout attempt
+ */
+export async function onLogout() {
+    return await fetch(&quot;/api/logout&quot;);
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

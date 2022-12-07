@@ -1,26 +1,22 @@
-const {Translate} = require('@google-cloud/translate').v2;
-require('dotenv').config();
+const { Translate } = require("@google-cloud/translate").v2;
+require("dotenv").config();
 
 const CREDENTIALS = JSON.parse(process.env.GOOGLE_SERVICE_KEY);
 
 const translate = new Translate({
     credentials: CREDENTIALS,
-    projectId: CREDENTIALS.project_id
+    projectId: CREDENTIALS.project_id,
 });
 
-const translateText = async (text, targetLanguage) => {
-
+const translateFunction = async (req, res) => {
+    const { targetLanguage } = req.params;
+    const { text } = req.body;
     try {
-        let [response] = await translate.translate(text, targetLanguage);
-        return response;
+        const result = await translate.translate(text, targetLanguage);
+        res.status(201).json(result);
     } catch (error) {
-        console.log(`Error at translateText --> ${error}`);
-        return 0;
+        console.log("[ERROR] ", error);
     }
-};
-
-module.exports = {
-    translateText,
 };
 
 // translateText('Oggi è lunedì', 'en')
@@ -30,3 +26,6 @@ module.exports = {
 //     .catch((err) => {
 //         console.log(err);
 //     });
+module.exports = {
+    translateFunction,
+};

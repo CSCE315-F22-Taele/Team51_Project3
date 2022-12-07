@@ -12,7 +12,12 @@ export default function Revenue() {
   const navigate = useNavigate();
   const [fontSize, setFontSize] = useState(16); //for inc and dec font size
 
-
+  /**
+     * Fetches information from database table 'orders' between specfied parameter dates
+     * @author  Margaret
+     * @param   {date} firstDate first date for btwn
+     * @param   {date} secondDate second date in btwn
+  */
   async function getSalesBetweenDates() {
     try {
       const res = await fetch(`api/revenue/${startDate}/${endDate}`);
@@ -23,7 +28,11 @@ export default function Revenue() {
       console.error(err);
     }
   }
-
+  /**
+     * Sets the information to be display given the item
+     * @author  Margaret
+     * @param   {object} item the object containing an item's information
+  */
   const displayInfo = items.map((item) => {
     return (
       <tr>

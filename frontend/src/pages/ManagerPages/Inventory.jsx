@@ -188,7 +188,7 @@ export default function Inventory() {
     });
 
     return (
-        <div className="inventory-page">
+        <div className="inventory-page manager-page">
             <div className="back__container">
                 <button
                     onClick={() => {

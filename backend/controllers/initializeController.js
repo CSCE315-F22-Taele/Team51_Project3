@@ -14,8 +14,6 @@ const initialDatabase = async (req, res) => {
                 [currentDate]
             );
             res.status(201).send("[SUCCESS] Entry was created");
-        } else {
-            res.status(401).send("[WARNING] Entry was already created");
         }
     } catch (err) {
         console.error(err);

@@ -15,6 +15,9 @@ const POSPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [isColorBlind, setColorBlind] = useState(false);
     const [isEnlargeMenu, setEnlargeMenu] = useState(false);
+    const [isLanguage, setLanguage] = useState(false);
+    // const [text, setTextToTranslate] = useState("");
+    // const [targetLanguage, setTargetLanguage] = useState("");
 
     /**
      * Initialize a Revenue Entry for today's date on load
@@ -53,6 +56,42 @@ const POSPage = () => {
      */
     const toggleEnlargeMenu = () => {
         setEnlargeMenu(!isEnlargeMenu);
+    };
+
+    // # # # # # # # # # # # # # # # # # # # # #
+    // CONTROLS LANGUAGE SETTINGS FOR ACCESSIBILITY
+    // # # # # # # # # # # # # # # # # # # # # #
+    /**
+     * @author Joshua
+     * [toggleLanguage] changes boolean check for langauge
+     * [translateText] calls api in backend to return the change with params text and target
+     */
+    const translateText = async (text, targetLanguage) => {
+        console.log(text);
+        try {
+            const res = await fetch(`api/translate/${targetLanguage}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({ text: text }),
+            }).then((response) => {
+                response.json().then((data) => {
+                    console.log(data);
+                });
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const toggleLanguage = () => {
+        setLanguage(!isLanguage);
+        // setTextToTranslate('Hello');
+        // setTargetLanguage('es');
+        translateText("Hello", "es");
     };
 
     /**
@@ -174,6 +213,11 @@ const POSPage = () => {
         getMenu();
     }, []);
 
+    /**
+     * @author Will
+     * @returns Normal color palette if the user has not selected colorblind option,
+     *  colorblind scheme if they have
+     */
     return isColorBlind ? (
         <div className="pos">
             <Navbar></Navbar>
@@ -204,6 +248,9 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
+                            <button onClick={toggleLanguage}>
+                                Change Language to Spanish
+                            </button>,
                             <button>Default</button>,
                         ]}
                     />
@@ -237,6 +284,10 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
+                            <button onClick={toggleLanguage}>
+                                {" "}
+                                Change Language to Spanish
+                            </button>,
                             <button>Default</button>,
                         ]}
                     />

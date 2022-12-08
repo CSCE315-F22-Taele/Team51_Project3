@@ -1,120 +1,74 @@
-import React, { Component } from "react";
-import { useState, useEffect } from 'react';
-import moment from "moment";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import backbutton from "../../images/backbutton.png";
+import { useState, useEffect } from "react";
+import moment from "moment";
 
-export default function Revenue() {
-  const [items, setRevenue] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+/**
+ * @author Will
+ * @returns the table containing all revenue data
+ */
+const OrderHistory = () => {
+    const navigate = useNavigate();
+    const [revenue, setRevenue] = useState([]);
 
-  const navigate = useNavigate();
-  const [fontSize, setFontSize] = useState(16); //for inc and dec font size
-
-  /**
-     * Fetches information from database table 'orders' between specfied parameter dates
-     * @author  Margaret
-     * @param   {date} firstDate first date for btwn
-     * @param   {date} secondDate second date in btwn
-  */
-  async function getSalesBetweenDates() {
-    try {
-      const res = await fetch(`api/revenue/${startDate}/${endDate}`);
-      const data = await res.json();
-      setRevenue(data);
-
-    } catch (err) {
-      console.error(err);
+    /**
+     * @function getOrderHistory pulls revenue table data from api
+     */
+    async function getRevenue() {
+        try {
+            const res = await fetch("api/revenue");
+            const data = await res.json();
+            setRevenue(data);
+            console.log(data);
+        } catch (err) {
+            console.log(err);
+        }
     }
-  }
-  /**
-     * Sets the information to be display given the item
-     * @author  Margaret
-     * @param   {object} item the object containing an item's information
-  */
-  const displayInfo = items.map((item) => {
+
+    /**
+     * @function displayData
+     * @returns all the rows within the revenue table in a nice format
+     */
+    const displayData = revenue.map((date) => (
+        <tr>
+            <th>{date.type}</th>
+            <th>{moment(date.date).utc().format("YYYY-MM-DD")}</th>
+            <th>{date.revenue}</th>
+        </tr>
+    ));
+
+    useEffect(() => {
+        getRevenue();
+    }, []);
+
     return (
-      <tr>
-        <td
-          style={{ fontSize: `${fontSize}px` }}
-        > {item.orderid} </td>
-        <td
-          style={{ fontSize: `${fontSize}px` }}
-        >{moment(item.date).utc().format("YYYY-MM-DD")}</td>
-        <td
-          style={{ fontSize: `${fontSize}px` }}
-        > {item.amount} </td>
-      </tr>
+        <div className="App">
+            <div>
+                <button>
+                    <img
+                        onClick={() => {
+                            navigate("/ManagerMenu");
+                        }}
+                        className="backbutton"
+                        src={backbutton}
+                        alt="back"></img>
+                </button>
+            </div>
+            <div className="orders-table">
+                <table className="styled-table-orders">
+                    <thead>
+                        <tr>
+                            <th className="table-head">Day Type</th>
+                            <th className="table-head">Date</th>
+                            <th className="table-head">Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>{displayData}</tbody>
+                </table>
+            </div>
+        </div>
     );
-  });
+};
 
-  return (
-    <div className="App">
-      <tr>
-        <th> <div>
-          <button>
-            <img
-              onClick={() => {
-                navigate("/ManagerMenu")
-              }}
-              className="backbutton"
-              src={backbutton}
-              alt="back">
-            </img>
-          </button>
-        </div> </th>
-        <th><button onClick={() => setFontSize(fontSize + 2)} >
-          + increase font size
-        </button> </th>
-        <th> <button onClick={() => setFontSize(fontSize - 2)} >
-          - decrease font size
-        </button> </th>
-      </tr>
-      <h1>Sales Report </h1>
-      <form
-        onSubmit={(e) => {
-          getSalesBetweenDates();
-          e.preventDefault();
-          getSalesBetweenDates();
-        }}
-      >
-        <input
-          type="string"
-          placeholder="yyyy-mm-dd"
-          onChange={(event) => {
-            setStartDate(event.target.value);
-          }}
-
-        >
-        </input>
-        <input
-          type="string"
-          placeholder="yyyy-mm-dd"
-          onChange={(event) => {
-            setEndDate(event.target.value);
-          }}
-        ></input>
-        <button>Submit</button>
-      </form>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th
-              style={{ fontSize: `${fontSize}px` }}
-            >ITEM</th>
-            <th
-              style={{ fontSize: `${fontSize}px` }}
-            >DATE</th>
-            <th
-              style={{ fontSize: `${fontSize}px` }}
-            >REVENUE</th>
-          </tr>
-        </thead>
-        <tbody>{displayInfo}</tbody>
-      </table>
-    </div>
-
-  );
-
-}
+export default OrderHistory;

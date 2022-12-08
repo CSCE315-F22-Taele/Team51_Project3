@@ -204,15 +204,15 @@ export default function Inventory() {
                 <table className="styled-table">
                     <thead>
                         <tr>
-                            <th style={{ fontSize: `${fontSize}px` }}>ID</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Name</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Inventory</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>ID</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Name</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Inventory</th>
                             <th
                                 className="center-text"
-                                style={{ fontSize: `${fontSize}px` }}>
+                                style={{ fontSize: `${fontSize + 2}px` }}>
                                 Status
                             </th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Change Amount</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Change Amount</th>
                         </tr>
                     </thead>
                     <tbody>{displayData}</tbody>

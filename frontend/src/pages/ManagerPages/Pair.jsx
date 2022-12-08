@@ -177,10 +177,10 @@ export default function Pair() {
                 <thead>
                     <tr>
                         <th
-                        style={{fontSize: `${fontSize}px`}}
+                        style={{fontSize: `${fontSize + 2}px`}}
                         >Item 1</th>
                         <th
-                        style={{fontSize: `${fontSize}px`}}
+                        style={{fontSize: `${fontSize + 2}px`}}
                         >Item 2</th>
                     </tr>
                 </thead>

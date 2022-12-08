@@ -13,7 +13,6 @@ export default function Excess() {
     const [excessItems, setExcessItems] = useState([]);
 
     const didMount = useRef(false);
-    const didMount2 = useRef(false);
 
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(16); //for inc and dec font size
@@ -144,13 +143,11 @@ export default function Excess() {
                     <button
                         onClick={() => {
                             navigate("/managermenu");
-                        }}
-                    >
+                        }}>
                         <img
                             className="backbutton"
                             src={require("../../images/backbutton.png")}
-                            alt="back"
-                        ></img>
+                            alt="back"></img>
                     </button>
                 </div>
                 <div className="excess-actions">
@@ -159,8 +156,7 @@ export default function Excess() {
                         className="excess-actions__container"
                         onSubmit={(event) => {
                             getIngredientUsage(event);
-                        }}
-                    >
+                        }}>
                         <input
                             className="excess-actions--input"
                             type="date"
@@ -195,9 +191,9 @@ export default function Excess() {
                 <table className="styled-table">
                     <thead>
                         <tr>
-                            <th style={{ fontSize: `${fontSize}px` }}>Item ID</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Item Name</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Percentage Sold</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Item ID</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Item Name</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Percentage Sold</th>
                         </tr>
                     </thead>
                     <tbody>{displayInfo}</tbody>

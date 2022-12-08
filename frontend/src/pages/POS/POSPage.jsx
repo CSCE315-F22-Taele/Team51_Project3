@@ -248,9 +248,9 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
-                            <button onClick={toggleLanguage}>
-                                Change Language to Spanish
-                            </button>,
+                            // <button onClick={toggleLanguage}>
+                            //     Change Language to Spanish
+                            // </button>,
                             <button>Default</button>,
                         ]}
                     />
@@ -284,10 +284,10 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
-                            <button onClick={toggleLanguage}>
-                                {" "}
-                                Change Language to Spanish
-                            </button>,
+                            // <button onClick={toggleLanguage}>
+                            //     {" "}
+                            //     Change Language to Spanish
+                            // </button>,
                             <button>Default</button>,
                         ]}
                     />

@@ -96,9 +96,9 @@ export default function OrderHistory() {
                 <table className="styled-table">
                     <thead>
                         <tr>
-                            <th style={{ fontSize: `${fontSize}px` }}>ITEM</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>DATE</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>REVENUE</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>ORDER ID</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>DATE</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>REVENUE</th>
                         </tr>
                     </thead>
                     <tbody>{displayInfo}</tbody>

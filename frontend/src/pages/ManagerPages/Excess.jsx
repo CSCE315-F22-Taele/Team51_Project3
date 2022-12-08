@@ -191,9 +191,9 @@ export default function Excess() {
                 <table className="styled-table">
                     <thead>
                         <tr>
-                            <th style={{ fontSize: `${fontSize}px` }}>Item ID</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Item Name</th>
-                            <th style={{ fontSize: `${fontSize}px` }}>Percentage Sold</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Item ID</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Item Name</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Percentage Sold</th>
                         </tr>
                     </thead>
                     <tbody>{displayInfo}</tbody>

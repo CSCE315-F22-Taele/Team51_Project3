@@ -21,6 +21,7 @@
 }
 .styled-table tr {
     font-family: "Lato";
+    font-weight: 600;
     text-transform: uppercase;
 }
 

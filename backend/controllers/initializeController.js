@@ -8,13 +8,29 @@ const initialDatabase = async (req, res) => {
         const currentDay = await pool.query("SELECT * FROM revenue WHERE date = $1", [
             currentDate,
         ]);
+        const currentInv = await pool.query(
+            "SELECT * FROM daily_inventory WHERE date = $1",
+            [currentDate]
+        );
         if (!currentDay.rows.length) {
             await pool.query(
                 "INSERT INTO revenue (type, date, revenue) VALUES('normal', $1, 0)",
                 [currentDate]
             );
-            res.status(201).send("[SUCCESS] Entry was created");
         }
+        if (!currentInv.rows.length) {
+            await pool.query("INSERT INTO daily_inventory (date) VALUES ($1)", [
+                currentDate,
+            ]);
+            const inventoryList = await pool.query(
+                "SELECT * FROM ingredients ORDER BY id"
+            );
+            inventoryList.rows.forEach((ingredient, i) => {
+                var sql = `UPDATE daily_inventory SET "${ingredient.id}" = ${ingredient.inventory} WHERE date = '${currentDate}'`
+                pool.query(sql);
+            });
+        }
+        res.status(200).send("[SUCCESS] Initialized");
     } catch (err) {
         console.error(err);
     }

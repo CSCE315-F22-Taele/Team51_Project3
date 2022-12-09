@@ -11,7 +11,7 @@ const decrementInventoryById = (req, res) => {
         if (noIngredientFound) {
             res.send("Ingredient does not exist in database.");
         } else {
-            pool.query(queries.decrementInventoryById, [id], (error, results) => {
+            pool.query("UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1", [id], (error, results) => {
                 if (error) throw error;
                 res.status(200).send("Ingredient inventory reduced by one.");
             });

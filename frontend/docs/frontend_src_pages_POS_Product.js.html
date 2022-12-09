@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: frontend/src/pages/POS/Product.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,73 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: frontend/src/pages/POS/Product.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useSelector } from "react-redux";
+import "./pos.css";
 
+/**
+ * @author Will
+ * @param {*} props product (menu item, see menu in POSPage) and onAdd (see POSPage)
+ * @returns data for each product
+ */
+export default function Product(props) {
+    const { product, onAdd, isColorBlind} = props;
+    const { type } = useSelector((state) => state.auth);
+    const userType = type["type"];
+    const name = product.name;
+    const png = product.png;
+    const price = product.price;
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    return !isColorBlind ? (
+        &lt;div className="menu-item" onClick={() => onAdd(product)}>
+            {userType === "user" ? (
+                &lt;div className="menu-item--info">
+                    &lt;div className="menu-item--price text--right">{`$${price}`}&lt;/div>
+                    &lt;img
+                        className="menu-item--photo"
+                        src={`./posPhotos/${png}`}
+                        alt={name}
+                    >&lt;/img>
+                    &lt;h3 className="menu-item--name ">{name}&lt;/h3>
+                &lt;/div>
+            ) : (
+                &lt;div>
+                    &lt;h3 className="menu-item--name ">{name}&lt;/h3>
+                &lt;/div>
+            )}
+        &lt;/div>
+    ): (
+        &lt;div className="menu-item-colorblind" onClick={() => onAdd(product)}>
+            {userType === "user" ? (
+                &lt;div className="menu-item--info">
+                    &lt;div className="menu-item--price text--right">{`$${price}`}&lt;/div>
+                    &lt;img
+                        className="menu-item--photo"
+                        src={`./posPhotos/${png}`}
+                        alt={name}
+                    >&lt;/img>
+                    &lt;h3 className="menu-item--name ">{name}&lt;/h3>
+                &lt;/div>
+            ) : (
+                &lt;div>
+                    &lt;h3 className="menu-item--name ">{name}&lt;/h3>
+                &lt;/div>
+            )}
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

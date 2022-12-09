@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: backend/server/db.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,40 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: backend/server/db.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const dotenv = require("dotenv").config({ path: "../.env" });
+const Pool = require("pg").Pool;
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
+/**
+ * Create a connection to the Database (PSQL)
+ * @author  Johnny
+ */
+const pool = new Pool({
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST,
+    port: 5432,
     
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 
 
-
-
-
+module.exports = pool;
+</code></pre>
+        </article>
+    </section>
 
 
 

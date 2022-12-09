@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/controllers/pairController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/controllers/pairController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const pool = require("../server/db");
+const { response } = require("express");
+
+/**
+ * Queries the items in certain dates from orders and orderinfo
+ * this will be parsed to find the lowest items
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
+
+const createTable = (req, res) => {
+//     const firstDate = req.params.firstDate;
+//     const secondDate = req.params.secondDate;
+    pool.query(
+        // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
+        // "SELECT menu.name FROM menu JOIN X ON menu.id = X.pid",
+        "CREATE TABLE X (pid int, count int);",
+        // [firstDate, secondDate],
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const insertPair = (req, res) => {
+    pool.query(
+        "INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders) AND NOT EXISTS (SELECT * FROM X) GROUP BY productid ORDER BY count DESC;",
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const insertPairDates = (req, res) => {
+    const firstDate = req.params.firstDate;
+    const secondDate = req.params.secondDate;
+    pool.query(
+        // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
+        // "SELECT menu.name FROM menu JOIN X ON menu.id = X.pid",
+        "INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN $1 AND $2) AND NOT EXISTS (SELECT * FROM X) GROUP BY productid ORDER BY count DESC;",
+        [firstDate, secondDate],
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const getPair = (req, res) => {
+//     const firstDate = req.params.firstDate;
+//     const secondDate = req.params.secondDate;
+    pool.query(
+        // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
+        "SELECT menu.name FROM menu JOIN X ON menu.id = X.pid",
+        // [firstDate, secondDate],
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+const removePair = (req, res) => {
+    //     const firstDate = req.params.firstDate;
+    //     const secondDate = req.params.secondDate;
+        pool.query(
+            // "CREATE TABLE X (pid int, count int); INSERT INTO X (pid, count) SELECT productid, COUNT(*) FROM orderinfo WHERE orderid IN (SELECT orderid FROM orders WHERE Date BETWEEN '2022-11-04' AND '2022-11-05') GROUP BY productid ORDER BY count DESC; SELECT menu.name FROM menu JOIN X ON menu.id = X.pid; DROP TABLE X;",
+            "DELETE FROM X",
+            // [firstDate, secondDate],
+            (error, results) => {
+                if (error) throw error;
+                res.status(200).json(results.rows);
+            }
+        );
+    };
+
+module.exports = {
+    getPair,
+    insertPair,
+    insertPairDates,
+    createTable,
+    removePair,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addOrderInfo">addOrderInfo</a></li><li><a href="global.html#addToOrders">addToOrders</a></li><li><a href="global.html#checkoutOperator">checkoutOperator</a></li><li><a href="global.html#createTable">createTable</a></li><li><a href="global.html#decreaseIngredientInventory">decreaseIngredientInventory</a></li><li><a href="global.html#decrementInventoryById">decrementInventoryById</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#generateID">generateID</a></li><li><a href="global.html#getIngredientById">getIngredientById</a></li><li><a href="global.html#getIngredients">getIngredients</a></li><li><a href="global.html#getManagers">getManagers</a></li><li><a href="global.html#getOrderHistorypullsrevenuetabledatafromapi">getOrderHistory pulls revenue table data from api</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#initialDatabase">initialDatabase</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginCredentialsCheck">loginCredentialsCheck</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li><li><a href="global.html#pool">pool</a></li><li><a href="global.html#protected">protected</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeIngredient">removeIngredient</a></li><li><a href="global.html#updateIngredientInventory">updateIngredientInventory</a></li><li><a href="global.html#updateRevenue">updateRevenue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Dec 09 2022 15:13:10 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

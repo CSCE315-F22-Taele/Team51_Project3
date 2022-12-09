@@ -21,6 +21,11 @@ const usernameExists = check("username").custom(async (value) => {
     }
 });
 
+/**
+ * Check to see if the credentials are in the Database, if so return the user if not throw an error
+ * @author  Johnny
+ * @return  {QueryResult} result of the user found in the database
+ */
 const loginCredentialsCheck = check("username").custom(async (value, { req }) => {
     const user = await pool.query("SELECT * FROM accounts WHERE username = $1", [value]);
     if (!user.rows.length) {

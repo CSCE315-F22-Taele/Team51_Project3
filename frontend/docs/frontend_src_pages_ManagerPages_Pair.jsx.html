@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/pages/ManagerPages/Pair.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/pages/ManagerPages/Pair.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Translate from "../../components/translate/translate";
+
+export default function Pair() {
+    const [sales, setTable] = useState([]);
+
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [pairReportCalled, setPair] = useState(false);
+    const navigate = useNavigate();
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
+    /**
+     * Sends a HTTP PATCH request with the quantity of the ID to be modified
+     * @author  Mohnish
+     * @param   {date} startDate first date for btwn
+     * @param   {date} endDate second date in btwn
+     */
+
+    function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    async function insertPairDates(event) {
+        await delay(1000);
+        event.preventDefault();
+        try {
+            const res = await fetch(`/api/pair/${startDate}/${endDate}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PATCH",
+                },
+            });
+
+            const data = await res.json();
+            setTable(data);
+            setPair(true);
+
+            console.log(startDate, endDate);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function removePair(event) {
+        event.preventDefault();
+        try {
+            const res = await fetch("/api/pair/:t", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "DELETE",
+                },
+            });
+
+            const data = await res.json();
+            setTable(data);
+            setPair(true);
+
+            console.log(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // async function editPairDates(event) {
+    //   event.preventDefault();
+    //   try {
+    //       console.log(`api/pair/`);
+    //       const res = await fetch(`api/pair/`);
+    //       const data = await res.json();
+    //       setTable(data);
+    //       setPair(true);
+
+    //       console.log(startDate, endDate);
+    //   } catch (err) {
+    //       console.error(err);
+    //   }
+    // }
+
+    async function getPair(event) {
+        await delay(3000);
+        event.preventDefault();
+        try {
+            console.log(`api/pair/:p`);
+            const res = await fetch(`api/pair/:p`);
+            const data = await res.json();
+            const temp = data;
+            setTable(data);
+            setPair(true);
+            // for (let i = 0; i &lt; data.length; i++) {
+            //     temp[i] = data[data.length-i-1];
+            // }
+            console.log(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const displayInfo1 = sales.slice(0, -1).map((item, index, array) => {
+        return (
+            &lt;tr>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.name}&lt;/td>
+            &lt;/tr>
+        );
+    });
+
+    const displayInfo2 = sales.slice(1).map((item, index, array) => {
+        return (
+            &lt;tr>
+                &lt;td className="alt-td" style={{ fontSize: `${fontSize}px` }}>
+                    {item.name}
+                &lt;/td>
+            &lt;/tr>
+        );
+    });
+
+    return (
+        &lt;div className="pair-page manager-page">
+            &lt;div className="excess-topbar">
+                &lt;div className="back__container">
+                    &lt;button
+                        onClick={() => {
+                            navigate("/managermenu");
+                        }}>
+                        &lt;img
+                            className="backbutton"
+                            src={require("../../images/backbutton.png")}
+                            alt="back">&lt;/img>
+                    &lt;/button>
+                &lt;/div>
+                &lt;div className="pair-actions">
+                    &lt;form
+                        id="pair-form"
+                        className="pair-actions__container"
+                        onSubmit={(event) => {
+                            removePair(event);
+                            insertPairDates(event);
+                            getPair(event);
+                        }}>
+                        &lt;input
+                            className="pair-actions--input"
+                            type="date"
+                            placeholder="yyyy-mm-dd"
+                            onChange={(event) => {
+                                setStartDate(event.target.value);
+                            }}
+                            onKeyPress="setStorage(this)">&lt;/input>
+                        &lt;input
+                            className="pair-actions--input"
+                            type="date"
+                            placeholder="yyyy-mm-dd"
+                            onChange={(event) => {
+                                setEndDate(event.target.value);
+                            }}
+                            onKeyPress="setStorage(this)">&lt;/input>
+                        &lt;button className="button">Submit&lt;/button>
+                    &lt;/form>
+                &lt;/div>
+                &lt;div className="pair-accessibility">
+                    &lt;Translate />
+                    &lt;button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    &lt;/button>
+                    &lt;button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    &lt;/button>
+                &lt;/div>
+            &lt;/div>
+            &lt;div className="pair-table">
+                &lt;table className="styled-table">
+                    &lt;thead>
+                        &lt;tr>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Item 1&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Item 2&lt;/th>
+                        &lt;/tr>
+                    &lt;/thead>
+                    &lt;tbody>
+                        &lt;tr>
+                            &lt;td style={{ fontSize: `${fontSize}px` }}>{displayInfo1}&lt;/td>
+                            &lt;td style={{ fontSize: `${fontSize}px` }}>{displayInfo2}&lt;/td>
+                        &lt;/tr>
+                    &lt;/tbody>
+                &lt;/table>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addOrderInfo">addOrderInfo</a></li><li><a href="global.html#addToOrders">addToOrders</a></li><li><a href="global.html#checkoutOperator">checkoutOperator</a></li><li><a href="global.html#createTable">createTable</a></li><li><a href="global.html#decreaseIngredientInventory">decreaseIngredientInventory</a></li><li><a href="global.html#decrementInventoryById">decrementInventoryById</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#generateID">generateID</a></li><li><a href="global.html#getIngredientById">getIngredientById</a></li><li><a href="global.html#getIngredients">getIngredients</a></li><li><a href="global.html#getManagers">getManagers</a></li><li><a href="global.html#getOrderHistorypullsrevenuetabledatafromapi">getOrderHistory pulls revenue table data from api</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#initialDatabase">initialDatabase</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginCredentialsCheck">loginCredentialsCheck</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li><li><a href="global.html#pool">pool</a></li><li><a href="global.html#protected">protected</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeIngredient">removeIngredient</a></li><li><a href="global.html#updateIngredientInventory">updateIngredientInventory</a></li><li><a href="global.html#updateRevenue">updateRevenue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Dec 09 2022 15:13:10 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -11,10 +11,14 @@ const decrementInventoryById = (req, res) => {
         if (noIngredientFound) {
             res.send("Ingredient does not exist in database.");
         } else {
-            pool.query("UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1", [id], (error, results) => {
-                if (error) throw error;
-                res.status(200).send("Ingredient inventory reduced by one.");
-            });
+            pool.query(
+                "UPDATE ingredients SET inventory = inventory - 1 WHERE id = $1",
+                [id],
+                (error, results) => {
+                    if (error) throw error;
+                    res.status(200).send("Ingredient inventory reduced by one.");
+                }
+            );
         }
     });
 };
@@ -45,6 +49,8 @@ const addIngredient = (req, res) => {
             res.status(201).send("Ingredient Created Successfully!");
         }
     );
+    var sql = `ALTER TABLE daily_inventory ADD "${newID}" int4`;
+    pool.query(sql);
 };
 
 const removeIngredient = (req, res) => {
@@ -53,6 +59,8 @@ const removeIngredient = (req, res) => {
         if (error) throw error;
         res.status(200).send("Ingredient removed successfully.");
     });
+    var sql = `ALTER TABLE daily_inventory DROP COLUMN "${removeID}"`;
+    pool.query(sql);
 };
 
 /**

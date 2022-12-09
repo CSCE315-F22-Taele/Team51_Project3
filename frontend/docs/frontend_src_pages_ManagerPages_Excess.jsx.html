@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/pages/ManagerPages/Excess.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/pages/ManagerPages/Excess.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import Translate from "../../components/translate/translate";
+
+export default function Excess() {
+    const [firstDate, setStartDate] = useState("");
+    const [secondDate, setEndDate] = useState("");
+    const [ingredientsID, setIngredientsID] = useState([]);
+    const [usageCount, setUsageCount] = useState([]);
+    const [inventory, setInventory] = useState([]);
+    const [initialInventory, setInitialInventory] = useState([]);
+    const [excessItems, setExcessItems] = useState([]);
+
+    const didMount = useRef(false);
+
+    const navigate = useNavigate();
+    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+
+    useEffect(() => {
+        getInventory();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ingredientsID]);
+
+    useEffect(() => {
+        if (!didMount.current) {
+            didMount.current = true;
+        } else {
+            checkExcessGivenDate();
+        }
+    }, [usageCount]);
+
+    /**
+     * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
+     */
+    async function getInventory() {
+        try {
+            let ids = [];
+            const data = await (await fetch("api/inventory")).json();
+            setInventory(data);
+
+            for (let i = 0; i &lt; data.length; i++) {
+                ids[i] = data[i]["id"];
+            }
+            if (JSON.stringify(ids) !== JSON.stringify(ingredientsID)) {
+                setIngredientsID(ids);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const getIngredientUsage = async (event) => {
+        console.log(firstDate, secondDate);
+        event.preventDefault();
+        try {
+            await fetch("api/excess/ingredientusage", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({
+                    ids: ingredientsID,
+                    firstDate: firstDate,
+                    secondDate: secondDate,
+                }),
+            }).then((response) => {
+                response
+                    .json()
+                    .then((data) => ({
+                        data: data,
+                        status: response.status,
+                    }))
+                    .then((res) => {
+                        setUsageCount(res.data);
+                    });
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    /**
+     * Sends a HTTP PATCH request with the quantity of the ID to be modified
+     * @author  Joshua
+     * @param   {date} firstDate first date for btwn
+     * @param   {date} secondDate second date in btwn
+     */
+
+    async function checkExcessGivenDate() {
+        try {
+            await fetch(`api/excess/dailyinventory/${firstDate}`).then((response) => {
+                response.json().then((data) => {
+                    setInitialInventory(data);
+                });
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    useEffect(() => {
+        const excessed = inventory.filter(function (item) {
+            try {
+                if (usageCount[item.id] &lt; initialInventory[0][item.id] * 0.1) {
+                    return true;
+                }
+            } catch (err) {
+                return false;
+            }
+            return false;
+        });
+        setExcessItems(excessed);
+    }, [initialInventory]);
+
+    console.log(usageCount, initialInventory);
+    const displayInfo = excessItems.map((item) => {
+        if (initialInventory.length &lt; 1 || initialInventory === undefined) {
+            return;
+        }
+        return (
+            &lt;tr>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.id}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.name}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>
+                    {Number(
+                        usageCount[item.id] / parseFloat(initialInventory[0][item.id])
+                    ).toLocaleString("en-US", {
+                        style: "percent",
+                        minimumFractionDigits: 2,
+                    })}
+                &lt;/td>
+            &lt;/tr>
+        );
+    });
+
+    return (
+        &lt;div className="excess-page manager-page">
+            &lt;div className="excess-topbar">
+                &lt;div className="back__container">
+                    &lt;button
+                        onClick={() => {
+                            navigate("/managermenu");
+                        }}>
+                        &lt;img
+                            className="backbutton"
+                            src={require("../../images/backbutton.png")}
+                            alt="back">&lt;/img>
+                    &lt;/button>
+                &lt;/div>
+                &lt;div className="excess-actions">
+                    &lt;form
+                        id="excess-form"
+                        className="excess-actions__container"
+                        onSubmit={(event) => {
+                            getIngredientUsage(event);
+                        }}>
+                        &lt;input
+                            className="excess-actions--input"
+                            type="date"
+                            placeholder="yyyy-mm-dd"
+                            onChange={(event) => {
+                                setStartDate(event.target.value);
+                            }}
+                            required
+                        />
+                        &lt;input
+                            className="excess-actions--input"
+                            type="date"
+                            placeholder="yyyy-mm-dd"
+                            onChange={(event) => {
+                                setEndDate(event.target.value);
+                            }}
+                            required
+                        />
+                        &lt;button className="button">Search&lt;/button>
+                    &lt;/form>
+                &lt;/div>
+                &lt;div className="excess-accessibility">
+                    &lt;Translate />
+                    &lt;button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    &lt;/button>
+                    &lt;button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    &lt;/button>
+                &lt;/div>
+            &lt;/div>
+            &lt;div className="excess-table">
+                &lt;table className="styled-table">
+                    &lt;thead>
+                        &lt;tr>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Item ID&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Item Name&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>
+                                Percentage Sold
+                            &lt;/th>
+                        &lt;/tr>
+                    &lt;/thead>
+                    &lt;tbody>{displayInfo}&lt;/tbody>
+                &lt;/table>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addOrderInfo">addOrderInfo</a></li><li><a href="global.html#addToOrders">addToOrders</a></li><li><a href="global.html#checkoutOperator">checkoutOperator</a></li><li><a href="global.html#createTable">createTable</a></li><li><a href="global.html#decreaseIngredientInventory">decreaseIngredientInventory</a></li><li><a href="global.html#decrementInventoryById">decrementInventoryById</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#generateID">generateID</a></li><li><a href="global.html#getIngredientById">getIngredientById</a></li><li><a href="global.html#getIngredients">getIngredients</a></li><li><a href="global.html#getManagers">getManagers</a></li><li><a href="global.html#getOrderHistorypullsrevenuetabledatafromapi">getOrderHistory pulls revenue table data from api</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#initialDatabase">initialDatabase</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginCredentialsCheck">loginCredentialsCheck</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li><li><a href="global.html#pool">pool</a></li><li><a href="global.html#protected">protected</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeIngredient">removeIngredient</a></li><li><a href="global.html#updateIngredientInventory">updateIngredientInventory</a></li><li><a href="global.html#updateRevenue">updateRevenue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Dec 09 2022 15:13:10 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

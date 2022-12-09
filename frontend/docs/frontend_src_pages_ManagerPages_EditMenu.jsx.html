@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/pages/ManagerPages/EditMenu.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/pages/ManagerPages/EditMenu.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Translate from "../../components/translate/translate";
+import "./managerPages.css";
+
+export default function EditMenu() {
+    const [menu, setMenu] = useState([]);
+    const [category, setCategory] = useState("");
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState(0.0);
+    const [ingredients, setIngredients] = useState([]);
+    const [png, setPNG] = useState("");
+    const [options, setOptions] = useState([]);
+    const [id, setID] = useState(0);
+    const [idChecker, setIDChecker] = useState([]);
+    const [ingredientList, setIngredientList] = useState([]);
+    const [idRemove, setIdRemove] = useState();
+    const [saveError, setError] = useState();
+    const navigate = useNavigate();
+    const [fontSize, setFontSize] = useState(15); //for inc and dec font size
+
+    /**
+     * Sends a HTTP get for all menu items, then gets all ids for data validation
+     * @author  Joshua
+     */
+    async function getMenu() {
+        try {
+            const res = await fetch("api/menuManager");
+            const data = await res.json();
+            setMenu(data);
+            var idList = [];
+
+            for (let i = 0; i &lt; data.length; i++) {
+                idList.push(data[i]["id"]);
+            }
+            // const idList = data['id']
+        } catch (err) {
+            console.error(err);
+        }
+        idList.sort();
+        //console.log(idList);
+        setIDChecker(idList);
+        setID(idList[idList.length - 1] + 1);
+        return idList;
+    }
+    /**
+     * Sends a HTTP put request with new order into the menu
+     * @author  Joshua
+     * @param   {string} category is the inputed label of the items, entree, dessert, or drink
+     * @param   {string} name is the item name
+     * @param   {float} price is the manager set price
+     * @param   {string} ingredients is the string of item ids that represent the order
+     * @param   {string} options are the functioning number of editable items
+     * @param   {int} id is the items unique id
+     */
+    async function addMenuItem(id) {
+        // If ID already exists
+        if (idChecker.includes(id)) {
+            setID(idChecker[idChecker.length - 1] + 1);
+        }
+        try {
+            let res = await fetch("api/menuManager/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({
+                    category: category,
+                    name: name,
+                    price: parseFloat(price),
+                    ingredients: ingredients,
+                    png: png,
+                    options: options,
+                    id: parseInt(id),
+                }),
+            });
+            const data = await res.json();
+            console.log(data);
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    /**
+     * Send HTTP request to delete the item in the Database
+     * @author  Joshua
+     */
+    async function removeMenuById() {
+        try {
+            await fetch("api/menuManager/", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "DELETE",
+                },
+                body: JSON.stringify({
+                    idRemove: parseInt(idRemove),
+                }),
+            });
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    /**
+     * Sends a HTTP get request for all ingredients to then display in the dropdown menu
+     * @author  Joshua
+     */
+    async function getInventory() {
+        try {
+            const res = await fetch("api/inventory");
+            const data = await res.json();
+            setIngredientList(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // event returns a list of ids from the menu to error check with the user
+    useEffect(() => {
+        getInventory();
+        getMenu();
+        checkOptionsInIDs();
+    }, []);
+
+    const checkOptionsInIDs = () => {
+        for (
+            let ingredientIndex = 0;
+            ingredientIndex &lt; ingredients.length;
+            ingredientIndex++
+        ) {
+            for (let index = 0; index &lt; options.length; index++) {
+                if (!ingredients.includes(options[index])) {
+                    ingredients.push(options[index]);
+                }
+            }
+        }
+    };
+
+    /**
+     * Parses List of Ingredient ID to Readable Strings
+     * @author  Joshua, Johnny
+     */
+    const parseIDToString = (array, list) => {
+        var readableList = [];
+        array.forEach((id, i) => {
+            readableList.push(list.find((o) => o.id === id).name);
+        });
+
+        return readableList;
+    };
+
+    const displayInfo = menu.map((item) => {
+        return (
+            &lt;tr>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.category}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.id}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.name}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.price}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>
+                    {item.ingredients.toString()}
+                &lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>
+                    {item.options ? item.options.toString() : ""}
+                &lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{item.png}&lt;/td>
+            &lt;/tr>
+        );
+    });
+    const displayDropDown = ingredientList.map((inventory) => {
+        return &lt;option value={inventory.id}> {inventory.name}&lt;/option>;
+    });
+    return (
+        &lt;div className="edit-menu-page manager-page">
+            &lt;div className="edit-menu-topbar">
+                &lt;div className="back__container">
+                    &lt;button
+                        onClick={() => {
+                            navigate("/managermenu");
+                        }}>
+                        &lt;img
+                            className="backbutton"
+                            src={require("../../images/backbutton.png")}
+                            alt="back">&lt;/img>
+                    &lt;/button>
+                &lt;/div>
+                &lt;div className="edit-menu-accessibility">
+                    &lt;div className="translate">
+                        &lt;Translate />
+                    &lt;/div>
+                    &lt;button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    &lt;/button>
+                    &lt;button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    &lt;/button>
+                &lt;/div>
+            &lt;/div>
+            &lt;div className="edit-menu-table">
+                &lt;table className="edit-menu-table styled-table">
+                    &lt;thead>
+                        &lt;tr>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Category&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Id&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Name&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Price&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Ingredients&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Options&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>PNG&lt;/th>
+                        &lt;/tr>
+                    &lt;/thead>
+                    &lt;tbody>{displayInfo}&lt;/tbody>
+                &lt;/table>
+            &lt;/div>
+            &lt;div className="edit-menu-actions">
+                &lt;div className="edit-menu-actions--create">
+                    &lt;form
+                        className="edit-menu-actions__container"
+                        onSubmit={(event) => {
+                            addMenuItem(id);
+                            // setIngredients((newArray) => [...newArray, event.target.value]);
+                            // setOptions((newArray) => [...newArray, event.target.value]);
+                            // parseIDToString();
+                        }}>
+                        {/* now we plan to dive into what is the hell that is checking user inputs and preventing stupid ones */}
+
+                        &lt;select
+                            className="edit-menu-actions--input"
+                            placeholder="Category"
+                            onChange={(event) => {
+                                setCategory(event.target.value);
+                                console.log(event.target.value);
+                            }}>
+                            &lt;option value="entree"> Entree &lt;/option>
+                            &lt;option value="dessert"> Dessert &lt;/option>
+                            &lt;option value="drink"> Drink &lt;/option>
+                        &lt;/select>
+                        &lt;input
+                            className="edit-menu-actions--input"
+                            type="number"
+                            placeholder="ID"
+                            onChange={(event) => {
+                                setID(event.target.value);
+                            }}
+                        />
+                        &lt;input
+                            className="edit-menu-actions--input"
+                            type="string"
+                            placeholder="Item Name"
+                            onChange={(event) => {
+                                setName(event.target.value);
+                            }}
+                        />
+                        &lt;input
+                            className="edit-menu-actions--input"
+                            type="float"
+                            placeholder="Price"
+                            onChange={(event) => {
+                                if (event.target.value >= 0) {
+                                    setPrice(event.target.value);
+                                } else {
+                                    setPrice(0.0);
+                                }
+                            }}
+                        />
+                        &lt;p className="edit-menu-actions--header">Select Ingredients&lt;/p>
+                        &lt;select
+                            className="edit-menu-actions--input"
+                            onChange={(event) => {
+                                var initalizeIngredients = true;
+                                if (initalizeIngredients) {
+                                    setIngredients((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                    initalizeIngredients = false;
+                                } else if (!ingredients.includes(event.target.value)) {
+                                    setIngredients((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                }
+                            }}>
+                            {displayDropDown}
+                        &lt;/select>
+                        &lt;div className="edit-menu-actions--info">
+                            {parseIDToString(ingredients, ingredientList).toString()}
+                        &lt;/div>
+                        &lt;p className="edit-menu-actions--header">Select Options&lt;/p>
+                        &lt;select
+                            className="edit-menu-actions--input"
+                            onChange={(event) => {
+                                var initalizeOptions = true;
+                                if (initalizeOptions) {
+                                    setOptions((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                    initalizeOptions = false;
+                                } else if (!options.includes(event.target.value)) {
+                                    setOptions((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                }
+                                // console.log(options)
+                            }}>
+                            {displayDropDown}
+                        &lt;/select>
+                        &lt;div className="edit-menu-actions--info">
+                            {parseIDToString(options, ingredientList).toString()}
+                        &lt;/div>
+                        &lt;input
+                            className="edit-menu-actions--input"
+                            type="string"
+                            placeholder="PNG File Name"
+                            onChange={(event) => {
+                                setPNG(event.target.value);
+                            }}>&lt;/input>
+                        &lt;button className="button">Add New Menu Item&lt;/button>
+                        &lt;button
+                            className="button"
+                            onClick={() => {
+                                ingredients.length = 0;
+                                options.length = 0;
+                            }}>
+                            Clear presets
+                        &lt;/button>
+                    &lt;/form>
+                &lt;/div>
+                &lt;div className="edit-menu-actions--remove">
+                    &lt;form
+                        className="edit-menu-actions__container"
+                        onSubmit={(event) => {
+                            removeMenuById();
+                        }}>
+                        &lt;input
+                            className="edit-menu-actions--input"
+                            type="number"
+                            placeholder="ID"
+                            onChange={(event) => {
+                                setIdRemove(event.target.value);
+                            }}
+                        />
+                        &lt;button className="button">Remove Menu Item&lt;/button>
+                    &lt;/form>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addOrderInfo">addOrderInfo</a></li><li><a href="global.html#addToOrders">addToOrders</a></li><li><a href="global.html#checkoutOperator">checkoutOperator</a></li><li><a href="global.html#createTable">createTable</a></li><li><a href="global.html#decreaseIngredientInventory">decreaseIngredientInventory</a></li><li><a href="global.html#decrementInventoryById">decrementInventoryById</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#generateID">generateID</a></li><li><a href="global.html#getIngredientById">getIngredientById</a></li><li><a href="global.html#getIngredients">getIngredients</a></li><li><a href="global.html#getManagers">getManagers</a></li><li><a href="global.html#getOrderHistorypullsrevenuetabledatafromapi">getOrderHistory pulls revenue table data from api</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#initialDatabase">initialDatabase</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginCredentialsCheck">loginCredentialsCheck</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li><li><a href="global.html#pool">pool</a></li><li><a href="global.html#protected">protected</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeIngredient">removeIngredient</a></li><li><a href="global.html#updateIngredientInventory">updateIngredientInventory</a></li><li><a href="global.html#updateRevenue">updateRevenue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Dec 09 2022 15:13:10 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

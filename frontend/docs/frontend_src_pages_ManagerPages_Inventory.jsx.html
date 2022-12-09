@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/src/pages/ManagerPages/Inventory.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/src/pages/ManagerPages/Inventory.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Translate from "../../components/translate/translate";
+import "./managerPages.css";
+
+export default function Inventory() {
+    const [inventory, setInventory] = useState([]);
+    const [quantity, setQuantity] = useState();
+    const [idCheckList, setCheckList] = useState();
+    const [removeID, setRemoveID] = useState(0);
+
+    const [newIngredientValues, setNewIngredientValues] = useState({
+        newID: "",
+        newName: "",
+        newInventory: "",
+    });
+
+    const navigate = useNavigate();
+    const [fontSize, setFontSize] = useState(20); //for inc and dec font size
+
+    /**
+     * Fetches the information from Database Table: 'Ingredients' that was sent to resource (HTTP)
+     * @author  Joshua
+     */
+    async function getInventory() {
+        try {
+            const res = await fetch(`api/inventory`);
+            const data = await res.json();
+            setInventory(data);
+            var idList = [];
+
+            for (let i = 0; i &lt; data.length; i++) {
+                idList.push(data[i]["id"]);
+            }
+
+            idList.sort();
+            setCheckList(idList);
+            console.log("INSIDE", idList);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    /**
+     * Sends a HTTP POST request of a new ingredient
+     * @author  Joshua, Johnny
+     * @param   {int} id the identification value of the ingredient being modified
+     * @param   {string} newName the new name of the ingredient
+     * @param   {int} newInventory the new inventory value to be assigned to the ingredient\
+     * @return  {boolean} returns true on success, false on fail
+     */
+    async function ingredientCreate(event) {
+        event.preventDefault();
+        let newID = parseInt(newIngredientValues.newID);
+        let newName = newIngredientValues.newName;
+        let newInventory = parseInt(newIngredientValues.newInventory);
+
+        // Checks if ID already exists in the Database, if so reassign
+        if (idCheckList.includes(newID) || newID &lt; 0) {
+            newID = idCheckList[idCheckList.length - 1] + 1;
+        }
+        try {
+            console.log(parseInt(newID), newName, parseInt(newInventory));
+            await fetch("api/inventory/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST",
+                },
+                body: JSON.stringify({
+                    newID: newID,
+                    newName: newName,
+                    newInventory: newInventory,
+                }),
+            });
+            getInventory();
+            return true;
+        } catch (err) {
+            console.log(err.message);
+            return false;
+        }
+    }
+
+    // Refreshes / Regrabs the Inventory on Update
+    useEffect(() => {
+        getInventory();
+    }, []);
+
+    /**
+     * Sends a HTTP PATCH request with the quantity of the ID to be modified
+     * @author  Joshua, Johnny
+     * @param   {int} id the identification value of the ingredient being modified
+     * @param   {int} quantity the new inventory value to be assigned to the ingredient
+     */
+    async function updateIngredientInventory(event, id, quantity) {
+        event.preventDefault();
+        try {
+            await fetch(`/api/inventory/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PATCH",
+                },
+                body: JSON.stringify({ quantity: parseInt(quantity) }),
+            });
+            getInventory();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    /**
+     * Sends a HTTP deete request with the quantity of the ID to be removed
+     * @author  Joshua, Johnny
+     * @param   {int} id the identification value of the ingredient being modified
+     */
+    async function ingredientRemove(event) {
+        event.preventDefault();
+        try {
+            await fetch("/api/inventory/", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "DELETE",
+                },
+                body: JSON.stringify({
+                    removeID: parseInt(removeID),
+                }),
+            });
+            getInventory();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // Detects and Set Values When Called
+    const onChange = (e) => {
+        setNewIngredientValues({
+            ...newIngredientValues,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    /**
+     * Sets the information to be display given the ingredients
+     * @author  Joshua, Johnny
+     * @param   {object} ingredient the object containing an ingredient's information
+     */
+    const displayData = inventory.map((ingredient) => {
+        const restockNeeded = () => {
+            if (ingredient.inventory === 0) {
+                return &lt;p className="inventory-table--status status--red">Depleted&lt;/p>;
+            } else if (ingredient.inventory &lt; 10) {
+                return &lt;p className="inventory-table--status status--yellow">Low&lt;/p>;
+            } else {
+                return &lt;p className="inventory-table--status status--green">Good&lt;/p>;
+            }
+        };
+        return (
+            &lt;tr>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{ingredient.id}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{ingredient.name}&lt;/td>
+                &lt;td style={{ fontSize: `${fontSize}px` }}>{ingredient.inventory}&lt;/td>
+                &lt;td className="center-text" style={{ fontSize: `${fontSize}px` }}>
+                    {restockNeeded()}
+                &lt;/td>
+                &lt;td>
+                    &lt;form
+                        onSubmit={(event) => {
+                            updateIngredientInventory(event, ingredient.id, quantity);
+                        }}>
+                        &lt;input
+                            type="number"
+                            name={ingredient.name}
+                            defaultValue={ingredient.inventory}
+                            onChange={(event) => {
+                                if (event.target.value >= 0) {
+                                    setQuantity(event.target.value);
+                                } else {
+                                    setQuantity(0);
+                                }
+                            }}>&lt;/input>
+                    &lt;/form>
+                &lt;/td>
+            &lt;/tr>
+        );
+    });
+
+    return (
+        &lt;div className="inventory-page manager-page">
+            &lt;div className="back__container">
+                &lt;button
+                    onClick={() => {
+                        navigate("/managermenu");
+                    }}>
+                    &lt;img
+                        className="backbutton"
+                        src={require("../../images/backbutton.png")}
+                        alt="back">&lt;/img>
+                &lt;/button>
+            &lt;/div>
+            &lt;div className="inventory-table">
+                &lt;table className="styled-table">
+                    &lt;thead>
+                        &lt;tr>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>ID&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Name&lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>Inventory&lt;/th>
+                            &lt;th
+                                className="center-text"
+                                style={{ fontSize: `${fontSize + 2}px` }}>
+                                Status
+                            &lt;/th>
+                            &lt;th style={{ fontSize: `${fontSize + 2}px` }}>
+                                Change Amount
+                            &lt;/th>
+                        &lt;/tr>
+                    &lt;/thead>
+                    &lt;tbody>{displayData}&lt;/tbody>
+                &lt;/table>
+            &lt;/div>
+            &lt;div className="inventory-actions">
+                &lt;form
+                    id="inventory-form--create"
+                    className="inventory-actions__container"
+                    onSubmit={(event) => {
+                        if (ingredientCreate(event)) {
+                            setNewIngredientValues({
+                                newID: "",
+                                newName: "",
+                                newInventory: "",
+                            });
+                        }
+                    }}>
+                    &lt;input
+                        className="inventory-actions--input"
+                        type="number"
+                        autoComplete="off"
+                        placeholder="ID"
+                        onChange={(event) => {
+                            onChange(event);
+                        }}
+                        name="newID"
+                        value={newIngredientValues.newID}
+                        required
+                    />
+                    &lt;input
+                        className="inventory-actions--input"
+                        type="string"
+                        autoComplete="off"
+                        placeholder="Name"
+                        onChange={(event) => {
+                            onChange(event);
+                        }}
+                        name="newName"
+                        value={newIngredientValues.newName}
+                        required
+                    />
+                    &lt;input
+                        className="inventory-actions--input"
+                        type="number"
+                        autoComplete="off"
+                        placeholder="Quantity"
+                        onChange={(event) => {
+                            onChange(event);
+                        }}
+                        name="newInventory"
+                        value={newIngredientValues.newInventory}
+                        required
+                    />
+                    &lt;button className="button">Create Ingredient&lt;/button>
+                &lt;/form>
+                &lt;form
+                    id="inventory-form--remove"
+                    className="inventory-actions__container"
+                    onSubmit={(event) => {
+                        ingredientRemove(event);
+                        document.getElementById("inventory-form--remove").reset();
+                    }}>
+                    &lt;input
+                        className="inventory-actions--input"
+                        type="number"
+                        placeholder="Ingredient ID"
+                        onChange={(event) => {
+                            setRemoveID(event.target.value);
+                        }}>&lt;/input>
+                    &lt;button className="button">Remove Ingredient&lt;/button>
+                &lt;/form>
+                &lt;div className="inventory-accessibility">
+                    &lt;button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    &lt;/button>
+                    &lt;button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    &lt;/button>
+                &lt;/div>
+                &lt;div className="translate">
+                    &lt;Translate />
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addOrderInfo">addOrderInfo</a></li><li><a href="global.html#addToOrders">addToOrders</a></li><li><a href="global.html#checkoutOperator">checkoutOperator</a></li><li><a href="global.html#createTable">createTable</a></li><li><a href="global.html#decreaseIngredientInventory">decreaseIngredientInventory</a></li><li><a href="global.html#decrementInventoryById">decrementInventoryById</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#generateID">generateID</a></li><li><a href="global.html#getIngredientById">getIngredientById</a></li><li><a href="global.html#getIngredients">getIngredients</a></li><li><a href="global.html#getManagers">getManagers</a></li><li><a href="global.html#getOrderHistorypullsrevenuetabledatafromapi">getOrderHistory pulls revenue table data from api</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#initialDatabase">initialDatabase</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginCredentialsCheck">loginCredentialsCheck</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li><li><a href="global.html#pool">pool</a></li><li><a href="global.html#protected">protected</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeIngredient">removeIngredient</a></li><li><a href="global.html#updateIngredientInventory">updateIngredientInventory</a></li><li><a href="global.html#updateRevenue">updateRevenue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Dec 09 2022 15:13:10 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

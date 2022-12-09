@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/controllers/checkoutController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/controllers/checkoutController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const pool = require("../server/db");
+const queries = require("../queries/queries");
+const { response } = require("express");
+
+
+/**
+ * Inserts the order into the Orders Table in PSQL 
+ * @author  Johnny
+ * @param   {double} totalPrice contains strings (username, password) holding the login information
+ * @param   {int} itemCount represents how many items are inside the order
+ * @return  {Promise} holds the result of what was inserted
+ */
+const addToOrders = async (totalPrice, itemCount) => {
+    const order = await pool.query(
+        "INSERT INTO orders (amount, itemcount) VALUES ($1, $2) RETURNING *",
+        [totalPrice, itemCount]
+    );
+    return order;
+};
+
+/**
+ * Inserts each item from the order into the Orderinfo Table in PSQL
+ * @author  Johnny
+ * @param   {int} orderID the current order identification number
+ * @param   {list} cart the items ordered by the user
+ */
+const addOrderInfo = (orderID, cart) => {
+    cart.map((menuItem) => {
+        pool.query(
+            "INSERT INTO orderinfo (orderid, productid, quantity, ingredients) VALUES ($1, $2, $3, $4)",
+            [orderID, menuItem.id, 1, menuItem.ingredients]
+        );
+    });
+};
+
+/**
+ * Updates the revenue inside Revenue Table in PSQL with the current order
+ * @author  Johnny
+ * @param   {int} orderID the current order identification number
+ */
+const updateRevenue = (orderID) => {
+    pool.query(
+        "UPDATE revenue SET revenue = revenue + (SELECT amount FROM orders WHERE orderid = $1) WHERE date = (CURRENT_DATE)",
+        [orderID]
+    );
+};
+
+/**
+ * Main function calling helper function to complete and record the order
+ * @author  Johnny
+ */
+const checkoutOperator = (req, res) => {
+    const { cart, totalPrice } = req.body;
+    const itemCount = cart.length;
+
+    const order = addToOrders(totalPrice, itemCount);
+    order.then(function (result) {
+        const orderID = result["rows"][0].orderid;
+        addOrderInfo(orderID, cart);
+        updateRevenue(orderID);
+    });
+    res.status(200).send("[SUCCESS] Added Order to Database");
+};
+
+
+/**
+ * Updates the inventory in PSQL respective to what was ordered
+ * @author  Will
+ */
+const decreaseIngredientInventory = (req, res) => {
+    // Grabs the :id value (params) from the request
+    const { id } = req.params;
+    // Grabs the JSON body data from the request
+    const { quantity } = req.body;
+
+    pool.query(
+        "UPDATE ingredients SET inventory = inventory - $1 WHERE id = $2",
+        [quantity, id],
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).send("Ingredient Quantity was Updated");
+        }
+    );
+};
+
+module.exports = {
+    decreaseIngredientInventory,
+    checkoutOperator,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Main">Main</a></li><li><a href="global.html#OrderHistory">OrderHistory</a></li><li><a href="global.html#POSPage">POSPage</a></li><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addOrderInfo">addOrderInfo</a></li><li><a href="global.html#addToOrders">addToOrders</a></li><li><a href="global.html#checkoutOperator">checkoutOperator</a></li><li><a href="global.html#createTable">createTable</a></li><li><a href="global.html#decreaseIngredientInventory">decreaseIngredientInventory</a></li><li><a href="global.html#decrementInventoryById">decrementInventoryById</a></li><li><a href="global.html#displayData">displayData</a></li><li><a href="global.html#generateID">generateID</a></li><li><a href="global.html#getIngredientById">getIngredientById</a></li><li><a href="global.html#getIngredients">getIngredients</a></li><li><a href="global.html#getManagers">getManagers</a></li><li><a href="global.html#getOrderHistorypullsrevenuetabledatafromapi">getOrderHistory pulls revenue table data from api</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#initialDatabase">initialDatabase</a></li><li><a href="global.html#isAuth">isAuth</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginCredentialsCheck">loginCredentialsCheck</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#onLogin">onLogin</a></li><li><a href="global.html#onLogout">onLogout</a></li><li><a href="global.html#onRegister">onRegister</a></li><li><a href="global.html#pool">pool</a></li><li><a href="global.html#protected">protected</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeIngredient">removeIngredient</a></li><li><a href="global.html#updateIngredientInventory">updateIngredientInventory</a></li><li><a href="global.html#updateRevenue">updateRevenue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Dec 09 2022 15:13:10 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

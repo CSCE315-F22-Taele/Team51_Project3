@@ -1,10 +1,14 @@
 const pool = require("../server/db");
 const queries = require("../queries/queries");
-const { response } = require("express");
 
+/**
+ * Decrements an ingredient's inventory from the Database given the ID
+ * @author  Will
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
 const decrementInventoryById = (req, res) => {
     const id = parseInt(req.params.id);
-
     // make sure ingredient actually exists
     pool.query("SELECT * FROM ingredients WHERE id = $1", [id], (error, results) => {
         const noIngredientFound = !results.rows.length;
@@ -23,6 +27,12 @@ const decrementInventoryById = (req, res) => {
     });
 };
 
+/**
+ * Retrieve all the ingredients in the Table Ingredients from the Database
+ * @author  Johnny
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
 const getIngredients = (req, res) => {
     pool.query("SELECT * FROM ingredients ORDER BY id", (error, results) => {
         if (error) throw error;
@@ -30,6 +40,12 @@ const getIngredients = (req, res) => {
     });
 };
 
+/**
+ * Retrieves an ingredients from the database with the ID
+ * @author  Johnny
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
 const getIngredientById = (req, res) => {
     const id = parseInt(req.params.id);
     pool.query(queries.getIngredientById, [id], (error, results) => {
@@ -38,6 +54,12 @@ const getIngredientById = (req, res) => {
     });
 };
 
+/**
+ * Adds an ingredient from the Database with the respective params
+ * @author  Johnny
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
 const addIngredient = (req, res) => {
     const { newID, newName, newInventory } = req.body;
     //add ingredient to db
@@ -53,6 +75,12 @@ const addIngredient = (req, res) => {
     pool.query(sql);
 };
 
+/**
+ * Remove an ingredient from the Database with the respective params
+ * @author  Johnny
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
 const removeIngredient = (req, res) => {
     const { removeID } = req.body;
     pool.query("DELETE FROM ingredients WHERE id = $1", [removeID], (error, results) => {
@@ -65,6 +93,7 @@ const removeIngredient = (req, res) => {
 
 /**
  * Updates an ingredient's inventory in the Database with the respective params
+ * @author  Johnny
  * @param   {any} req object containing information about the HTTP request
  * @param   {any} res packet to send back the desired HTTP response
  */

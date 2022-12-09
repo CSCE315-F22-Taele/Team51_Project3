@@ -1,6 +1,13 @@
 const pool = require("../server/db");
 const { response } = require("express");
 
+/**
+ * Initializes the Database with Daily Commands (Daily Inventory and Revenue) for
+ * the system to function
+ * @author  Johnny
+ * @param   {any} req object containing information about the HTTP request
+ * @param   {any} res packet to send back the desired HTTP response
+ */
 const initialDatabase = async (req, res) => {
     const currentDate = new Date().toJSON().slice(0, 10);
 

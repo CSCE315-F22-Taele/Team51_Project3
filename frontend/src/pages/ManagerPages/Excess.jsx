@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import backbutton from "../../images/backbutton.png";
+import Translate from "../../components/translate/translate";
 
 export default function Excess() {
     const [firstDate, setStartDate] = useState("");
@@ -179,6 +179,7 @@ export default function Excess() {
                     </form>
                 </div>
                 <div className="excess-accessibility">
+                    <Translate />
                     <button className="button" onClick={() => setFontSize(fontSize + 2)}>
                         + Font Size
                     </button>
@@ -193,7 +194,9 @@ export default function Excess() {
                         <tr>
                             <th style={{ fontSize: `${fontSize + 2}px` }}>Item ID</th>
                             <th style={{ fontSize: `${fontSize + 2}px` }}>Item Name</th>
-                            <th style={{ fontSize: `${fontSize + 2}px` }}>Percentage Sold</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>
+                                Percentage Sold
+                            </th>
                         </tr>
                     </thead>
                     <tbody>{displayInfo}</tbody>

@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import backbutton from "../../images/backbutton.png";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import Translate from "../../components/translate/translate"
 
 /**
  * @author Will
@@ -76,6 +76,9 @@ const OrderHistory = () => {
                     <button className="button" onClick={() => setFontSize(fontSize - 2)}>
                         - Font Size
                     </button>
+                </div>
+                <div className="translate">
+                    <Translate />
                 </div>
             </div>
         </div>

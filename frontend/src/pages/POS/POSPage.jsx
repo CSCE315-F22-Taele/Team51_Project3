@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/navbar";
 import CheckoutModal from "../../components/modal/checkoutModal";
 import "./pos.css";
+import Translate from "../../components/translate/translate";
 
 /**
  * @function POSPage
@@ -274,6 +275,7 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
+                            <Translate />
                         ]}
                     />
                 </div>

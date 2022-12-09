@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import backbutton from "../../images/backbutton.png";
+import Translate from "../../components/translate/translate";
 
 export default function Pair() {
     const [sales, setTable] = useState([]);
@@ -114,7 +113,9 @@ export default function Pair() {
     const displayInfo2 = sales.slice(1).map((item, index, array) => {
         return (
             <tr>
-                <td className="alt-td" style={{ fontSize: `${fontSize}px` }}>{item.name}</td>
+                <td className="alt-td" style={{ fontSize: `${fontSize}px` }}>
+                    {item.name}
+                </td>
             </tr>
         );
     });
@@ -162,6 +163,7 @@ export default function Pair() {
                     </form>
                 </div>
                 <div className="pair-accessibility">
+                    <Translate />
                     <button className="button" onClick={() => setFontSize(fontSize + 2)}>
                         + Font Size
                     </button>

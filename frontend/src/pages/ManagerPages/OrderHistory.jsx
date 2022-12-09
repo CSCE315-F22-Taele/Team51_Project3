@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import moment from "moment";
+import Translate from "../../components/translate/translate";
 import { useNavigate } from "react-router-dom";
 
 export default function OrderHistory() {
@@ -84,6 +85,7 @@ export default function OrderHistory() {
                     </form>
                 </div>
                 <div className="orderhistory-accessibility">
+                    <Translate />
                     <button className="button" onClick={() => setFontSize(fontSize + 2)}>
                         + Font Size
                     </button>

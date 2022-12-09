@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
-import Loading from "../../components/loading/loading";
 import GoogleMaps from "../../components/googleMaps/GoogleMap";
+import Translate from "../../components/translate/translate";
 import "./home.css";
 
 const Home = () => {
@@ -27,6 +27,9 @@ const Home = () => {
             </div>
             <footer>
                 <p>Made By Team 51: Johnny, Joshua, Will, Margaret, Mohnish</p>
+                <div className="translate">
+                    <Translate />
+                </div>
             </footer>
         </div>
     );

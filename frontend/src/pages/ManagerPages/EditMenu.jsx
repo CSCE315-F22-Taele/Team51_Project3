@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Translate from "../../components/translate/translate";
 import "./managerPages.css";
 
 export default function EditMenu() {
@@ -163,7 +164,9 @@ export default function EditMenu() {
                 <td style={{ fontSize: `${fontSize}px` }}>
                     {item.ingredients.toString()}
                 </td>
-                <td style={{ fontSize: `${fontSize}px` }}>{item.options ? item.options.toString() : ""}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>
+                    {item.options ? item.options.toString() : ""}
+                </td>
                 <td style={{ fontSize: `${fontSize}px` }}>{item.png}</td>
             </tr>
         );
@@ -186,6 +189,9 @@ export default function EditMenu() {
                     </button>
                 </div>
                 <div className="edit-menu-accessibility">
+                    <div className="translate">
+                        <Translate />
+                    </div>
                     <button className="button" onClick={() => setFontSize(fontSize + 2)}>
                         + Font Size
                     </button>

@@ -218,3 +218,8 @@
     width: 25px;
     height: 25px;
 }
+.home-translate {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

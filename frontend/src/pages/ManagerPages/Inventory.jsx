@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Translate from "../../components/translate/translate";
 import "./managerPages.css";
 
 export default function Inventory() {
@@ -212,7 +213,9 @@ export default function Inventory() {
                                 style={{ fontSize: `${fontSize + 2}px` }}>
                                 Status
                             </th>
-                            <th style={{ fontSize: `${fontSize + 2}px` }}>Change Amount</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>
+                                Change Amount
+                            </th>
                         </tr>
                     </thead>
                     <tbody>{displayData}</tbody>
@@ -292,6 +295,9 @@ export default function Inventory() {
                     <button className="button" onClick={() => setFontSize(fontSize - 2)}>
                         - Font Size
                     </button>
+                </div>
+                <div className="translate">
+                    <Translate />
                 </div>
             </div>
         </div>

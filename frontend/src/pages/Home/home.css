@@ -56,3 +56,17 @@
 .home--title--img img {
     width: 500px;
 }
+
+.home-map .google-maps {
+    height: 80vh;
+}
+.home-map .google-maps .map {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.home-map .google-maps .map__container {
+    width: 70%;
+    height: 50vh;
+    box-shadow: 10px 10px 14px #2b2b2b, -10px -10px 12px #3b3b3b;
+}

@@ -1,0 +1,55 @@
+@import url("../../index.css");
+
+.checkout-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+.checkout-modal__container {
+    width: 40vw;
+    height: 50vh;
+    background-color: var(--platinum);
+    padding: 15px;
+    border-radius: 25px;
+}
+.checkout-modal-options {
+    display: grid;
+    height: 90%;
+    grid-template-columns: 1fr 1fr;
+    font-family: "Oswald";
+    font-size: 50px;
+    cursor: pointer;
+}
+.modal-options {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.exit {
+    font-size: 25px;
+    font-family: "Lato";
+    font-weight: 600;
+}
+.options-maps {
+    display: flex;
+    height: 90%;
+    width: 100%;
+}
+.options-maps .google-maps {
+    width: 100%;
+    height: 100%;
+}
+.options-maps .google-maps .map {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.options-maps .google-maps .map__container {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+}

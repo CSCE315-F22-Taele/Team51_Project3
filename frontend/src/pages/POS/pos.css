@@ -3,6 +3,9 @@
 .text--right {
     text-align: right;
 }
+.blur {
+    filter: blur(5px);
+}
 .pos {
     position: relative;
     width: 100%;

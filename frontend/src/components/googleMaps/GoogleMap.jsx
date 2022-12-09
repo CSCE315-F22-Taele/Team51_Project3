@@ -15,15 +15,17 @@ export default function GoogleMaps() {
     const onLoad = useCallback((map) => (mapRef.current = map), []);
 
     return isLoaded ? (
-        <div className="map">
-            <GoogleMap
-                zoom={20}
-                center={center}
-                mapContainerClassName="map__container"
-                options={options}>
-                onLoad={onLoad}
-                <Marker position={center} />
-            </GoogleMap>
+        <div className="google-maps">
+            <div className="map">
+                <GoogleMap
+                    zoom={20}
+                    center={center}
+                    mapContainerClassName="map__container"
+                    options={options}>
+                    onLoad={onLoad}
+                    <Marker position={center} />
+                </GoogleMap>
+            </div>
         </div>
     ) : (
         <></>

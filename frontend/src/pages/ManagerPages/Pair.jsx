@@ -13,9 +13,6 @@ export default function Pair() {
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(16); //for inc and dec font size
 
-
-
-
     /**
      * Sends a HTTP PATCH request with the quantity of the ID to be modified
      * @author  Mohnish
@@ -23,52 +20,50 @@ export default function Pair() {
      * @param   {date} endDate second date in btwn
      */
 
-
     function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     async function insertPairDates(event) {
-      await delay(1000);
-      event.preventDefault();
-      try {
-          const res = await fetch(`/api/pair/${startDate}/${endDate}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "PATCH",
-            },
-          });
-          
-          const data = await res.json();
-          setTable(data);
-          setPair(true);
+        await delay(1000);
+        event.preventDefault();
+        try {
+            const res = await fetch(`/api/pair/${startDate}/${endDate}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PATCH",
+                },
+            });
 
-          console.log(startDate, endDate);
-      } catch (err) {
-          console.error(err);
-      }
+            const data = await res.json();
+            setTable(data);
+            setPair(true);
+
+            console.log(startDate, endDate);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     async function removePair(event) {
         event.preventDefault();
         try {
-          const res = await fetch("/api/pair/:t", {
+            const res = await fetch("/api/pair/:t", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "DELETE",
                 },
-
             });
-            
-          const data = await res.json();
-          setTable(data);
-          setPair(true);
-        
-          console.log(data);
+
+            const data = await res.json();
+            setTable(data);
+            setPair(true);
+
+            console.log(data);
         } catch (err) {
             console.error(err);
         }
@@ -106,96 +101,91 @@ export default function Pair() {
         } catch (err) {
             console.error(err);
         }
-      }
+    }
 
     const displayInfo1 = sales.slice(0, -1).map((item, index, array) => {
         return (
             <tr>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.name}</td>    
+                <td style={{ fontSize: `${fontSize}px` }}>{item.name}</td>
             </tr>
         );
     });
-    
+
     const displayInfo2 = sales.slice(1).map((item, index, array) => {
         return (
             <tr>
-                <td
-                style={{fontSize: `${fontSize}px`}}
-                >{item.name}</td>
+                <td className="alt-td" style={{ fontSize: `${fontSize}px` }}>{item.name}</td>
             </tr>
         );
     });
 
     return (
-        <div className="App">
-            <tr>
-                <th> <div>
-                    <button>
+        <div className="pair-page manager-page">
+            <div className="excess-topbar">
+                <div className="back__container">
+                    <button
+                        onClick={() => {
+                            navigate("/managermenu");
+                        }}>
                         <img
-                            onClick={() => {
-                                navigate("/ManagerMenu")
-                            }}
                             className="backbutton"
-                            src={backbutton}
-                            alt="back">
-                        </img>
+                            src={require("../../images/backbutton.png")}
+                            alt="back"></img>
                     </button>
-                </div> </th>
-                <th><button onClick={() => setFontSize(fontSize + 2)} >
-                    + increase font size
-                </button> </th>
-                <th> <button onClick={() => setFontSize(fontSize - 2)} >
-                    - decrease font size
-                </button> </th>
-            </tr>
-            <h1>Pair Report </h1>
-            <form
-                onSubmit={(event) => {
-                    removePair(event);
-                    insertPairDates(event);
-                    getPair(event);
-                }}>
-                <input
-                    type="string"
-                    placeholder="yyyy-mm-dd"
-                    onChange={(event) => {
-                        setStartDate(event.target.value);
-                    }}
-                    onKeyPress="setStorage(this)"></input>
-                <input
-                    type="string"
-                    placeholder="yyyy-mm-dd"
-                    onChange={(event) => {
-                        setEndDate(event.target.value);
-                    }}
-                    onKeyPress="setStorage(this)"></input>
-                <button>Submit</button>
-            </form>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th
-                        style={{fontSize: `${fontSize + 2}px`}}
-                        >Item 1</th>
-                        <th
-                        style={{fontSize: `${fontSize + 2}px`}}
-                        >Item 2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td
-                        style={{fontSize: `${fontSize}px`}}
-                        >{displayInfo1}</td>
-                        <td
-                        style={{fontSize: `${fontSize}px`}}
-                        >{displayInfo2}</td>
-                    </tr>
-                </tbody>
-            </table>
+                </div>
+                <div className="pair-actions">
+                    <form
+                        id="pair-form"
+                        className="pair-actions__container"
+                        onSubmit={(event) => {
+                            removePair(event);
+                            insertPairDates(event);
+                            getPair(event);
+                        }}>
+                        <input
+                            className="pair-actions--input"
+                            type="date"
+                            placeholder="yyyy-mm-dd"
+                            onChange={(event) => {
+                                setStartDate(event.target.value);
+                            }}
+                            onKeyPress="setStorage(this)"></input>
+                        <input
+                            className="pair-actions--input"
+                            type="date"
+                            placeholder="yyyy-mm-dd"
+                            onChange={(event) => {
+                                setEndDate(event.target.value);
+                            }}
+                            onKeyPress="setStorage(this)"></input>
+                        <button className="button">Submit</button>
+                    </form>
+                </div>
+                <div className="pair-accessibility">
+                    <button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    </button>
+                    <button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    </button>
+                </div>
+            </div>
+            <div className="pair-table">
+                <table className="styled-table">
+                    <thead>
+                        <tr>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Item 1</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Item 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style={{ fontSize: `${fontSize}px` }}>{displayInfo1}</td>
+                            <td style={{ fontSize: `${fontSize}px` }}>{displayInfo2}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
-

@@ -1,29 +1,28 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import backbutton from "../../images/backbutton.png";
+import "./managerPages.css";
 
 export default function EditMenu() {
     const [menu, setMenu] = useState([]);
     const [category, setCategory] = useState("");
     const [name, setName] = useState("");
     const [price, setPrice] = useState(0.0);
-    const [ingredients, setIngredients] = useState("");
+    const [ingredients, setIngredients] = useState([]);
     const [png, setPNG] = useState("");
-    const [options, setOptions] = useState("");
+    const [options, setOptions] = useState([]);
     const [id, setID] = useState(0);
     const [idChecker, setIDChecker] = useState([]);
-    const [ingredientList, setInventory] = useState([]);
+    const [ingredientList, setIngredientList] = useState([]);
     const [idRemove, setIdRemove] = useState();
     const [saveError, setError] = useState();
     const navigate = useNavigate();
-    const [fontSize, setFontSize] = useState(16); //for inc and dec font size
+    const [fontSize, setFontSize] = useState(15); //for inc and dec font size
 
     /**
      * Sends a HTTP get for all menu items, then gets all ids for data validation
      * @author  Joshua
      */
-
     async function getMenu() {
         try {
             const res = await fetch("api/menuManager");
@@ -55,7 +54,8 @@ export default function EditMenu() {
      * @param   {int} id is the items unique id
      */
     async function addMenuItem(id) {
-        if (!id) {
+        // If ID already exists
+        if (idChecker.includes(id)) {
             setID(idChecker[idChecker.length - 1] + 1);
         }
         try {
@@ -70,9 +70,9 @@ export default function EditMenu() {
                     category: category,
                     name: name,
                     price: parseFloat(price),
-                    ingredients: JSON.stringify(ingredients),
+                    ingredients: ingredients,
                     png: png,
-                    options: JSON.stringify(options),
+                    options: options,
                     id: parseInt(id),
                 }),
             });
@@ -82,6 +82,11 @@ export default function EditMenu() {
             console.log(err.message);
         }
     }
+
+    /**
+     * Send HTTP request to delete the item in the Database
+     * @author  Joshua
+     */
     async function removeMenuById() {
         try {
             await fetch("api/menuManager/", {
@@ -99,6 +104,7 @@ export default function EditMenu() {
             console.log(err.message);
         }
     }
+
     /**
      * Sends a HTTP get request for all ingredients to then display in the dropdown menu
      * @author  Joshua
@@ -107,7 +113,7 @@ export default function EditMenu() {
         try {
             const res = await fetch("api/inventory");
             const data = await res.json();
-            setInventory(data);
+            setIngredientList(data);
         } catch (err) {
             console.error(err);
         }
@@ -133,52 +139,18 @@ export default function EditMenu() {
             }
         }
     };
-    // makes the ingredients human readable
-    const displayChoice = () => {
-        var ingredientReturn = "Return ingredients: ";
-        // prevents a option not being in the ingredient list
-        checkOptionsInIDs();
-        for (let index = 0; index < ingredientList.length; index++) {
-            for (
-                let ingredientIndex = 0;
-                ingredientIndex < ingredients.length;
-                ingredientIndex++
-            ) {
-                //console.log(ingredientList[index]['id'])
-                //console.log(menu[index]['id'])
-                // console.log(parseInt(ingredients[ingredientIndex]) == parseInt(ingredientList[index]['id']))
-                if (
-                    parseInt(ingredients[ingredientIndex]) ===
-                    parseInt(ingredientList[index]["id"])
-                ) {
-                    ingredientReturn += ingredientList[index]["name"] + " ";
-                }
-            }
-        }
-        return ingredientReturn;
-    };
-    // makes the options human readable
-    const displayOptions = () => {
-        var optionsReturn = "Options are: ";
-        for (let index = 0; index < ingredientList.length; index++) {
-            for (
-                let ingredientIndex = 0;
-                ingredientIndex < options.length;
-                ingredientIndex++
-            ) {
-                ///console.log(ingredientList[index]['id'])
-                //console.log(menu[index]['id'])
-                // console.log(parseInt(options[ingredientIndex]) == parseInt(ingredientList[index]['id']))
-                if (
-                    parseInt(options[ingredientIndex]) ===
-                    parseInt(ingredientList[index]["id"])
-                ) {
-                    optionsReturn += ingredientList[index]["name"] + " ";
-                }
-            }
-        }
-        checkOptionsInIDs();
-        return optionsReturn;
+
+    /**
+     * Parses List of Ingredient ID to Readable Strings
+     * @author  Joshua, Johnny
+     */
+    const parseIDToString = (array, list) => {
+        var readableList = [];
+        array.forEach((id, i) => {
+            readableList.push(list.find((o) => o.id === id).name);
+        });
+
+        return readableList;
     };
 
     const displayInfo = menu.map((item) => {
@@ -188,8 +160,10 @@ export default function EditMenu() {
                 <td style={{ fontSize: `${fontSize}px` }}>{item.id}</td>
                 <td style={{ fontSize: `${fontSize}px` }}>{item.name}</td>
                 <td style={{ fontSize: `${fontSize}px` }}>{item.price}</td>
-                <td style={{ fontSize: `${fontSize}px` }}>{item.ingredients}</td>
-                <td style={{ fontSize: `${fontSize}px` }}>{item.options}</td>
+                <td style={{ fontSize: `${fontSize}px` }}>
+                    {item.ingredients.toString()}
+                </td>
+                <td style={{ fontSize: `${fontSize}px` }}>{item.options ? item.options.toString() : ""}</td>
                 <td style={{ fontSize: `${fontSize}px` }}>{item.png}</td>
             </tr>
         );
@@ -198,158 +172,178 @@ export default function EditMenu() {
         return <option value={inventory.id}> {inventory.name}</option>;
     });
     return (
-        <div className="App">
-            <tr>
-                <th> <div>
-                    <button>
+        <div className="edit-menu-page manager-page">
+            <div className="edit-menu-topbar">
+                <div className="back__container">
+                    <button
+                        onClick={() => {
+                            navigate("/managermenu");
+                        }}>
                         <img
-                            onClick={() => {
-                                navigate("/ManagerMenu")
-                            }}
                             className="backbutton"
-                            src={backbutton}
-                            alt="back">
-                        </img>
+                            src={require("../../images/backbutton.png")}
+                            alt="back"></img>
                     </button>
                 </div>
-                </th>
-                <th><button onClick={() => setFontSize(fontSize + 2)} >
-                    + increase font size
-                </button> </th>
-                <th> <button onClick={() => setFontSize(fontSize - 2)} >
-                    - decrease font size
-                </button> </th>
-            </tr>
-            <h1>Edit Menu </h1>
-            <form
-                onSubmit={(event) => {
-                    addMenuItem(id);
-                    setIngredients((newArray) => [...newArray, event.target.value]);
-                    setOptions((newArray) => [...newArray, event.target.value]);
-                    displayChoice();
-                }}>
-                {/* now we plan to dive into what is the hell that is checking user inputs and preventing stupid ones */}
+                <div className="edit-menu-accessibility">
+                    <button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    </button>
+                    <button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    </button>
+                </div>
+            </div>
+            <div className="edit-menu-table">
+                <table className="edit-menu-table styled-table">
+                    <thead>
+                        <tr>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Category</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Id</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Name</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Price</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Ingredients</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Options</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>PNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>{displayInfo}</tbody>
+                </table>
+            </div>
+            <div className="edit-menu-actions">
+                <div className="edit-menu-actions--create">
+                    <form
+                        className="edit-menu-actions__container"
+                        onSubmit={(event) => {
+                            addMenuItem(id);
+                            // setIngredients((newArray) => [...newArray, event.target.value]);
+                            // setOptions((newArray) => [...newArray, event.target.value]);
+                            // parseIDToString();
+                        }}>
+                        {/* now we plan to dive into what is the hell that is checking user inputs and preventing stupid ones */}
 
-                <select
-                    placeholder="category"
-                    onChange={(event) => {
-                        setCategory(event.target.value);
-                        console.log(event.target.value);
-                    }}>
-                    <option value=""> null </option>
-                    <option value="entree"> entree </option>
-                    <option value="dessert"> dessert </option>
-                    <option value="drink"> drink </option>
-                </select>
-                <input
-                    type="number"
-                    placeholder="id"
-                    onChange={(event) => {
-                        // see if the id exists already
-
-                        if (!idChecker.includes(event.target.value)) {
-                            setID(event.target.value);
-                        } else {
-                            // if it exists find the last id and add 1
-                            setID(idChecker[idChecker.length - 1] + 1);
-                        }
-                    }}></input>
-                <input
-                    type="string"
-                    placeholder="name"
-                    onChange={(event) => {
-                        setName(event.target.value);
-                    }}></input>
-                <input
-                    type="float"
-                    placeholder="price"
-                    onChange={(event) => {
-                        if (event.target.value > 0) {
-                            setPrice(event.target.value);
-                        } else {
-                            setPrice(4.2);
-                        }
-                    }}></input>
-                <select
-                    onChange={(event) => {
-                        var initalizeIngredients = true;
-                        if (initalizeIngredients) {
-                            setIngredients((newArray) => [
-                                ...newArray,
-                                event.target.value,
-                            ]);
-                            initalizeIngredients = false;
-                        } else if (!ingredients.includes(event.target.value)) {
-                            setIngredients((newArray) => [
-                                ...newArray,
-                                event.target.value,
-                            ]);
-                        }
-                        console.log(ingredients);
-                    }}>
-                    {displayDropDown}
-                </select>
-                <select
-                    onChange={(event) => {
-                        var initalizeOptions = true;
-                        if (initalizeOptions) {
-                            setOptions((newArray) => [...newArray, event.target.value]);
-                            initalizeOptions = false;
-                        } else if (!options.includes(event.target.value)) {
-                            setOptions((newArray) => [...newArray, event.target.value]);
-                        }
-                        // console.log(options)
-                    }}>
-                    {displayDropDown}
-                </select>
-                <input
-                    type="string"
-                    placeholder="png"
-                    onChange={(event) => {
-                        setPNG(event.target.value);
-                    }}></input>
-
-                <button onClick>Add New Menu Item</button>
-            </form>
-
-            <form
-                onSubmit={(event) => {
-                    removeMenuById();
-                }}>
-                <input
-                    type="number"
-                    placeholder="id to REMOVE"
-                    onChange={(event) => {
-                        setIdRemove(event.target.value);
-                    }}></input>
-                <button>Remove menu item by id</button>
-            </form>
-
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th style={{ fontSize: `${fontSize}px` }}>Category</th>
-                        <th style={{ fontSize: `${fontSize}px` }}>Id</th>
-                        <th style={{ fontSize: `${fontSize}px` }}>Name</th>
-                        <th style={{ fontSize: `${fontSize}px` }}>Price</th>
-                        <th style={{ fontSize: `${fontSize}px` }}>Ingredients</th>
-                        <th style={{ fontSize: `${fontSize}px` }}>Options</th>
-                        <th style={{ fontSize: `${fontSize}px` }}>PNG</th>
-                    </tr>
-                </thead>
-                <tbody>{displayInfo}</tbody>
-            </table>
-            <form onSubmit>
-                <button
-                    onClick={() => {
-                        ingredients.length = 0;
-                        options.length = 0;
-                    }}>
-                    Clear presets
-                </button>
-                <p>{displayChoice()}</p>
-                <p>{displayOptions()}</p>
-            </form>
+                        <select
+                            className="edit-menu-actions--input"
+                            placeholder="Category"
+                            onChange={(event) => {
+                                setCategory(event.target.value);
+                                console.log(event.target.value);
+                            }}>
+                            <option value="entree"> Entree </option>
+                            <option value="dessert"> Dessert </option>
+                            <option value="drink"> Drink </option>
+                        </select>
+                        <input
+                            className="edit-menu-actions--input"
+                            type="number"
+                            placeholder="ID"
+                            onChange={(event) => {
+                                setID(event.target.value);
+                            }}
+                        />
+                        <input
+                            className="edit-menu-actions--input"
+                            type="string"
+                            placeholder="Item Name"
+                            onChange={(event) => {
+                                setName(event.target.value);
+                            }}
+                        />
+                        <input
+                            className="edit-menu-actions--input"
+                            type="float"
+                            placeholder="Price"
+                            onChange={(event) => {
+                                if (event.target.value >= 0) {
+                                    setPrice(event.target.value);
+                                } else {
+                                    setPrice(0.0);
+                                }
+                            }}
+                        />
+                        <p className="edit-menu-actions--header">Select Ingredients</p>
+                        <select
+                            className="edit-menu-actions--input"
+                            onChange={(event) => {
+                                var initalizeIngredients = true;
+                                if (initalizeIngredients) {
+                                    setIngredients((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                    initalizeIngredients = false;
+                                } else if (!ingredients.includes(event.target.value)) {
+                                    setIngredients((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                }
+                            }}>
+                            {displayDropDown}
+                        </select>
+                        <div className="edit-menu-actions--info">
+                            {parseIDToString(ingredients, ingredientList).toString()}
+                        </div>
+                        <p className="edit-menu-actions--header">Select Options</p>
+                        <select
+                            className="edit-menu-actions--input"
+                            onChange={(event) => {
+                                var initalizeOptions = true;
+                                if (initalizeOptions) {
+                                    setOptions((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                    initalizeOptions = false;
+                                } else if (!options.includes(event.target.value)) {
+                                    setOptions((newArray) => [
+                                        ...newArray,
+                                        parseInt(event.target.value),
+                                    ]);
+                                }
+                                // console.log(options)
+                            }}>
+                            {displayDropDown}
+                        </select>
+                        <div className="edit-menu-actions--info">
+                            {parseIDToString(options, ingredientList).toString()}
+                        </div>
+                        <input
+                            className="edit-menu-actions--input"
+                            type="string"
+                            placeholder="PNG File Name"
+                            onChange={(event) => {
+                                setPNG(event.target.value);
+                            }}></input>
+                        <button className="button">Add New Menu Item</button>
+                        <button
+                            className="button"
+                            onClick={() => {
+                                ingredients.length = 0;
+                                options.length = 0;
+                            }}>
+                            Clear presets
+                        </button>
+                    </form>
+                </div>
+                <div className="edit-menu-actions--remove">
+                    <form
+                        className="edit-menu-actions__container"
+                        onSubmit={(event) => {
+                            removeMenuById();
+                        }}>
+                        <input
+                            className="edit-menu-actions--input"
+                            type="number"
+                            placeholder="ID"
+                            onChange={(event) => {
+                                setIdRemove(event.target.value);
+                            }}
+                        />
+                        <button className="button">Remove Menu Item</button>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }

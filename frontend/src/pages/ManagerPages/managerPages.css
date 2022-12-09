@@ -19,6 +19,9 @@
 .styled-table td {
     padding: 1rem 2rem;
 }
+.alt-td {
+    padding: 1rem 2rem;
+}
 .styled-table tr {
     font-family: "Lato";
     font-weight: 600;
@@ -104,50 +107,19 @@
 }
 
 /*
-    ### ORDER HISTORY STYLING ###
+    ### REVENUE STYLING ###
 */
-
-.orders-table {
+.revenue-page {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.1fr 1fr 0.5fr;
+}
+.revenue-table {
     display: flex;
     width: 100%;
     height: 100%;
-    
     overflow-y: scroll;
 }
-
-.styled-table-orders {
-    width: 100%;
-    border-collapse: collapse;
-    border: 0px solid white;
-    box-shadow: 8px 8px 12px #2b2b2b, -8px -8px 12px #d21b1b;
-    text-align: left;
-    overflow: hidden;
-}
-.styled-table-orders thead {
-    background-color: var(--maroon);
-    width: 100%;
-    height: 100%;
-    text-align: left;
-}
-.styled-table-orders th {
-    padding: 1rem 2rem;
-    color: var(--platinum);
-    font-family: "Oswald";
-}
-
-.styled-table-orders tr {
-    font-family: "Lato";
-    text-transform: uppercase;
-}
-
-th .table-head {
-    text-align: left;
-}
-
-.styled-table-orders tbody tr:nth-child(odd) {
-background-color: var(--light-jet5);
-}
-
 /*
 
         # # # # #   EXCESS STYLING CODE  # # # # #
@@ -205,7 +177,7 @@ background-color: var(--light-jet5);
 
 /*
 
-        # # # # #   REVENUE STYLING CODE  # # # # #
+        # # # # #   ORDERHISTORY STYLING CODE  # # # # #
 
 */
 .orderhistory-page {
@@ -256,4 +228,134 @@ background-color: var(--light-jet5);
     gap: 25px;
     grid-template-columns: 1fr 1fr;
     height: .2rem;
+}
+
+
+/*
+
+        # # # # #   PAIR STYLING CODE  # # # # #
+
+*/
+.pair-page {
+    height: 100vh;
+    background-color: var(--jet);
+}
+.pair-table {
+    display: flex;
+    width: 100%;
+    height: 85%;
+    overflow-y: scroll;
+}
+.pair-topbar {
+    width: 100%;
+    display: flex;
+    gap: 100px;
+    margin-bottom: 1.5rem;
+}
+.pair-actions__container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.pair-actions__container input {
+    margin-right: 1.5rem;
+}
+.pair-actions__container button {
+    margin-left: 1rem;
+}
+.pair-actions {
+    width: 70%;
+}
+.pair-actions--input {
+    height: 40px;
+    padding-left: 25px;
+    font-size: 13px;
+    letter-spacing: 0.15px;
+    border: none;
+    outline: none;
+    font-family: "Lato";
+    background-color: var(--jet);
+    color: var(--white);
+    border-radius: 8px;
+    box-shadow: inset 2px 2px 4px #2b2b2b, inset -2px -2px 4px #3b3b3b;
+}
+.pair-accessibility {
+    display: grid;
+    gap: 25px;
+    grid-template-columns: 1fr 1fr;
+    height: .2rem;
+}
+
+
+/*
+
+        # # # # #   EDIT MENU STYLING CODE  # # # # #
+
+*/
+.edit-menu-page {
+
+}
+.edit-menu-table {
+    width: 100%;
+    height: 85%;
+    overflow: scroll;
+}
+.edit-menu-topbar {
+    width: 100%;
+    display: flex;
+    gap: 100px;
+    margin-bottom: 1.5rem;
+    justify-content: space-between;
+}
+.edit-menu-accessibility {
+    display: grid;
+    gap: 25px;
+    grid-template-columns: 1fr 1fr;
+    height: .2rem;
+}
+.edit-menu-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+    width: 100%;
+    margin-top: 2rem;
+}
+.edit-menu-actions--input {
+    height: 40px;
+    margin: 4px 0;
+    padding-left: 25px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    letter-spacing: 0.15px;
+    border: none;
+    outline: none;
+    font-family: "Lato";
+    background-color: var(--jet);
+    color: var(--white);
+    border-radius: 8px;
+    box-shadow: inset 2px 2px 4px #2b2b2b, inset -2px -2px 4px #3b3b3b;
+}
+.edit-menu-actions--header {
+    color: var(--platinum);
+    font-family: "Lato";
+    font-weight: 600;
+    margin: .2rem;
+}
+.edit-menu-actions--info {
+    color: var(--platinum);
+    font-family: "Lato";
+    margin-bottom: 1rem;
+}
+.edit-menu-form--remove {
+    display: flex;
+}
+.edit-menu-actions__container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 25px;
+    box-shadow: 10px 10px 10px #2b2b2b, -10px -10px 10px #3b3b3b;
+}
+.edit-menu-actions__container button {
+    margin-bottom: 1rem;
 }

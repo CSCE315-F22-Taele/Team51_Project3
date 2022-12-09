@@ -11,6 +11,7 @@ import moment from "moment";
 const OrderHistory = () => {
     const navigate = useNavigate();
     const [revenue, setRevenue] = useState([]);
+    const [fontSize, setFontSize] = useState(20); //for inc and dec font size
 
     /**
      * @function getOrderHistory pulls revenue table data from api
@@ -32,9 +33,9 @@ const OrderHistory = () => {
      */
     const displayData = revenue.map((date) => (
         <tr>
-            <th>{date.type}</th>
-            <th>{moment(date.date).utc().format("YYYY-MM-DD")}</th>
-            <th>{date.revenue}</th>
+            <td style={{ fontSize: `${fontSize}px` }}>{date.type}</td>
+            <td style={{ fontSize: `${fontSize}px` }}>{moment(date.date).utc().format("YYYY-MM-DD")}</td>
+            <td style={{ fontSize: `${fontSize}px` }}>{date.revenue}</td>
         </tr>
     ));
 
@@ -43,29 +44,39 @@ const OrderHistory = () => {
     }, []);
 
     return (
-        <div className="App">
-            <div>
-                <button>
+        <div className="revenue-page manager-page">
+            <div className="back__container">
+                <button
+                    onClick={() => {
+                        navigate("/managermenu");
+                    }}>
                     <img
-                        onClick={() => {
-                            navigate("/ManagerMenu");
-                        }}
                         className="backbutton"
-                        src={backbutton}
+                        src={require("../../images/backbutton.png")}
                         alt="back"></img>
                 </button>
             </div>
-            <div className="orders-table">
-                <table className="styled-table-orders">
+            <div className="revenue-table">
+                <table className="styled-table">
                     <thead>
                         <tr>
-                            <th className="table-head">Day Type</th>
-                            <th className="table-head">Date</th>
-                            <th className="table-head">Revenue</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Day Type</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Date</th>
+                            <th style={{ fontSize: `${fontSize + 2}px` }}>Revenue</th>
                         </tr>
                     </thead>
                     <tbody>{displayData}</tbody>
                 </table>
+            </div>
+            <div className="inventory-actions">
+                <div className="inventory-accessibility">
+                    <button className="button" onClick={() => setFontSize(fontSize + 2)}>
+                        + Font Size
+                    </button>
+                    <button className="button" onClick={() => setFontSize(fontSize - 2)}>
+                        - Font Size
+                    </button>
+                </div>
             </div>
         </div>
     );

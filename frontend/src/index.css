@@ -136,28 +136,11 @@ code {
 
 /*
 
-        # # # # #   GOOGLE MAP STYLING CODE  # # # # #
-
-*/
-
-.map {
-    width: 100%;
-    height: 80vh;
-    display: flex;
-    justify-content: center;
-}
-.map__container {
-    width: 70%;
-    height: 50vh;
-    box-shadow: 10px 10px 14px #2b2b2b, -10px -10px 12px #3b3b3b;
-}
-
-/*
-
         # # # # #   FOOTER STYLING CODE  # # # # #
 
 */
 footer {
+    position: inherit;
     display: flex;
     height: 10vh;
     justify-content: center;

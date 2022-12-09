@@ -22,11 +22,11 @@ const Home = () => {
                         alt="illustration of a generic web app"></img>
                 </div>
             </div>
-            <GoogleMaps />
+            <div className="home-map">
+                <GoogleMaps />
+            </div>
             <footer>
-                <p>
-                    Made By Team 51: Johnny, Joshua, Will, Margaret, Mohnish
-                </p>
+                <p>Made By Team 51: Johnny, Joshua, Will, Margaret, Mohnish</p>
             </footer>
         </div>
     );

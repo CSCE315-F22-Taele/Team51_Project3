@@ -2,6 +2,7 @@ import Main from "./main";
 import Basket from "./basket";
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/navbar";
+import CheckoutModal from "../../components/modal/checkoutModal";
 import "./pos.css";
 
 /**
@@ -15,9 +16,7 @@ const POSPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [isColorBlind, setColorBlind] = useState(false);
     const [isEnlargeMenu, setEnlargeMenu] = useState(false);
-    const [isLanguage, setLanguage] = useState(false);
-    // const [text, setTextToTranslate] = useState("");
-    // const [targetLanguage, setTargetLanguage] = useState("");
+    const [checkoutModal, setCheckoutModal] = useState(false);
 
     /**
      * Initialize a Revenue Entry for today's date on load
@@ -63,7 +62,6 @@ const POSPage = () => {
     // # # # # # # # # # # # # # # # # # # # # #
     /**
      * @author Joshua
-     * [toggleLanguage] changes boolean check for langauge
      * [translateText] calls api in backend to return the change with params text and target
      */
     const translateText = async (text, targetLanguage) => {
@@ -85,13 +83,6 @@ const POSPage = () => {
         } catch (err) {
             console.error(err);
         }
-    };
-
-    const toggleLanguage = () => {
-        setLanguage(!isLanguage);
-        // setTextToTranslate('Hello');
-        // setTargetLanguage('es');
-        translateText("Hello", "es");
     };
 
     /**
@@ -170,6 +161,7 @@ const POSPage = () => {
      */
     function onCheckout(totalPrice) {
         // Request to Add Orders to the Database
+        setCheckoutModal(true);
         try {
             fetch("api/checkout", {
                 method: "POST",
@@ -190,7 +182,7 @@ const POSPage = () => {
             )
         );
         setCartItems([]);
-        alert("Thank you for your order!");
+        // alert("Thank you for your order!");
     }
 
     /**
@@ -219,9 +211,10 @@ const POSPage = () => {
      *  colorblind scheme if they have
      */
     return isColorBlind ? (
-        <div className="pos">
+        <div id="pos" className="pos">
             <Navbar></Navbar>
-            <div className="pos__box">
+            {checkoutModal && <CheckoutModal closeModal={setCheckoutModal} />}
+            <div className={checkoutModal ? "pos__box blur" : "pos__box"}>
                 <div className="pos__container">
                     <div className={isEnlargeMenu ? "menu-englarge-menu" : "menu"}>
                         <Main
@@ -248,19 +241,16 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}>Enlarge Menu</button>,
-                            // <button onClick={toggleLanguage}>
-                            //     Change Language to Spanish
-                            // </button>,
-                            <button>Default</button>,
                         ]}
                     />
                 </div>
             </div>
         </div>
     ) : (
-        <div className="posColorBlind">
+        <div id="posColorBlind" className="posColorBlind">
             <Navbar></Navbar>
-            <div className="pos__box">
+            {checkoutModal && <CheckoutModal closeModal={setCheckoutModal} />}
+            <div className={checkoutModal ? "pos__box blur" : "pos__box"}>
                 <div className="pos__container">
                     <div className={isEnlargeMenu ? "menu-englarge-menu" : "menu"}>
                         <Main onAdd={onAdd} menu={menu}></Main>
@@ -284,11 +274,6 @@ const POSPage = () => {
                         menu={[
                             <button onClick={toggleColorBlind}>Colorblind Mode</button>,
                             <button onClick={toggleEnlargeMenu}> Enlarge Menu</button>,
-                            // <button onClick={toggleLanguage}>
-                            //     {" "}
-                            //     Change Language to Spanish
-                            // </button>,
-                            <button>Default</button>,
                         ]}
                     />
                 </div>

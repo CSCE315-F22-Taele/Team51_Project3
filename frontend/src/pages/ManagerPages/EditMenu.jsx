@@ -233,7 +233,6 @@ export default function EditMenu() {
                             placeholder="Category"
                             onChange={(event) => {
                                 setCategory(event.target.value);
-                                console.log(event.target.value);
                             }}>
                             <option value="entree"> Entree </option>
                             <option value="dessert"> Dessert </option>

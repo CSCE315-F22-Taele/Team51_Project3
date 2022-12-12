@@ -16,7 +16,8 @@ export default function EditMenu() {
     const [idChecker, setIDChecker] = useState([]);
     const [ingredientList, setIngredientList] = useState([]);
     const [idRemove, setIdRemove] = useState();
-    const [saveError, setError] = useState();
+    const [initalizeOptions, setInitalizeOptions] = useState(true);
+    const [initalizeIngredients, setInitalizeIngredients] = useState(true);
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(15); //for inc and dec font size
 
@@ -128,22 +129,24 @@ export default function EditMenu() {
     useEffect(() => {
         getInventory();
         getMenu();
-        checkOptionsInIDs();
+
     }, []);
 
-    const checkOptionsInIDs = () => {
-        for (
-            let ingredientIndex = 0;
-            ingredientIndex < ingredients.length;
-            ingredientIndex++
-        ) {
-            for (let index = 0; index < options.length; index++) {
-                if (!ingredients.includes(options[index])) {
-                    ingredients.push(options[index]);
-                }
-            }
-        }
-    };
+    // const checkOptionsInIDs = () => {
+    //     console.log(options)
+    //     console.log(ingredients)
+    //     for (
+    //         let ingredientIndex = 0;
+    //         ingredientIndex < ingredients.length;
+    //         ingredientIndex++
+    //     ) {
+    //         for (let index = 0; index < options.length; index++) {
+    //             if (!ingredients.includes(options[index])) {
+    //                 ingredients.push(options[index]);
+    //             }
+    //         }
+    //     }
+    // };
 
     /**
      * Parses List of Ingredient ID to Readable Strings
@@ -274,14 +277,16 @@ export default function EditMenu() {
                         <select
                             className="edit-menu-actions--input"
                             onChange={(event) => {
-                                var initalizeIngredients = true;
                                 if (initalizeIngredients) {
                                     setIngredients((newArray) => [
                                         ...newArray,
                                         parseInt(event.target.value),
                                     ]);
-                                    initalizeIngredients = false;
-                                } else if (!ingredients.includes(event.target.value)) {
+                                    setInitalizeIngredients(false);
+                                } else if (!ingredients.includes( parseInt( event.target.value ) )) {
+                                    console.log(!ingredients.includes( parseInt(event.target.value) ))
+                                    console.log(ingredients)
+                                    console.log(event.target.value)
                                     setIngredients((newArray) => [
                                         ...newArray,
                                         parseInt(event.target.value),
@@ -290,6 +295,7 @@ export default function EditMenu() {
                             }}>
                             {displayDropDown}
                         </select>
+                        
                         <div className="edit-menu-actions--info">
                             {parseIDToString(ingredients, ingredientList).toString()}
                         </div>
@@ -297,20 +303,34 @@ export default function EditMenu() {
                         <select
                             className="edit-menu-actions--input"
                             onChange={(event) => {
-                                var initalizeOptions = true;
+
                                 if (initalizeOptions) {
                                     setOptions((newArray) => [
                                         ...newArray,
                                         parseInt(event.target.value),
                                     ]);
-                                    initalizeOptions = false;
-                                } else if (!options.includes(event.target.value)) {
+                                    if (!ingredients.includes(parseInt(event.target.value))) {
+                                        setIngredients((newArray) => [
+                                            ...newArray,
+                                            parseInt(event.target.value),
+                                        ]);
+                                    }
+
+                                    setInitalizeOptions(false);
+                                } else if (!options.includes(parseInt(event.target.value))) {
                                     setOptions((newArray) => [
                                         ...newArray,
                                         parseInt(event.target.value),
                                     ]);
+
+                                    if (!ingredients.includes(parseInt(event.target.value))) {
+                                        setIngredients((newArray) => [
+                                            ...newArray,
+                                            parseInt(event.target.value),
+                                        ]);
+                                    }
+
                                 }
-                                checkOptionsInIDs();
 
                                 // console.log(options)
                             }}>

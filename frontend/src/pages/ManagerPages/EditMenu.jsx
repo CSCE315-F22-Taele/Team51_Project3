@@ -310,6 +310,8 @@ export default function EditMenu() {
                                         parseInt(event.target.value),
                                     ]);
                                 }
+                                checkOptionsInIDs();
+
                                 // console.log(options)
                             }}>
                             {displayDropDown}

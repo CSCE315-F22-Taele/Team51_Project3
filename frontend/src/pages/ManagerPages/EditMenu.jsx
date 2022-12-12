@@ -84,6 +84,10 @@ export default function EditMenu() {
         }
     }
 
+    useEffect(() => {
+        getMenu();
+    }, [addMenuItem])
+
     /**
      * Send HTTP request to delete the item in the Database
      * @author  Joshua
